@@ -48,7 +48,7 @@ export default function Success({data}) {
             }
         </div>
 
-        <CreateAccount id={data}/>
+        {/* <CreateAccount id={data}/> */}
       
     </div>
   )

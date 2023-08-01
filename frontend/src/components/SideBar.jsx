@@ -1,123 +1,115 @@
-import React, { useState } from "react";
-import {FiShoppingCart, FiInbox,FiUserPlus, FiHome, FiArchive, FiAnchor, FiMessageSquare } from "react-icons/fi";
-import { Link, Outlet } from "react-router-dom";
+import { useRef, useState } from "react";
+import {Link, Outlet} from 'react-router-dom'
+
+import chart_fill from '../assets/Chart_fill.png'
+import User from '../assets/User.png'
+import clients from '../assets/clients.png'
+import Chart from '../assets/Chart.png'
+import Aminities from '../assets/Aminities.png'
+import Transaction from '../assets/Transaction.png'
+import Setting from '../assets/Setting.png'
+import Calendar from '../assets/Calendar.png'
+import Control from '../assets/Control.png'
+import Facilities from '../assets/facilities.png'
+import Users from '../assets/User.png'
 import Navbar from "./Navbar";
-import Logo from '../assets/images/logo-2.jpg'
+import Logo from '../assets/images/logo-3.png'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function SideBar({passengers}) {
+const Sidebar = ({children}) => {
+  const [open, setOpen] = useState(true);
+  const [link, setLink] = useState('');
+  const toastId = useRef(null);
 
-    const [active, setActive] = useState(false)
-    const [link, setLink] = useState('')
-    const [notification_num, setNum] = useState(1)
-    const menuItems = [
-        {
-            title: 'Ticketing', 
-            icon: <FiArchive/>,
-            link: '/ticketing'
-        },
-        {
-            title: 'Passengers', 
-            icon: <FiAnchor/>,
-            link: '/passengers'
-        },
-        {
-            title: 'People', 
-            icon: <FiUserPlus/>,
-            link: '/people',
-        },
-        {
-            title: 'Manifest', 
-            icon: <FiInbox/>,
-            link: '/manifest'
-        },
-        {
-            title: 'Sales', 
-            icon: <FiShoppingCart/>,
-            link: '/sales'
-        },
-        {
-            title: 'Message Settings', 
-            icon: <FiMessageSquare/>,
-            link: '/message-settings'
-        }
-    ]
+  const Menus = [
+    { title: "Dashboard", src: chart_fill, to: '/dashboard'},
+      { title: "Ticketing", src: Facilities, to: '/ticketing', gap: true,},
+      { title: "Passengers ", src: Users, to: '/passengers' },
+      { title: "People", src: Aminities, to: '/people' },
+      { title: "Manifest", src: Calendar, to: '/manifest'},
+      { title: "Sales", src: Transaction, to: '/sales'},
+      { title: "Reports", src: Chart,  gap: true, to: '/reports' },
+      { title: "Settings", src: Setting, to: '/logs' },
+      { title: "Logs", src: Setting, to: '/logs' },
+  ];
 
-    const sidebarHandler = () => {
-        setActive(!active)
-    }
+  const handleLink = () => {
+    setLink(window.location.pathname)
+  }
 
-    const handleResize = () => {
-        setActive(false)
-    }
-
-    const handleLink = () =>{
-        setLink(window.location.pathname)
-        console.log(link)
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return (
-        <div className="flex flex-no-wrap relative">
-            {/* Sidebar starts */}
-            {/* Remove class [ hidden ] and replace [ sm:flex ] with [ flex ] */}
-           <div className={(active ? "active" : "") +" absolute transition-all ease-in-out delay-150 md:w-[200px] sm:relative bg-gray-800 shadow md:h-full flex-col justify-between p-0"} id="sidebar">
-            <div className="h-10 w-10 bg-blue-700 absolute right-0 mt-3 -mr-10 flex items-center shadow rounded-tr rounded-br justify-center cursor-pointer" id="mobile-toggler" onClick={sidebarHandler}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-adjustments" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="#FFFFFF" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <circle cx={6} cy={10} r={2} />
-                        <line x1={6} y1={4} x2={6} y2={8} />
-                        <line x1={6} y1={12} x2={6} y2={20} />
-                        <circle cx={12} cy={16} r={2} />
-                        <line x1={12} y1={4} x2={12} y2={14} />
-                        <line x1={12} y1={18} x2={12} y2={20} />
-                        <circle cx={18} cy={7} r={2} />
-                        <line x1={18} y1={4} x2={18} y2={5} />
-                        <line x1={18} y1={9} x2={18} y2={20} />
-                    </svg>
-                </div>
-                <div className="px-4">
-                    <div className="h-16 p-3 flex items-center">
-                        <img src={Logo} alt="" className="mt-4 w-full rounded"/>
-                    </div>
-                    <ul className="mt-12 transition-all ease-in-out w-full">
-                        <li onClick={handleLink} className={(window.location.pathname == '/dashboard' ? "bg-white text-blue-500" : "text-white") + " flex-col py-2 px-2 rounded flex w-full justify-between font-medium hover:bg-white hover:text-blue-500 cursor-pointer  mb-1 transition-all ease-in-out"}>
-                            <Link to={'dashboard'} className="text-md">
-                            <div className="flex items-center">
-                                <FiHome/>
-                                <span className="text-sm tracking-wider ml-2">Dashboard &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
-                                    <span className={(notification_num == 0 ? 'hidden' : 'block') + " inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10"}>
-                                    {notification_num}
-                                    </span>
-                                </span>
-                            </div>
-                            </Link>
-                        </li>
-                        {
-                            menuItems.map((items, key) => (
-                                <li onClick={handleLink} key={key} className={(link == items.link ? "bg-white text-blue-500" : "text-white") + " flex-col py-2 px-2 rounded flex w-full justify-between font-medium hover:bg-white hover:text-blue-500 cursor-pointer  mb-3 transition-all ease-in-out"}>
-                                    <Link to={items.link} className="text-sm">
-                                    <div className="flex items-center">
-                                        {items.icon}
-                                        <span className="text-sm tracking-wider ml-2">{items.title}</span>
-                                    </div>
-                                    </Link>
-                                </li>
-                            ))
-                        }
-                        
-                    </ul>
-                </div>
+  return (
+    <div className="flex">
+      <div
+        className={` ${
+          open ? "w-[235px]" : "w-20"
+        }  h-screen px-2  pt-1 fixed top-0 duration-300`}
+      id="sidebar">
+        <img
+          src={Control}
+          className={`absolute cursor-pointer -right-3 top-3 w-7 border-dark-purple
+           border-2 rounded-full  ${!open && "rotate-180"}`}
+          onClick={() => setOpen(!open)}
+        />
+        <div className="flex items-center gap-2">
+            <div className={`h-[70px]  bg-white p-1 rounded-lg ${
+                    !open ? "w-[50px]" : "w-[80px]"
+                    }`}>
+                <img
+                    src={Logo}
+                    className={`cursor-pointer duration-500 h-full w-full mr-5 ${
+                    open && "rotate-[360deg]"
+                    }`}
+                />
             </div>
-            <div className={(!active && "main") + " content w-full absolute transition-all ease-in-out delay-150"}>
-                <Navbar/>
-                <div className="md:w-full h-full rounded py-5 px-4">
-                    <Outlet/>
-                </div>
-            </div>
+          <h1
+            className={`text-[#ffff] origin-left font-bold tracking-wide text-lg duration-200 ${
+              !open && "scale-0"
+            }`}
+          >
+            RJA Express
+          </h1>
         </div>
-    );
-}
+       
+        <ul className="pt-5 px-1">
+          {Menus.map((Menu, index) => (
+            <li
+                onClick={handleLink}
+                key={index}
+                className={`flex  rounded-md p-2 cursor-pointer hover:bg-blue-400 text-white text-sm items-center gap-x-4 
+                ${Menu.gap ? "mt-6" : "mt-2"} 
+                ${link === Menu.to && "bg-blue-400"}`}
+              >
+              
+                <img src={Menu.src} />
+                <Link
+                to={Menu.to}
+                >
+                <span className={`${!open && "hidden"} origin-left duration-200 uppercase text-[12px]`}>
 
-    
+                  
+                    {Menu.title}
+                  
+
+                </span>
+              </Link>
+              </li>
+          ))}
+        </ul>
+      </div>
+     
+      <div className={`flex-1 ${open ? "ml-[235px]" : "ml-20"} h-screen duration-300 bg-[#e3e8ee]`}>
+
+        <Navbar/>
+
+        <div className='py-5 px-3'>
+        <ToastContainer/>
+          <Outlet/>
+        </div>
+       
+      </div>
+
+    </div>
+  );
+};
+export default Sidebar;

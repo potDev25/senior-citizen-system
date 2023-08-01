@@ -56,7 +56,7 @@ export default function Navbar() {
 
   return (
     <div className='navbar'>
-      <div className='px-10'>
+      <div className=''>
         <img src={Logo} alt="" className='h-16 rounded-full' />
       </div>
 

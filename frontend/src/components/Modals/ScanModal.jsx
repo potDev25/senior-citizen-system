@@ -76,8 +76,10 @@ export default function ScanModal({date}) {
                 setMedia(data.image)
                 setShowProfile(true)
             })
-            .catch(err => {
-                setLoading(false)
+            .catch((error) => {
+              console.log(error.response.status)
+              hideLoadingToast()
+              error.response.status === 422 ? alertMessage('Passenger Already Booked!', 'warning') : alertMessage('Passenger not found!', 'error')
             })
       
     };
@@ -318,7 +320,7 @@ export default function ScanModal({date}) {
                         {/*body*/}
                         <div className="relative p-6 flex-auto bg-gray-200">
                             <div className='w-full bg-white shadow-md flex items-center justify-center p-5 rounded'>
-                               <ChairModal manifest_id={manifest_id}/>
+                               <ChairModal manifest_id={manifest_id} passenger={passenger}/>
                             </div>
 
                         </div>

@@ -34,4 +34,8 @@ class Passenger extends Authenticatable
     public function manifest(){
         return $this->hasMany(ManifestData::class);
     }
+
+    public function id_number(){
+        return $this->hasOne(IdNumber::class);
+    }
 }

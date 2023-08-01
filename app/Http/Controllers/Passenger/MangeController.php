@@ -7,6 +7,7 @@ use App\Http\Requests\PassengerRequest;
 use App\Http\Resources\Passenger\PassengerNoMediaRerource;
 use App\Http\Resources\Passenger\PassengerResource;
 use App\Models\ManifestAction;
+use App\Models\ManifestData;
 use App\Models\ManifestDate;
 use App\Models\Media;
 use App\Models\Passenger;
@@ -58,6 +59,7 @@ class MangeController extends Controller
         if(count($get_media) >= 0){
             return PassengerResource::collection(
                 $passenger::where('verified', 0)
+                            ->where('done', 1)
                             ->orderBy('id', 'DESC')
                             ->get()
             );
@@ -79,14 +81,24 @@ class MangeController extends Controller
     public function profile(Passenger $passenger, Request $request){
 
         if(isset($request->qr)){
-            $data =  Passenger::where('qrcode_hash', $request->qr)->first();
-            $image = [
-                'back_id' => asset('./storage/'.$data->media->back_id),
-                'front_id' => asset('./storage/'.$data->media->front_id),
-                'selfie' => asset('./storage/'.$data->media->selfie),
-                'study_load' => asset('./storage/'.$data->media->study_load),
-            ];
-            return json_encode(compact('data', 'image'));
+            $data             = Passenger::where('qrcode_hash', $request->qr)->first();
+            $check            = ManifestData::where('passengers_id', $data->id)->first();
+
+            if(isset($check)){
+                return response([
+                    'message-error' => 'error'
+                ], 422);
+            }else{
+
+                $image = [
+                    'back_id'     => asset('./storage/'.$data->media->back_id),
+                    'front_id'    => asset('./storage/'.$data->media->front_id),
+                    'selfie'      => asset('./storage/'.$data->media->selfie),
+                    'study_load'  => asset('./storage/'.$data->media->study_load),
+                ];
+                return json_encode(compact('data', 'image'));
+            }
+
             
         }elseif(isset($request->id)){
 

@@ -7,7 +7,7 @@ export default function CreateAccount({id}) {
 
   return (
     <>
-          <button onClick={() => setShow(true)} className='w-[80%] bg-blue-500 text-white text-lg font-md mt-6 p-2 rounded hover:bg-yellow-500 hover:text-white border hover:border-5-blue-500'>Create Account</button>
+          <button onClick={() => setShow(true)} className='w-[80%] bg-blue-500 text-white text-lg font-md mt-6 p-2 rounded hover:bg-yellow-500 hover:text-white border hover:border-5-blue-500'>Log In</button>
 
           {showModal ? (
         <>

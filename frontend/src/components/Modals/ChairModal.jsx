@@ -3,19 +3,20 @@ import React, { useEffect, useState } from 'react'
 import axiosClient from '../../axiosClient'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 
-export default function ChairModal({manifest_id}) {
+export default function ChairModal({manifest_id, passenger}) {
 
     const [left_chair, setLeftChair] = useState([])
     const [right_chair, setRightChair] = useState()
+    const [loading, setloading] = useState(true)
     
     useEffect(() => {
         get_sets()
-    }) 
+    }, [loading]) 
 
     const get_sets = () =>{
         axiosClient.get('/get-sets')
          .then(({data}) => {
-            // console.log(data.right_chair)
+            setloading(false)
             setLeftChair(data.left_chair)
             setRightChair(data.right_chair)
          })
@@ -53,11 +54,10 @@ export default function ChairModal({manifest_id}) {
                 }
                 axiosClient.put(`/assign-set?manifest_id=${manifest_id}`, data)
                     .then(({data}) => {
-                        if(data == 200){
-                            window.location.reload();
-                        }else{
-                            Swal.fire('Something went wrong, please try again', 'error')
-                        }
+                        window.location.replace(`/ticketing/ticket/${manifest_id}/${passenger.id}/${data.data_id}`);
+                    })
+                    .catch(() => {
+                        Swal.fire('Something went wrong, please try again', 'warning')
                     })
             }
         })

@@ -90,13 +90,7 @@ export default function Menu() {
                 setLoading(false)
                 _setAction(false)
             })
-
-            axiosClient.get(`/get-passenger-manifest?id=${dateId}`)
-            .then(({data}) => {
-                console.log(data)
-                setManifest(data)
-            })
-    })
+    }, [loading])
 
 
     
@@ -151,7 +145,7 @@ export default function Menu() {
                 </tbody>
             </table>
         </div>
-        <TicketingTable title={new Date(date).toLocaleString() + ""} loading={loading} dataId={dateId} manifest={manifest}>
+        <TicketingTable title={new Date(date).toLocaleString() + ""} dateId={dateId} manifest={manifest}>
             {manifestAction == 'true' &&
             <div className='mt-5 flex justify-between'>
                 <div></div>

@@ -24,11 +24,15 @@ export default function Upload() {
     const [back_image, _setBackImage] = useState('');
     const [studyLoad_image, _setStudyLoadImage] = useState('');
     const [selfie_image, _setSelfieImage] = useState('');
+    const [idNumber, setNumber] = useState({
+        number: ''
+    })
 
     const [backErrors, setBackErrors] = useState('');
     const [frontErrors, setfrontErrors] = useState('');
     const [studyErrors, setstudyErrors] = useState('');
     const [selfieError, setSelfieError] = useState('');
+    const [number_error, setError] = useState(false)
 
     const [loading, setLoading] = useState(true);
     const [passengers, setPassengers] = useState([]);
@@ -143,9 +147,8 @@ export default function Upload() {
 
     const upload = (e) => {
         e.preventDefault();
-
-
-        if(front == '' && back == '' && studyLoad == '' && selfie == ''){
+        
+        if(front == '' && back == '' && studyLoad == '' && selfie == '', idNumber.number == ''){
             setfrontErrors('Please provide some ID')
 
             setstudyErrors('Please provide some ID')
@@ -153,6 +156,8 @@ export default function Upload() {
             setBackErrors('Please provide some ID')
 
             setSelfieError('Please provide a selfie!')
+
+            setError(true)
 
             toastError('Please provide some ID')
 
@@ -165,11 +170,12 @@ export default function Upload() {
                 back_id : back_image,
                 study_load : studyLoad_image,
                 selfie : selfie_image,
+                id_number: idNumber.number
             }
 
             console.log(data)
 
-            axiosClient.post('/store-media', data, config)
+            axiosClient.post(`/store-media/${id}`, data, config)
                 .then(({response}) => {
                     toastError('Identification submitted successfully', 'light', 'success')
                     _setFront('');
@@ -179,6 +185,7 @@ export default function Upload() {
                     _setStudyLoad('');
                     setSelfieError('')
                     _setStudyLoadImage('')
+                    setError(false)
 
                     axiosClient.get(`/get-media?passenger=${id}`)
                         .then(({data}) => {
@@ -270,7 +277,7 @@ export default function Upload() {
                 </label>
             </div> 
 
-            <div className={(passengers.type == "student" ? 'block' : 'hidden') + " w-[80%] text-center"}>
+            <div className={(passengers.type == "Student" ? 'block' : 'hidden') + " w-[80%] text-center"}>
                 <h1 className='text-sm font-bold text-[#0755A2]'>Upload Clear Image of Study Load</h1>
                 <div className="flex items-center justify-center mb-6">
                     <label htmlFor="dropzone-file2" className={(!studyErrors ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
@@ -283,6 +290,21 @@ export default function Upload() {
                         <input id="dropzone-file2" type="file" className="hidden" onChange={setStudyLoad} />
                     </label>
                 </div> 
+            </div>
+
+            <div className='mb-6 w-[80%] text-center'>
+                <h1 className='text-sm font-bold text-[#0755A2]'>
+                    {passengers.type == "Student" && 'Student ID No.'}
+                    {passengers.type == "Senior" && 'Sr. Citizen TIN No.'}
+                    {passengers.type == "Regular" && 'ID No.'}
+                    {passengers.type == "PWD" && 'PWD ID No.'}
+                </h1>
+                <input type="text" 
+                    id="id_number" 
+                    onChange={ev => setNumber({...idNumber, number: ev.target.value})} 
+                    className={`${number_error ? "border-red-500" : "border-gray-300"} bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:text-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} 
+                    placeholder="Enter ID No."
+                />
             </div>
 
 

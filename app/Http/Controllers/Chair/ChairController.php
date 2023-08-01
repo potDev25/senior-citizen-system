@@ -25,15 +25,17 @@ class ChairController extends Controller
         $update = [
             'set_number' => $request->set_number
         ];
-        $assign = ManifestData::where('id', $request->manifest_id)->update($update);
-
+        $assign            = ManifestData::where('id', $request->manifest_id)->update($update);
+        $get_manifest_data = ManifestData::where('id', $request->manifest_id)->first();
+        $data_id           = $get_manifest_data->manifest_dates_id;
+        
         if($assign){
 
             $set = SetsModel::where('set', $request->set_number)->first();
             $set->status = 1;
             $set->save();
 
-            return response(200);
+            return response(compact('data_id'));
         }else{
             return response('error');
         }

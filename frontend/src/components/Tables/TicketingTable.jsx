@@ -9,9 +9,11 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom';
 
-export default function TicketingTable({title, children, loading, dataId, manifest}) {
+export default function TicketingTable({title, children, dateId}) {
 
     const [search, setSearch] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [manifest, setManifest] = useState([])
     
 
     function classNames(...classes) {
@@ -22,325 +24,17 @@ export default function TicketingTable({title, children, loading, dataId, manife
         setSearch(!search)
     }
 
-    // const insert = () => {
-    //     var sets = [
-    //         {
-    //             set: '2A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '2B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '2C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '3A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '3B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '3C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '4A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '4B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '4C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '5A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '5B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '5C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '6A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '6B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '6C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '7A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '7B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '7C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '8A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '8B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '8C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '9A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '9B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '9C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '10A',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '10B',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '10C',
-    //             type: 'left_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '1D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '1E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '1F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '2D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '2E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '2F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '3D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '3E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '3F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '4D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '4E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '4F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '5D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '5E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '5F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '6D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '6E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '6F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '7D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '7E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '7F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '8D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '8E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '8F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '9D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '9E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '9F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '10D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '10E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '10F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '11D',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '11E',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //         {
-    //             set: '11F',
-    //             type: 'right_chair',
-    //             status: 0
-    //         },
-    //     ]
-
-    //     axiosClient.post('/insert-set', sets)
-    //     .then(({data}) => {
-    //         console.log(data)
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
-    // }
-
-    // useEffect(() => {
-    //     
-    // })
+    useEffect(() => {
+        axiosClient.get(`/get-passenger-manifest/${dateId}`)
+        .then(({data}) => {
+            console.log(data)
+            setManifest(data)
+            setLoading(false)
+        })
+    }, [loading])
 
   return (
-    <div className='bg-white shadow-sm h-fit md:w-full sm:w-full sm:scroll-auto px-5 py-2 rounded sm:overflow-scroll lg:overflow-hidden md:overflow-auto'>
+    <div className='bg-white shadow-sm h-fit md:w-full sm:w-full sm:scroll-auto px-5 py-2 rounded'>
        <h1 className='text-md mb-4 font-bold tracking-wide'>{title}</h1>
 
        <div className='flex items-center justify-between mb-4'>
@@ -382,7 +76,7 @@ export default function TicketingTable({title, children, loading, dataId, manife
                             <td className='text-sm px-5 py-2 text-gray-500'>
                                 <span>{data.age}</span>
                             </td>
-                            <td className='text-sm px-5 py-2 text-gray-500'>
+                            <td className='text-sm px-5 py-2 text-gray-500 capitalize'>
                                 <span>{data.gender}</span>
                             </td>
                             <td className='text-sm px-5 py-2 text-gray-500'>
@@ -439,6 +133,19 @@ export default function TicketingTable({title, children, loading, dataId, manife
                                         onClick={ev => handle(1)}
                                         >
                                         Refund
+                                        </button>
+                                    )}
+                                    </Menu.Item>
+                                    <Menu.Item >
+                                    {({ active }) => (
+                                        <button
+                                        className={classNames(
+                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            'flex items-center px-4 py-2 text-sm w-full text-md font-semibold'
+                                        )}
+                                        onClick={ev => handle(1)}
+                                        >
+                                        With Minor
                                         </button>
                                     )}
                                     </Menu.Item>

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ManifestController;
 use App\Http\Controllers\Chair\ChairController;
 use App\Http\Controllers\Passenger\MangeController;
 use App\Http\Controllers\Passenger\MediaController;
+use App\Http\Controllers\Ticket\TicketController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,9 +45,12 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('/get-sets', [ChairController::class, 'get_sets']);
 
-    Route::get('/get-passenger-manifest', [ManifestController::class, 'passengers']);
+    Route::get('/get-passenger-manifest/{date_id}', [ManifestController::class, 'passengers']);
 
     Route::put('/assign-set', [ChairController::class, 'assign_set']);
+
+    Route::get('/get-ticket-info/{manifestData}/{passenger}/{manifestDate}', [TicketController::class, 'index']);
+    Route::post('/ticket/store/{manifest}', [TicketController::class, 'store']);
 });
 
 
@@ -58,7 +62,7 @@ Route::apiResource('/media', MediaController::class);
 
 Route::get('/get-media', [MediaController::class, 'get_media']);
 
-Route::post('/store-media', [MediaController::class, 'store']);
+Route::post('/store-media/{passenger}', [MediaController::class, 'store']);
 
 // Route::middleware(['auth:passenger'])->group(function(){
 //     Route::get('/dashboard', [MangeController::class, 'index']);

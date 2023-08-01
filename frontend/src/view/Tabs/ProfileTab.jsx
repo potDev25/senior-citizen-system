@@ -58,9 +58,9 @@ export default function ProfileTab({passenger}) {
             <div className='py-3 w-full mb-2 border-b border-gray-200'>
                 <div className='flex items-center gap-5'>
                     <h1 className='text-black text-md font-2xl'>Type:</h1>
-                    {passenger.type == 'student' && <p className='px-2 bg-gray-300 text-gray-500 text-md font-2xl rounded-[20px]'>Student</p>}
-                    {passenger.type == 'regular' && <p className='px-2 bg-red-300 text-red-500 text-md font-2xl rounded-[20px]'>Regular</p>}
-                    {passenger.type == 'senior' && <p className='px-2 bg-blue-300 text-blue-500 text-md font-2xl rounded-[20px]'>Senior</p>}
+                    {passenger.type == 'Student' && <p className='px-2 bg-gray-300 text-gray-500 text-md font-2xl rounded-[20px]'>Student</p>}
+                    {passenger.type == 'Regular' && <p className='px-2 bg-red-300 text-red-500 text-md font-2xl rounded-[20px]'>Regular</p>}
+                    {passenger.type == 'Senior' && <p className='px-2 bg-blue-300 text-blue-500 text-md font-2xl rounded-[20px]'>Senior</p>}
                     {passenger.type == 'pwd' && <p className='px-2 bg-green-300 text-green-500 text-md font-2xl rounded-[20px]'>PWD</p>}
                 </div>
             </div>

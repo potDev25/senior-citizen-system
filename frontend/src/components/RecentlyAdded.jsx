@@ -23,7 +23,7 @@ export default function RecentlyAdded({data, link, checked = false, title, strin
 
     useEffect(() => {
         getPassengers()
-    }, [])
+    }, [loading])
 
     const getPassengers = () => {
         axiosClient.get(link)
@@ -31,6 +31,10 @@ export default function RecentlyAdded({data, link, checked = false, title, strin
             setLoading(false)
             setPassengers(data.data)
             console.log(data.data)
+        })
+        .catch(() => {
+            alert('Server Error!')
+            setLoading(false)
         })
     }
 

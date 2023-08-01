@@ -54,10 +54,11 @@ class ManifestController extends Controller
         }
     }
 
-    public function passengers(){
+    public function passengers(string $date_id){
+        $get_date_id = ManifestDate::where('status', 0)->first();
         $data = DB::table('manifest_data')
                     ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
-                    ->where('manifest_data.manifest_dates_id', 10)
+                    ->where('manifest_data.manifest_dates_id', $get_date_id->id)
                     ->get();
 
         return json_encode($data);

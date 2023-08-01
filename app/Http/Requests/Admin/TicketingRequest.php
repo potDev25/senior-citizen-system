@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MediaRequest extends FormRequest
+class TicketingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,12 +22,7 @@ class MediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'passengers_id' => 'required',
-            'front_id' => 'image',
-            'back_id' => 'image',
-            'study_load' => 'image',
-            'selfie' => 'image',
-            'id_number' => 'required'
+            //
         ];
     }
 }

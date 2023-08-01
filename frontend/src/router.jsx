@@ -16,6 +16,7 @@ import Upload from "./view/Pages/Upload";
 import Profile from "./view/Pages/Profile";
 import QrCode from "./view/Pages/QrCode";
 import ValidationPage from "./view/Pages/ValidationPage";
+import Ticket from "./view/Ticketing/Ticket";
 
 const router =  createBrowserRouter ([
     {
@@ -59,6 +60,10 @@ const router =  createBrowserRouter ([
             {
                 path: '/ticketing',
                 element: <Ticketing/>
+            },
+            {
+                path: '/ticketing/ticket/:manifest_id/:pass_id/:manifest_data',
+                element: <Ticket/>
             },
             {
                 path: '/passenger/profile/:id',

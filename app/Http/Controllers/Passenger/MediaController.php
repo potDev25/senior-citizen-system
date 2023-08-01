@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Passenger;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MediaRequest;
 use App\Http\Resources\Passenger\MediaResource;
+use App\Models\IdNumber;
 use App\Models\Media;
+use App\Models\Passenger;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
-    public function store(MediaRequest $request){
+    public function store(MediaRequest $request, Passenger $passenger){
         $data = $request->validated();
 
         if($request->hasFile('front_id')){
@@ -30,14 +32,22 @@ class MediaController extends Controller
         }
 
         $save_media = Media::create([
-            'front_id' => $data['front_id'],
-            'back_id' => $data['back_id'],
-            'passengers_id' => $data['passengers_id'],
-            'study_load' => $data['study_load'],
-            'selfie' => $data['selfie'],
+            'front_id'       => $data['front_id'],
+            'back_id'        => $data['back_id'],
+            'passengers_id'  => $data['passengers_id'],
+            'study_load'     => $data['study_load'],
+            'selfie'         => $data['selfie'],
+        ]);
+
+        IdNumber::create([
+            'id_number'      => $data['id_number'],
+            'passenger_id'   => $data['passengers_id'],
         ]);
 
         if($save_media){
+            $passenger->done = 1;
+            $passenger->save();
+
             $status = 200;
             $id = $save_media->id;
         }
