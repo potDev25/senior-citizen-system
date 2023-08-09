@@ -15,10 +15,15 @@ class ManifestController extends Controller
 {
     public function store(ManifestRequest $request){
         $data = $request->validated();
+        $time = explode('/', $data['route']);
 
-        $save_manifest = ManifestDate::create($data);
+        $save_manifest = new ManifestDate();
+        $save_manifest->date = $data['date'];
+        $save_manifest->route = $time[0];
+        $save_manifest->time = $time[1];
+        $save = $save_manifest->save();
 
-        if(!$save_manifest){
+        if(!$save){
             return response([
                 'message' => 'error'
             ], 422);
@@ -37,21 +42,21 @@ class ManifestController extends Controller
 
     public function store_manifest_data(ManifestDataRequest $request){
         $data = $request->validated();
-        $validate = ManifestData::where('passengers_id', $data['passengers_id'])->first();
+        $validate = ManifestData::where('passengers_id', $data['passengers_id'])
+                    // ->where('manifest_dates_id', $data['manifest_dates_id'])
+                    ->first();
 
-        if($validate){
-            return response(403);
-        }else{
-            $save = ManifestData::create($data);
-            $id = $save->id;
-            if(!$save){
-                return response(422);
-            }
-
-            $status = 200;
-    
-            return response(compact('status', 'id'));
+     
+        $save = ManifestData::create($data);
+        $id = $save->id;
+        if(!$save){
+            return response(422);
         }
+
+        $status = 200;
+
+        return response(compact('status', 'id'));
+        
     }
 
     public function passengers(string $date_id){
@@ -59,6 +64,7 @@ class ManifestController extends Controller
         $data = DB::table('manifest_data')
                     ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
                     ->where('manifest_data.manifest_dates_id', $get_date_id->id)
+                    ->where('manifest_data.status','complete')
                     ->get();
 
         return json_encode($data);

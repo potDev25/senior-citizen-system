@@ -23,14 +23,13 @@ const Sidebar = ({children}) => {
   const toastId = useRef(null);
 
   const Menus = [
-    { title: "Dashboard", src: chart_fill, to: '/dashboard'},
+      { title: "Dashboard", src: chart_fill, to: '/dashboard'},
       { title: "Ticketing", src: Facilities, to: '/ticketing', gap: true,},
-      { title: "Passengers ", src: Users, to: '/passengers' },
       { title: "People", src: Aminities, to: '/people' },
       { title: "Manifest", src: Calendar, to: '/manifest'},
       { title: "Sales", src: Transaction, to: '/sales'},
       { title: "Reports", src: Chart,  gap: true, to: '/reports' },
-      { title: "Settings", src: Setting, to: '/logs' },
+      { title: "Settings", src: Setting, to: '/settings/fare' },
       { title: "Logs", src: Setting, to: '/logs' },
   ];
 

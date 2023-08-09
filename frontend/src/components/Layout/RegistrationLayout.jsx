@@ -5,10 +5,11 @@ import RegistrationNavbar from './RegistrationNavbar'
 
 export default function RegistrationLayout() {
   return (
-    <div className='body w-full h-fit flex flex-col items-center justify-center'>
-      <div className='backdrop'></div>
-      <RegistrationNavbar/>
-      <Outlet/>
+    <div className='body w-full h-fit'>
+      <div className='w-full flex flex-col items-center justify-center backdrop-blur-sm bg-green-300/20'>
+        <RegistrationNavbar/>
+        <Outlet/>
+      </div>
     </div>
   )
 }

@@ -27,6 +27,7 @@ class MediaRequest extends FormRequest
             'back_id' => 'image',
             'study_load' => 'image',
             'selfie' => 'image',
+            'psa' => 'image',
             'id_number' => 'required'
         ];
     }

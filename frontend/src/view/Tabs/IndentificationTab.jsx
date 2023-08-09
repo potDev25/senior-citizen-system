@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function IndentificationTab({passenger, student = ''}) {
+export default function IndentificationTab({passenger, student = '', minor = ''}) {
 
   const [show, setShow] = useState(false)
   const [image, setImage] = useState('')
@@ -19,21 +19,32 @@ export default function IndentificationTab({passenger, student = ''}) {
             <img onClick={(ev) => openImage(passenger.selfie, 'Selfie')} src={passenger.selfie} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
             <center><h1 className='text-black text-md font-2xl'>Selfie</h1></center>
           </div>
-          <div className='w-[200px] h-[80%]'>
-            <img onClick={(ev) => openImage(passenger.front_id, 'Front ID')} src={passenger.front_id} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
-            <center><h1 className='text-black text-md font-2xl'>Front ID</h1></center>
-          </div>
-          <div className='w-[200px] h-[80%]'>
-            <img onClick={(ev) => openImage(passenger.back_id, 'Back ID')} src={passenger.back_id} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
-            <center><h1 className='text-black text-md font-2xl'>Back ID</h1></center>
-          </div>
-
           {
-            passenger.type === 'Student' || student === 'Student' ?
-            <div className='w-[200px] h-[80%]'>
-              <img onClick={(ev) => openImage(passenger.study_load, 'Study Load')} src={passenger.study_load} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
-              <center><h1 className='text-black text-md font-2xl'>Study Load</h1></center>
-            </div> : null
+            passenger.type === 'Minor' || minor === 'Minor' ?
+            <>
+              <div className='w-[200px] h-[80%]'>
+                <img onClick={(ev) => openImage(passenger.psa, 'PSA Certificate')} src={passenger.psa} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
+                <center><h1 className='text-black text-md font-2xl'>PSA Certificate</h1></center>
+              </div>
+            </> : 
+            <>
+              <div className='w-[200px] h-[80%]'>
+                <img onClick={(ev) => openImage(passenger.front_id, 'Front ID')} src={passenger.front_id} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
+                <center><h1 className='text-black text-md font-2xl'>Front ID</h1></center>
+              </div>
+              <div className='w-[200px] h-[80%]'>
+                <img onClick={(ev) => openImage(passenger.back_id, 'Back ID')} src={passenger.back_id} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
+                <center><h1 className='text-black text-md font-2xl'>Back ID</h1></center>
+              </div>
+
+              {
+                passenger.type === 'Student' || student === 'Student' ?
+                <div className='w-[200px] h-[80%]'>
+                  <img onClick={(ev) => openImage(passenger.study_load, 'Study Load')} src={passenger.study_load} alt="" className='cursor-pointer h-full w-full rounded border hover:border-2 hover:border-blue-500' />
+                  <center><h1 className='text-black text-md font-2xl'>Study Load</h1></center>
+                </div> : null
+              }
+            </>
           }
         </div>
 

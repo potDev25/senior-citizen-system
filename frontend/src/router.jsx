@@ -17,6 +17,7 @@ import Profile from "./view/Pages/Profile";
 import QrCode from "./view/Pages/QrCode";
 import ValidationPage from "./view/Pages/ValidationPage";
 import Ticket from "./view/Ticketing/Ticket";
+import Settings from "./view/Settings/Settings";
 
 const router =  createBrowserRouter ([
     {
@@ -76,6 +77,10 @@ const router =  createBrowserRouter ([
             {
                 path: '/validation-page/:qr',
                 element: <ValidationPage/>
+            },
+            {
+                path: '/settings/:tab',
+                element: <Settings/>
             },
         ]
     },

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ManifestController;
 use App\Http\Controllers\Chair\ChairController;
 use App\Http\Controllers\Passenger\MangeController;
 use App\Http\Controllers\Passenger\MediaController;
+use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Ticket\TicketController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('/insert-set', [UserController::class, 'insert_set']);
 
-    Route::get('/get-sets', [ChairController::class, 'get_sets']);
+    Route::get('/get-sets/{manifest}', [ChairController::class, 'get_sets']);
 
     Route::get('/get-passenger-manifest/{date_id}', [ManifestController::class, 'passengers']);
 
@@ -51,6 +52,18 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('/get-ticket-info/{manifestData}/{passenger}/{manifestDate}', [TicketController::class, 'index']);
     Route::post('/ticket/store/{manifest}', [TicketController::class, 'store']);
+    Route::put('/ticket/with_minor/{passenger}/{manifestDateId}', [TicketController::class, 'withMinor']);
+    Route::put('/ticket/remove_minor/{passenger}/{manifestDateId}', [TicketController::class, 'removeMinor']);
+    Route::put('/ticket/refund/{passenger}/{manifestDateId}', [TicketController::class, 'refund']);
+    Route::put('/ticket/rebook/{passenger}/{manifestDateId}', [TicketController::class, 'rebook']);
+    Route::put('/ticket/submit_manifest', [TicketController::class, 'submit']);
+
+    Route::get('/settings/index', [SettingsController::class, 'index']);
+    Route::post('/settings/fair/store', [SettingsController::class, 'fair_store']);
+    Route::post('/settings/time/store', [SettingsController::class, 'time_store']);
+    Route::post('/settings/time/update/{route}', [SettingsController::class, 'time_update']);
+    Route::get('/settings/time/show/{route}', [SettingsController::class, 'show_time']);
+    Route::post('/settings/ticket/store/', [SettingsController::class, 'ticket_store']);
 });
 
 

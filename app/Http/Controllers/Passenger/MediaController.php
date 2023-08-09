@@ -31,12 +31,17 @@ class MediaController extends Controller
             $data['selfie'] = $request->file('selfie')->store('media', 'public');
         }
 
+        if($request->hasFile('psa')){
+            $data['psa'] = $request->file('psa')->store('media', 'public');
+        }
+
         $save_media = Media::create([
             'front_id'       => $data['front_id'],
             'back_id'        => $data['back_id'],
             'passengers_id'  => $data['passengers_id'],
             'study_load'     => $data['study_load'],
             'selfie'         => $data['selfie'],
+            'psa'            => $data['psa'],
         ]);
 
         IdNumber::create([

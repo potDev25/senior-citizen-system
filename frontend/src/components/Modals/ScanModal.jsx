@@ -12,9 +12,9 @@ import ChairModal from './ChairModal';
 export default function ScanModal({date}) {
     const [show, setShow] = useState(false)
     const [showProfile, setShowProfile] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [tab, setTab] = useState('')
-    const [manifest_id, setManifestId] = useState(null)
+    const [manifest_id1, setManifestId] = useState(null)
 
     const [qrscan, setQrscan] = useState('No result');
     const [qrCodeData, setQrCodeData] = useState(null);
@@ -60,7 +60,7 @@ export default function ScanModal({date}) {
         })
        setShow(false)
 
-        axiosClient.get(`/profile_passengers?qr=${result}`)
+        axiosClient.get(`/profile_passengers?qr=${result}&date=${date}`)
             .then(({data}) => {
                // setLoading(false)
 
@@ -160,6 +160,7 @@ export default function ScanModal({date}) {
     // if(loading){
     //     loadingToast('Processing....')
     // }
+    
 
   return (
     <>
@@ -263,7 +264,7 @@ export default function ScanModal({date}) {
                                         }
 
                                         {
-                                            tab == 'identification' && <IndentificationTab passenger={media} student={passenger.type}/>
+                                            tab == 'identification' && <IndentificationTab passenger={media} student={passenger.type} minor={passenger.type}/>
                                         }
                                     </div>
                                 </div>
@@ -320,7 +321,7 @@ export default function ScanModal({date}) {
                         {/*body*/}
                         <div className="relative p-6 flex-auto bg-gray-200">
                             <div className='w-full bg-white shadow-md flex items-center justify-center p-5 rounded'>
-                               <ChairModal manifest_id={manifest_id} passenger={passenger}/>
+                              <ChairModal manifest_id={manifest_id1} passenger={passenger}/>
                             </div>
 
                         </div>

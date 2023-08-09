@@ -38,7 +38,8 @@ class PassengerResource extends JsonResource
             'back_id' => asset('./storage/'.$this->media->back_id),
             'front_id' => asset('./storage/'.$this->media->front_id),
             'selfie' => asset('./storage/'.$this->media->selfie),
-            'study_load' => asset('./storage/'.$this->media->study_load)
+            'study_load' => asset('./storage/'.$this->media->study_load),
+            'psa' => asset('./storage/'.$this->media->psa)
         ];
     }
 }

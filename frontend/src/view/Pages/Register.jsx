@@ -198,6 +198,10 @@ export default function Register() {
                         <input onChange={(ev) => setType(ev.target.value)} id="pwd" type="radio" value="PWD" name="default-radio" className=""/>
                         <label htmlFor="pwd" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">PWD</label>
                     </div>
+                    <div className="flex gap-2">
+                        <input onChange={(ev) => setType(ev.target.value)} id="minor" type="radio" value="Minor" name="default-radio" className=""/>
+                        <label htmlFor="minor" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Minor</label>
+                    </div>
                 </div>
                 <p className='text-sm text-red-500 animate-pulse'>{errors.type}</p>
 

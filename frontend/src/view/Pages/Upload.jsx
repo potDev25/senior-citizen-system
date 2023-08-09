@@ -19,15 +19,18 @@ export default function Upload() {
     const [back, _setBack] = useState('');
     const [studyLoad, _setStudyLoad] = useState('');
     const [selfie, _setSelfie] = useState('');
+    const [psa, _setPsa] = useState('');
 
     const [front_image, _setFrontImage] = useState('');
     const [back_image, _setBackImage] = useState('');
     const [studyLoad_image, _setStudyLoadImage] = useState('');
     const [selfie_image, _setSelfieImage] = useState('');
+    const [psa_image, _setPsaImgae] = useState('');
     const [idNumber, setNumber] = useState({
         number: ''
     })
 
+    const [psaError, setPsaError] = useState('');
     const [backErrors, setBackErrors] = useState('');
     const [frontErrors, setfrontErrors] = useState('');
     const [studyErrors, setstudyErrors] = useState('');
@@ -78,6 +81,8 @@ export default function Upload() {
 
         if(passengers.type == 'Regular' || passengers.type == 'PWD' || passengers.type == 'Senior'){
             _setStudyLoadImage(ev.target.files[0])
+            _setFrontImage(ev.target.files[0])
+            _setPsaImgae(ev.target.files[0])
         }
 
         if(imageType.indexOf(file.type) !== -1){
@@ -89,6 +94,28 @@ export default function Upload() {
             toastError('This image type is not allowed!')
         }
 
+    }
+
+    const setPsa = (ev) => {
+        _setPsa('')
+        const file = ev.target.files[0];
+        const imageType = ['image/jpeg', 'image/jpg', 'image/png'];
+
+        if(passengers.type == 'Minor'){
+            _setStudyLoadImage(ev.target.files[0])
+            _setBackImage(ev.target.files[0])
+            _setFrontImage(ev.target.files[0])
+            setNumber({...idNumber, number: 'none'})
+        }
+
+        if(imageType.indexOf(file.type) !== -1){
+            setPsaError('')
+            _setPsa(file.name);
+            _setPsaImgae(ev.target.files[0])
+        }else{
+            setPsaError('This image type is not allowed!')
+            toastError('This image type is not allowed!')
+        }
     }
 
     const setback = (ev) => {
@@ -116,6 +143,7 @@ export default function Upload() {
             setstudyErrors('')
             _setStudyLoad(file.name);
             _setStudyLoadImage(ev.target.files[0])
+            _setPsaImgae(ev.target.files[0])
         }else{
             setstudyErrors('This image type is not allowed!')
             toastError('This image type is not allowed!')
@@ -148,7 +176,7 @@ export default function Upload() {
     const upload = (e) => {
         e.preventDefault();
         
-        if(front == '' && back == '' && studyLoad == '' && selfie == '', idNumber.number == ''){
+        if(front == '' && back == '' && studyLoad == '' && selfie == '' && idNumber.number == '' && psa ==''){
             setfrontErrors('Please provide some ID')
 
             setstudyErrors('Please provide some ID')
@@ -156,6 +184,8 @@ export default function Upload() {
             setBackErrors('Please provide some ID')
 
             setSelfieError('Please provide a selfie!')
+
+            setPsaError('Please provide a selfie!')
 
             setError(true)
 
@@ -170,6 +200,7 @@ export default function Upload() {
                 back_id : back_image,
                 study_load : studyLoad_image,
                 selfie : selfie_image,
+                psa : psa_image,
                 id_number: idNumber.number
             }
 
@@ -251,61 +282,84 @@ export default function Upload() {
                 </label>
             </div>
 
-            <h1 className='text-sm font-bold text-[#0755A2] uppercase'>Upload Front {passengers.type} ID</h1>
-            <div className="flex items-center justify-center w-[80%] mb-6">
-                <label htmlFor="dropzone-file" className={(!frontErrors ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" rokeLinejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
-                        {!front && <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>}
-                        {front && <p className="text-xs text-gray-500 dark:text-gray-400">{front}</p>}
+            {
+                passengers.type == "Minor" ? 
+                    <>
+                        <h1 className='text-sm font-bold text-[#0755A2] uppercase'>Upload PSA Certificate</h1>
+                        <div className="flex items-center justify-center w-[80%] mb-6">
+                            <label htmlFor="dropzone-file" className={(!psaError ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" rokeLinejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
+                                    {!psa && <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>}
+                                    {psa && <p className="text-xs text-gray-500 dark:text-gray-400">{psa}</p>}
+                                </div>
+                                <input id="dropzone-file" type="file" className="hidden" onChange={setPsa} />
+                            </label>
+                        </div> 
+                    </>
+                : <>
+                
+                <h1 className='text-sm font-bold text-[#0755A2] uppercase'>Upload Front {passengers.type} ID</h1>
+                    <div className="flex items-center justify-center w-[80%] mb-6">
+                        <label htmlFor="dropzone-file" className={(!frontErrors ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" rokeLinejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
+                                {!front && <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>}
+                                {front && <p className="text-xs text-gray-500 dark:text-gray-400">{front}</p>}
+                            </div>
+                            <input id="dropzone-file" type="file" className="hidden" onChange={setFront} />
+                        </label>
+                    </div> 
+
+                    <h1 className='text-sm font-bold text-[#0755A2] uppercase'>Upload Back {passengers.type} ID</h1>
+                    <div className="flex items-center justify-center w-[80%] mb-6">
+                        <label htmlFor="dropzone-file1" className={(!backErrors ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" rokeLinejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
+                                {!back && <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>}
+                                {back && <p className="text-xs text-gray-500 dark:text-gray-400">{back}</p>}
+                            </div>
+                            <input id="dropzone-file1" type="file" className="hidden" onChange={setback} />
+                        </label>
+                    </div> 
+
+                    <div className={(passengers.type == "Student" ? 'block' : 'hidden') + " w-[80%] text-center"}>
+                        <h1 className='text-sm font-bold text-[#0755A2]'>Upload Clear Image of Study Load</h1>
+                        <div className="flex items-center justify-center mb-6">
+                            <label htmlFor="dropzone-file2" className={(!studyErrors ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" rokeLinejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
+                                    {!studyLoad && <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>}
+                                    {studyLoad && <p className="text-xs text-gray-500 dark:text-gray-400">{studyLoad}</p>}
+                                </div>
+                                <input id="dropzone-file2" type="file" className="hidden" onChange={setStudyLoad} />
+                            </label>
+                        </div> 
                     </div>
-                    <input id="dropzone-file" type="file" className="hidden" onChange={setFront} />
-                </label>
-            </div> 
 
-            <h1 className='text-sm font-bold text-[#0755A2] uppercase'>Upload Back {passengers.type} ID</h1>
-            <div className="flex items-center justify-center w-[80%] mb-6">
-                <label htmlFor="dropzone-file1" className={(!backErrors ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" rokeLinejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
-                        {!back && <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>}
-                        {back && <p className="text-xs text-gray-500 dark:text-gray-400">{back}</p>}
+                    <div className='mb-6 w-[80%] text-center'>
+                        <h1 className='text-sm font-bold text-[#0755A2]'>
+                            {passengers.type == "Student" && 'Student ID No.'}
+                            {passengers.type == "Senior" && 'Sr. Citizen TIN No.'}
+                            {passengers.type == "Regular" && 'ID No.'}
+                            {passengers.type == "PWD" && 'PWD ID No.'}
+                        </h1>
+                        <input type="text" 
+                            id="id_number" 
+                            onChange={ev => setNumber({...idNumber, number: ev.target.value})} 
+                            className={`${number_error ? "border-red-500" : "border-gray-300"} bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:text-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} 
+                            placeholder="Enter ID No."
+                        />
                     </div>
-                    <input id="dropzone-file1" type="file" className="hidden" onChange={setback} />
-                </label>
-            </div> 
 
-            <div className={(passengers.type == "Student" ? 'block' : 'hidden') + " w-[80%] text-center"}>
-                <h1 className='text-sm font-bold text-[#0755A2]'>Upload Clear Image of Study Load</h1>
-                <div className="flex items-center justify-center mb-6">
-                    <label htmlFor="dropzone-file2" className={(!studyErrors ? 'border-gray-300' : 'border-red-500') +" flex flex-col items-center justify-center w-full h-50 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"}>
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg aria-hidden="true" className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" rokeLinejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
-                            {!studyLoad && <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>}
-                            {studyLoad && <p className="text-xs text-gray-500 dark:text-gray-400">{studyLoad}</p>}
-                        </div>
-                        <input id="dropzone-file2" type="file" className="hidden" onChange={setStudyLoad} />
-                    </label>
-                </div> 
-            </div>
+                </>
+            }
 
-            <div className='mb-6 w-[80%] text-center'>
-                <h1 className='text-sm font-bold text-[#0755A2]'>
-                    {passengers.type == "Student" && 'Student ID No.'}
-                    {passengers.type == "Senior" && 'Sr. Citizen TIN No.'}
-                    {passengers.type == "Regular" && 'ID No.'}
-                    {passengers.type == "PWD" && 'PWD ID No.'}
-                </h1>
-                <input type="text" 
-                    id="id_number" 
-                    onChange={ev => setNumber({...idNumber, number: ev.target.value})} 
-                    className={`${number_error ? "border-red-500" : "border-gray-300"} bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:text-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} 
-                    placeholder="Enter ID No."
-                />
-            </div>
+            
 
 
             <div className="mb-6 w-[80%]">

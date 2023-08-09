@@ -7,21 +7,10 @@ export default function ChairModal({manifest_id, passenger}) {
 
     const [left_chair, setLeftChair] = useState([])
     const [right_chair, setRightChair] = useState()
+    const [manifest, setManifest] = useState([])
     const [loading, setloading] = useState(true)
     
-    useEffect(() => {
-        get_sets()
-    }, [loading]) 
-
-    const get_sets = () =>{
-        axiosClient.get('/get-sets')
-         .then(({data}) => {
-            setloading(false)
-            setLeftChair(data.left_chair)
-            setRightChair(data.right_chair)
-         })
-    }
-
+    
     const alertMessage = (text, icon) =>{
         Swal.fire({
           icon: icon,
@@ -52,7 +41,7 @@ export default function ChairModal({manifest_id, passenger}) {
                 const data = {
                     set_number: e
                 }
-                axiosClient.put(`/assign-set?manifest_id=${manifest_id}`, data)
+                axiosClient.put(`/assign-set?manifest_id=${manifest.id}`, data)
                     .then(({data}) => {
                         window.location.replace(`/ticketing/ticket/${manifest_id}/${passenger.id}/${data.data_id}`);
                     })
@@ -63,9 +52,18 @@ export default function ChairModal({manifest_id, passenger}) {
         })
     }
 
+    useEffect(() => { 
+        axiosClient.get(`/get-sets/${manifest_id}`)
+         .then(({data}) => {
+            setloading(false)
+            setLeftChair(data.left_chair)
+            setRightChair(data.right_chair)
+            setManifest(data.manifest)
+         }) 
+    })  
 
   return (
-    <div className='flex gap-20 p-5 bg-blue-500 rounded'>                    
+    <div className='flex gap-20 p-5 bg-blue-500 rounded'> 
         <ul className='chair-left grid grid-cols-3 gap-2'>
             { left_chair ? <>
                 {left_chair.map(chair => (

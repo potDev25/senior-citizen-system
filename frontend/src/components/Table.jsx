@@ -55,6 +55,7 @@ export default function Table({checked, passengers, string = ''}) {
                     {u.type == 'Regular' && <span className='rounded-[10px] bg-red-300 text-red-500 px-2 text-sm capitalize'>{u.type}</span>}
                     {u.type == 'Senior' && <span className='rounded-[10px] bg-blue-300 text-blue-500 px-2 text-sm capitalize'>{u.type}</span>}
                     {u.type == 'PWD' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>{u.type}</span>}
+                    {u.type == 'Minor' && <span className='rounded-[10px] bg-yellow-300 text-yellow-500 px-2 text-sm capitalize'>{u.type}</span>}
                 </td>
                 <td className='text-md px-5 py-2x text-gray-500'>{u.created_at}</td>
                 <td>

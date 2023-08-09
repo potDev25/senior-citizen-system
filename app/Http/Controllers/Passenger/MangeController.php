@@ -11,6 +11,7 @@ use App\Models\ManifestData;
 use App\Models\ManifestDate;
 use App\Models\Media;
 use App\Models\Passenger;
+use App\Models\Time;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use PharIo\Manifest\Manifest;
@@ -80,9 +81,11 @@ class MangeController extends Controller
 
     public function profile(Passenger $passenger, Request $request){
 
-        if(isset($request->qr)){
+        if(isset($request->qr) || isset($request->date)){
             $data             = Passenger::where('qrcode_hash', $request->qr)->first();
-            $check            = ManifestData::where('passengers_id', $data->id)->first();
+            $check            = ManifestData::where('passengers_id', $data->id)
+                                ->where('manifest_dates_id', $request->date)
+                                ->first();
 
             if(isset($check)){
                 return response([
@@ -95,6 +98,7 @@ class MangeController extends Controller
                     'front_id'    => asset('./storage/'.$data->media->front_id),
                     'selfie'      => asset('./storage/'.$data->media->selfie),
                     'study_load'  => asset('./storage/'.$data->media->study_load),
+                    'psa'  => asset('./storage/'.$data->media->psa),
                 ];
                 return json_encode(compact('data', 'image'));
             }
@@ -183,7 +187,9 @@ class MangeController extends Controller
         $manifest = ManifestAction::where('id', 1)->first();
         $action = $manifest->action;
         $manifestDate = ManifestDate::where('status', 0)->first();
+        $routes = Time::all();
+        $passengers = Passenger::where('verified', '!=', null)->get();
 
-        return response(compact('action', 'manifestDate'));
+        return response(compact('action', 'manifestDate', 'routes', 'passengers'));
     }
 }

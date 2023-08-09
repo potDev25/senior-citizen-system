@@ -28,9 +28,11 @@
     "react-qr-reader": "^3.0.0-beta-1",
     "react-qr-scanner": "^1.0.0-alpha.11",
     "react-router-dom": "^6.11.1",
+    "react-to-print": "^2.14.13",
     "react-toastify": "^9.1.2",
     "sweetalert2": "^11.4.8",
-    "sweetalert2-react-content": "^5.0.7"
+    "sweetalert2-react-content": "^5.0.7",
+    "tw-elements-react": "^1.0.0-alpha1"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

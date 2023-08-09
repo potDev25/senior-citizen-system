@@ -37,7 +37,7 @@ export default function Success({data}) {
         </div>
 
         <div className='w-[80%] border border-2-gray-500 p-2 shadow-md rounded-[10px]'>
-            <h1 className='text-[#0755A2] mb-4 font-medium text-mc tracking-wider flex items-center justify-center uppercase'><p>{data.type} ID: </p> 
+            <h1 className='text-[#0755A2] mb-4 font-medium text-mc tracking-wider flex items-center justify-center uppercase'><p>{data.type} {data.type === 'Minor' ? '' : 'ID'}</p> 
                 <p className='text-lg font-medium text-[#51e949]'><FaIcon.FaCheckCircle/></p>
             </h1>
 

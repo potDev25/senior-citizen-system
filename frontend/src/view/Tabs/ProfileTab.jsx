@@ -62,6 +62,7 @@ export default function ProfileTab({passenger}) {
                     {passenger.type == 'Regular' && <p className='px-2 bg-red-300 text-red-500 text-md font-2xl rounded-[20px]'>Regular</p>}
                     {passenger.type == 'Senior' && <p className='px-2 bg-blue-300 text-blue-500 text-md font-2xl rounded-[20px]'>Senior</p>}
                     {passenger.type == 'pwd' && <p className='px-2 bg-green-300 text-green-500 text-md font-2xl rounded-[20px]'>PWD</p>}
+                    {passenger.type == 'Minor' && <p className='px-2 bg-yellow-300 text-yellow-500 text-md font-2xl rounded-[20px]'>Minor</p>}
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ChairController extends Controller
 {
-    public function get_sets(){
+    public function get_sets(ManifestData $manifest){
         $left = SetsModel::where('type', 'left_chair')->get();
         $right = SetsModel::where('type', 'right_chair')->get();
 
@@ -18,7 +18,7 @@ class ChairController extends Controller
             SetsModel::where('type', 'left_chair')->get()
         );
         $right_chair = SetsResource::collection($right);
-        return response(compact('right_chair', 'left_chair'));
+        return response(compact('right_chair', 'left_chair', 'manifest'));
     }
 
     public function assign_set(Request $request){
@@ -26,7 +26,8 @@ class ChairController extends Controller
             'set_number' => $request->set_number
         ];
         $assign            = ManifestData::where('id', $request->manifest_id)->update($update);
-        $get_manifest_data = ManifestData::where('id', $request->manifest_id)->first();
+        $get_manifest_data = ManifestData::where('id', $request->manifest_id)
+                            ->first();
         $data_id           = $get_manifest_data->manifest_dates_id;
         
         if($assign){
