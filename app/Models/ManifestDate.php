@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ManifestDate extends Model
 {
     use HasFactory;
+
+    public function manifestData(){
+        return $this->hasMany(ManifestData::class, 'manifest_dates_id');
+    }
 }

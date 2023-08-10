@@ -10,6 +10,10 @@ class ManifestData extends Model
 {
     use HasFactory;
     public function passenger(){
-        return $this->belongsTo(Passenger::class);
+        return $this->belongsTo(Passenger::class, 'passengers_id');
+    }
+
+    public function manifestDate(){
+        return $this->belongsTo(ManifestDate::class);
     }
 }

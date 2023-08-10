@@ -27,7 +27,7 @@ const Sidebar = ({children}) => {
       { title: "Ticketing", src: Facilities, to: '/ticketing', gap: true,},
       { title: "People", src: Aminities, to: '/people' },
       { title: "Manifest", src: Calendar, to: '/manifest'},
-      { title: "Sales", src: Transaction, to: '/sales'},
+      { title: "Sales", src: Calendar, to: '/salse'},
       { title: "Reports", src: Chart,  gap: true, to: '/reports' },
       { title: "Settings", src: Setting, to: '/settings/fare' },
       { title: "Logs", src: Setting, to: '/logs' },

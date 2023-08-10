@@ -88,7 +88,7 @@ export default function Ticket() {
         
         <button 
           onClick={submitTicket}
-          className={`${btnLoading && 'cursor-not-allowed'} rounded text-white border bg-green-500 border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center`}>
+          className={`${btnLoading && 'cursor-not-allowed'} ${manifestDate.status === 1 ? 'hidden' : 'flex'} rounded text-white border bg-green-500 border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center`}>
 
             <div className='flex items-center justify-center gap-2'>
 

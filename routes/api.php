@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ManifestController;
+use App\Http\Controllers\Admin\ManifestDataController;
 use App\Http\Controllers\Chair\ChairController;
 use App\Http\Controllers\Passenger\MangeController;
 use App\Http\Controllers\Passenger\MediaController;
@@ -64,6 +65,9 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/settings/time/update/{route}', [SettingsController::class, 'time_update']);
     Route::get('/settings/time/show/{route}', [SettingsController::class, 'show_time']);
     Route::post('/settings/ticket/store/', [SettingsController::class, 'ticket_store']);
+
+    Route::get('/manifest', [ManifestDataController::class, 'index']);
+    Route::get('/manifest/passengers/{manifest}', [ManifestDataController::class, 'show']);
 });
 
 

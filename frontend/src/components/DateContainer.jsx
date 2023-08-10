@@ -1,16 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as FaIcon from "react-icons/fi";
+import ManifestCalendar from './Modals/ManifestCalendar';
+import axiosClient from '../axiosClient';
 
 export default function DateContainer() {
 
   const [search, setSearch] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [manifestDate, setManifestDate] = useState([])
 
   const search_width = () => {
     setSearch(!search)
   }
 
+
+
+  useEffect(() => {
+    axiosClient.get('/manifest')
+      .then(({data}) => {
+        setManifestDate(data.manifestDate)
+      })
+
+  }, [loading])
+
   return (
-    <div className='bg-white shadow-sm h-fit h-[100%] md:w-[40%] px-5 py-2 rounded'>
+    <div className='bg-white shadow-sm h-fit md:w-[40%] px-5 py-2 rounded'>
        <h1 className='text-md mb-4 font-bold tracking-wide'>Date</h1>
 
        <div className='flex items-center justify-between'>
@@ -22,7 +36,6 @@ export default function DateContainer() {
                 <input type="search" id="default-search" onClick={search_width} className={(search ? 'w-[80%]' : 'w-[50px]') + " transition-all ease-in-out block py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-2"} required />
             </div>
 
-            <button className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiCalendar/> &nbsp;Calender</button>
         </div>
 
         <table className='md:table-auto w-full text-sm mt-2'>
