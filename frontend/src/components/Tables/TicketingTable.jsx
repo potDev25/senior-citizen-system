@@ -22,11 +22,11 @@ export default function TicketingTable({title, children, dateId, time, getManife
     const [passengerId, _setPassengerId] = useState(null)
     const [manifestDateId, setDateId] = useState(null)
     
-    const date = new Date(title)
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-    ];
-    const act_data = monthNames[date.getMonth()] + ' ' + date.getDay() + ',' + date.getFullYear()
+    // const date = new Date(title)
+    // const monthNames = ["January", "February", "March", "April", "May", "June",
+    // "July", "August", "September", "October", "November", "December"
+    // ];
+    // const act_data = monthNames[date.getMonth()] + ' ' + date.getDay() + ',' + date.getFullYear()
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
@@ -165,8 +165,7 @@ export default function TicketingTable({title, children, dateId, time, getManife
             dateId={manifestDateId}
         />
 
-       <h1 className='text-md mb-4 font-bold tracking-wide'>{title === '' ? 'Create Manifest Date' : act_data + ' ' + time}</h1>
-
+       <h1 className='text-md mb-4 font-bold tracking-wide'>{title === '' ? 'Create Manifest Date' : title + ' ' + time}</h1>
        <div className='flex items-center justify-between mb-4'>
             <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div className="relative">

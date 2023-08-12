@@ -2,11 +2,11 @@ import React, { useRef } from 'react'
 import Logo from '../../assets/images/logo-3.png'
 import qr from '../../assets/images/qr.png'
 
-const TicketToPrint = React.forwardRef(({ fare, ticket, passengers, manifest, id_number, manifestDate }, ref) => {
+const TicketToPrint = React.forwardRef(({ fare, ticket, passengers, manifest, id_number, manifestDate, sequence}, ref) => {
 
   return (
     <div className='flex items-center justify-center flex-col' ref={ref}>
-        <div className='bg-white w-[500px] h-[500px] p-5'>
+        <div className='bg-white w-[500px] h-[510px] p-5'>
           <div className='flex items-center justify-center gap-5 w-full'>
             <div>
               <img src={Logo} className='h-[100px] w-[50px]' alt="" />
@@ -38,8 +38,8 @@ const TicketToPrint = React.forwardRef(({ fare, ticket, passengers, manifest, id
                   Seat No. <br />{manifest.set_number}
                 </div>
               </li>
-              <li className='border-b-[1px] border-black text-[12px] p-2'>Departure Date/Time: 10:43 AM</li>
-              <li className='text-[12px] grid grid-cols-2'>
+              <li className='border-b-[1px] border-black text-[12px] p-2'>Departure Date/Time: {manifestDate.time}</li>
+              <li className='text-[12px] border-black border-b-[1px] grid grid-cols-2'>
                 <p className='px-2'>
                 Fare: {
                   manifest.type === 'Student' && fare.student + '.00'
@@ -75,6 +75,7 @@ const TicketToPrint = React.forwardRef(({ fare, ticket, passengers, manifest, id
                 }
                 </div>
               </li>
+              <li className='border-black text-[12px] p-2 capitalize'>Sequence No.: {sequence}</li>
             </ul>
           </div>
           <span className='text-[8px] font-semibold'>NOTE</span>
@@ -106,7 +107,7 @@ const TicketToPrint = React.forwardRef(({ fare, ticket, passengers, manifest, id
           Date Issued: <span className='border-b-[1px] border-black'> Feb 27, 2019</span> <span className='text-md font-bold'>LNPP</span></p>
         </div>
 
-        <div className='bg-pink-100 w-[500px] h-[500px] p-5'>
+        <div className='bg-pink-100 w-[500px] h-[510px] p-5'>
           <div className='flex items-center justify-center gap-5 w-full'>
             <div>
               <img src={Logo} className='h-[100px] w-[50px]' alt="" />
@@ -117,7 +118,7 @@ const TicketToPrint = React.forwardRef(({ fare, ticket, passengers, manifest, id
                 {ticket.office_address} <br />
                 {ticket.original_address} <br />
                 {ticket.type} Reg TIN {ticket.tin_no} <br />
-                Mobile No. {ticket.mobile} Tel No. {ticket.telephone} <span className='font-bold'>Fast Craft's Copy</span>
+                Mobile No. {ticket.mobile} Tel No. {ticket.telephone} <span className='font-bold'>Passengers's Copy</span>
               </p>
             </div>
             <div>
@@ -175,6 +176,7 @@ const TicketToPrint = React.forwardRef(({ fare, ticket, passengers, manifest, id
                 }
                 </div>
               </li>
+              <li className='border-black text-[12px] p-2 capitalize'>Sequence No.: {sequence}</li>
             </ul>
           </div>
           <span className='text-[8px] font-semibold'>NOTE</span>

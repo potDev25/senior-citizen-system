@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as FaIcon from "react-icons/fi";
-import ManifestCalendar from './Modals/ManifestCalendar';
-import axiosClient from '../axiosClient';
-import ManifestLayout from './Layout/ManifestLayout';
 import { Link } from 'react-router-dom';
 import ReactToPrint from 'react-to-print';
-import ManifestToPrint from './Tables/ManifestToPrint';
-import ManifestPassengers from './Modals/ManifestPassengers';
+import ManifestLayout from '../../Layout/ManifestLayout';
+import ManifestCalendar from '../../Modals/ManifestCalendar';
+import ManifestPassengers from '../../Modals/ManifestPassengers';
+import ManifestToPrint from '../../Tables/ManifestToPrint';
+import axiosClient from '../../../axiosClient';
+import TotalWidgets from './TotalWidgets';
+import ManifestSalesLayout from '../../Layout/ManifestSalesLayout';
 
-export default function () {
+export default function SalesManifestTable() {
     const [search, setSearch] = useState(true)
     const [strings, setString] = useState('')
     const [showModal, setModal] = useState(false)
@@ -23,9 +25,18 @@ export default function () {
     const [getDateIdForPrint, setDateIdForPrint] = useState(null)
     const [passengers, setPassengers] = useState([])
     const [numbers, setNumber] = useState([])
+    const [tickets, setTickets] = useState('')
     const [manifest, setManifest] = useState([])
     const [toPrint, setToPrint] = useState([])
+    const [sales, setSales] = useState({
+        pwd: '',
+        senior: '',
+        regular: '',
+        minor: '',
+        student: ''
+    })
     const [month, setMonth] = useState('')
+    const [totalSales, setTotalSales] = useState('')
     const componentRef = useRef();
 
     const search_width = () => {
@@ -51,9 +62,18 @@ export default function () {
         setLoadingBox(true)
         axiosClient.get(`/manifest/passengers/${date.id}`)
         .then(({data}) => {
+            setSales({...sales, 
+                pwd: data.pwd,
+                senior: data.senior,
+                student: data.student,
+                minor: data.minor,
+                regular: data.regular
+            })
             setPassengers(data.passengers)
             setNumber(data.number)
             setToPrint(data.toPrint)
+            setTotalSales(data.formatedTotalSales)
+            setTickets(data.sequence)
             setLoadingBox(false)
         })
         setModal(false)
@@ -72,9 +92,18 @@ export default function () {
     
         axiosClient.get(`/manifest/passengers/${dateId ? dateId.id : null}`)
         .then(({data}) => {
+            setSales({...sales, 
+                pwd: data.pwd,
+                senior: data.senior,
+                student: data.student,
+                minor: data.minor,
+                regular: data.regular
+            })
             setPassengers(data.passengers)
             setDateIdForPrint(dateId.id)
             setNumber(data.number)
+            setTotalSales(data.formatedTotalSales)
+            setTickets(data.sequence)
             setToPrint(data.toPrint)
             setLoadingBox(false)
         })
@@ -88,9 +117,17 @@ export default function () {
   
   return (
     <>
-        <ManifestLayout
+        <ManifestSalesLayout
             number={numbers}
             loading={loadingBox}
+            sales={sales}
+        />
+
+        <TotalWidgets
+            totalSales={totalSales}
+            passengers={passengers}
+            number={numbers}
+            tickets={tickets}
         />
 
         <div className='hidden'>
@@ -116,9 +153,6 @@ export default function () {
                             <button 
                             onClick={ev => setModal(true)}
                             className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiCalendar/> &nbsp;Date</button>
-                            <button 
-                            onClick={ev => setModalPassengers(true)}
-                            className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiUsers/> &nbsp;Passengers</button>
                             <ManifestCalendar
                                 showModal={showModal}
                                 hideModal={hideModal}
@@ -127,17 +161,6 @@ export default function () {
                                 filterByRoute={filterByRoute}
                                 loading={loading}
                                 getDateId={getDateId}
-                            />
-
-                            <ManifestPassengers
-                                showModal={showModalPassengers}
-                                hideModal={hideModalPassengers}
-                                dates={manifestDate}
-                                options={options}
-                                filterByRoute={filterByRoute}
-                                loading={loading}
-                                getDateId={getDateId}
-                                passengers={trackPassenger}
                             />
 
                             <ReactToPrint

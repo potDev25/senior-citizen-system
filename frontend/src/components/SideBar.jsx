@@ -25,10 +25,11 @@ const Sidebar = ({children}) => {
   const Menus = [
       { title: "Dashboard", src: chart_fill, to: '/dashboard'},
       { title: "Ticketing", src: Facilities, to: '/ticketing', gap: true,},
+      { title: "Staff", src: Facilities, to: '/staff'},
       { title: "People", src: Aminities, to: '/people' },
       { title: "Manifest", src: Calendar, to: '/manifest'},
-      { title: "Sales", src: Calendar, to: '/salse'},
-      { title: "Reports", src: Chart,  gap: true, to: '/reports' },
+      { title: "Daily Sales", src: Calendar, to: '/sales'},
+      { title: "Statistics", src: Chart,  gap: true, to: '/reports' },
       { title: "Settings", src: Setting, to: '/settings/fare' },
       { title: "Logs", src: Setting, to: '/logs' },
   ];

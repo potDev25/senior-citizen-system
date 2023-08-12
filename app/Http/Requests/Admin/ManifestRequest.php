@@ -22,7 +22,6 @@ class ManifestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'required',
             'route' => 'required',
         ];
     }

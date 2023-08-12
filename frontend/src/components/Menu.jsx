@@ -57,9 +57,9 @@ export default function Menu() {
         setProfileModal(false)
     }
 
-    const setDate = (ev) => {
-        _setDate(ev)
-    }
+    // const setDate = (ev) => {
+    //     _setDate(ev)
+    // }
 
     const finalDate = () => {
         seFinal(true)
@@ -87,7 +87,7 @@ export default function Menu() {
 
     const setAction = () => {
 
-        if(route == '' || date == ''){
+        if(route == ''){
             Swal.fire({
                 icon: 'error',
                 text: 'Please Enter Date and Route!',
@@ -103,7 +103,6 @@ export default function Menu() {
             })
 
             const data = {
-                date: date,
                 route: route
             }
 
@@ -145,10 +144,11 @@ export default function Menu() {
                 setLoading(false)
                 _setAction(data.action)
                 if(data.manifestDate){
-                    setDate(data.manifestDate.date)
+                    // setDate(data.manifestDate.date)
                     setTime(data.manifestDate.time)
                     setDateId(data.manifestDate.id)
                     setRoute(data.manifestDate.route)
+                    _setDate(data.date)
                 }
                 
             })
@@ -225,11 +225,11 @@ export default function Menu() {
                     </td>
                     <td className='text-gray-500 flex items-center cursor-pointer p-3'>
                         <div className='flex items-center justify-between gap-2 w-full'>
-                            {manifestAction == 'true' && <div className='w-full border rounded-[5px] border-gray-300 text-gray-500 py-2 px-5'>
+                            {/* {manifestAction == 'true' && <div className='w-full border rounded-[5px] border-gray-300 text-gray-500 py-2 px-5'>
                                 {date}
-                            </div>}
+                            </div>} */}
 
-                            {manifestAction == 'false' && (<input onChange={ev => setDate(ev.target.value)} type="date" className='w-full border rounded-[5px] border-gray-300 text-gray-500'/>)}
+                            {/* {manifestAction == 'false' && (<input onChange={ev => setDate(ev.target.value)} type="date" className='w-full border rounded-[5px] border-gray-300 text-gray-500'/>)} */}
 
                             {manifestAction == 'false' && (<button onClick={setAction} className='w-[30%] rounded text-gray-500 border border-2-gray-500 bg-sky-500 p-2.5 text-white flex items-center'><FaIcon.FiSave/> &nbsp;Save</button>)}
                         </div>

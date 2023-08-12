@@ -13,6 +13,7 @@ use App\Models\RefundRebook;
 use App\Models\SetsModel;
 use App\Models\Ticket;
 use App\Models\TicketSetting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -23,9 +24,24 @@ class TicketController extends Controller
     public function index(ManifestData $manifestData, Passenger $passenger, ManifestDate $manifestDate)
     {
         $id_number = $passenger->id_number()->first();
+        if($manifestDate->status === 0){
+            $newTicket = Ticket::latest()->first();
+
+            if(isset($newTicket->sequence)){
+                $newSequence = str_pad($newTicket->sequence + 1, 5, '0', STR_PAD_LEFT);
+            }else{
+                $newSequence = str_pad(1, 5, '0', STR_PAD_LEFT);
+            }
+        }else{
+            $newTicket = Ticket::where('manifest_date_id', $manifestDate->id)
+                        ->where('passenger_id', $passenger->id)
+                        ->first();
+            $newSequence = str_pad($newTicket->sequence, 5, '0', STR_PAD_LEFT);
+        }
+       
         $ticket_settings = TicketSetting::first();
         $fare = Fair::first();
-        return response(compact('passenger', 'manifestData', 'manifestDate', 'id_number', 'ticket_settings', 'fare'));
+        return response(compact('passenger', 'manifestData', 'manifestDate', 'id_number', 'ticket_settings', 'fare', 'newSequence'));
     }
 
     /**
@@ -34,23 +50,54 @@ class TicketController extends Controller
 
     public function setFair(int $manifest_id){
         $manifest = ManifestData::where('id', $manifest_id)->first();
+        $fare = Fair::first();
 
-        $fair = $manifest->type == 'Student' && '250';
-        $fair = $manifest->type == 'Regular' && '300';
-        $fair = $manifest->type == 'Senior' && '250';
-        $fair = $manifest->type == 'PWD' && '250';
+        $fair = $manifest->type === 'Student' && $fare->student;
+        $fair = $manifest->type === 'Regular' && $fare->regular;
+        $fair = $manifest->type === 'Senior' && $fare->senior;
+        $fair = $manifest->type === 'PWD' && $fare->pwd;
 
         return $fair;
     }
 
     public function store(ManifestData $manifest, Request $request)
     {
+        $fare = Fair::first();
+        $newTicket = Ticket::latest()->first();
+        $getRoute = ManifestDate::where('id', $request->manifest_date_id)->first();
+
+        if(isset($newTicket->sequence)){
+            $newSequence = $newTicket->sequence + 1;
+        }else{
+            $newSequence = 1;
+        }
+
+
+        if($manifest->type === 'Student'){
+            $fair = $fare->student;
+        }
+        if($manifest->type === 'Regular'){
+            $fair = $fare->regular;
+        }
+        if($manifest->type === 'Senior'){
+            $fair = $fare->senior;
+        }
+        if($manifest->type === 'PWD'){
+            $fair = $fare->pwd;
+        }
+        if($manifest->type === 'Minor'){
+            $fair = $fare->minor;
+        }
+
         $ticket                      = new Ticket();
         $ticket->manifest_date_id    = $request->manifest_date_id;
         $ticket->passenger_id        = $request->passenger_id;
         $ticket->manifest_data_id    = $request->manifest_data_id;
-        $ticket->fair                = $this->setFair($manifest->id);
+        $ticket->fair                = $fair;
         $ticket->type                = $manifest->type;
+        $ticket->sequence            = str_pad($newSequence, 5, '0', STR_PAD_LEFT);
+        $ticket->route               = $getRoute->route;
+        $ticket->month_year          = Carbon::now()->format('Y-M');
         $ticket->save();
 
         return response(200);

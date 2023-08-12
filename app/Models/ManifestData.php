@@ -16,4 +16,8 @@ class ManifestData extends Model
     public function manifestDate(){
         return $this->belongsTo(ManifestDate::class);
     }
+
+    public function ticket(){
+        return $this->hasMany(Ticket::class, 'manifest_data_id');
+    }
 }

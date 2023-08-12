@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ManifestData;
 use App\Models\ManifestDate;
 use App\Models\Media;
+use App\Models\Ticket;
 use App\Models\Time;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,12 @@ class ManifestDataController extends Controller
                             ->first();
         $getPassengers = ManifestData::all();
 
-        $month      = date('M-d-Y', strtotime($latestDate->date)).' ' .$latestDate->time. ' | ' .$latestDate->route;
+        if(isset($latestDate)){
+            $month         = date('M-d-Y', strtotime($latestDate->date)).' ' .$latestDate->time. ' | ' .$latestDate->route;
+        }else{
+            $month = '';
+        }
+
 
         $manifestDate  = [];
         $options       = [];
@@ -113,7 +119,70 @@ class ManifestDataController extends Controller
             ];
         }
 
-        return response(compact('manifest', 'passengers', 'number', 'toPrint'));
+        $totalSales = DB::table('manifest_data')
+                        ->join('tickets', 'tickets.manifest_data_id', '=', 'manifest_data.id')
+                        ->where('manifest_data.manifest_dates_id', $manifest->id)
+                        ->where('manifest_data.status', 'complete')
+                        ->sum('tickets.fair');
+
+        $getRegulars = DB::table('manifest_data')
+                        ->join('tickets', 'tickets.manifest_data_id', '=', 'manifest_data.id')
+                        ->where('manifest_data.manifest_dates_id', $manifest->id)
+                        ->where('manifest_data.type', 'Regular')
+                        ->sum('tickets.fair');
+
+        $getStudent = DB::table('manifest_data')
+                        ->join('tickets', 'tickets.manifest_data_id', '=', 'manifest_data.id')
+                        ->where('manifest_data.manifest_dates_id', $manifest->id)
+                        ->where('manifest_data.type', 'Student')
+                        ->sum('tickets.fair');
+
+        $getPwd = DB::table('manifest_data')
+                        ->join('tickets', 'tickets.manifest_data_id', '=', 'manifest_data.id')
+                        ->where('manifest_data.manifest_dates_id', $manifest->id)
+                        ->where('manifest_data.type', 'PWD')
+                        ->sum('tickets.fair');
+
+        $getMinor = DB::table('manifest_data')
+                        ->join('tickets', 'tickets.manifest_data_id', '=', 'manifest_data.id')
+                        ->where('manifest_data.manifest_dates_id', $manifest->id)
+                        ->where('manifest_data.type', 'Minor')
+                        ->sum('tickets.fair');
+        
+        $getSenior = DB::table('manifest_data')
+                        ->join('tickets', 'tickets.manifest_data_id', '=', 'manifest_data.id')
+                        ->where('manifest_data.manifest_dates_id', $manifest->id)
+                        ->where('manifest_data.type', 'Senior')
+                        ->sum('tickets.fair');
+        
+        $tickets = DB::table('manifest_data')
+                    ->join('tickets', 'tickets.manifest_data_id', '=', 'manifest_data.id')
+                    ->where('manifest_data.manifest_dates_id', $manifest->id)
+                    ->where('manifest_data.status', 'complete')
+                    ->get();
+        $sequence = $tickets[0]->sequence. '-'.$tickets[count($tickets) -1]->sequence; 
+
+        $formatedTotalSales = number_format($totalSales, 2);
+        $senior = number_format($getSenior, 2);
+        $pwd = number_format($getPwd, 2);
+        $minor = number_format($getMinor, 2);
+        $student = number_format($getStudent, 2);
+        $regular = number_format($getRegulars, 2);
+
+        return response(compact(
+            'manifest', 
+            'passengers',
+            'number', 
+            'toPrint', 
+            'formatedTotalSales', 
+            'tickets', 
+            'sequence',
+            'regular',
+            'student',
+            'minor',
+            'pwd',
+            'senior'
+        ));
     }
 
     /**

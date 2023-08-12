@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Admin\ManifestController;
 use App\Http\Controllers\Admin\ManifestDataController;
+use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Chair\ChairController;
 use App\Http\Controllers\Passenger\MangeController;
 use App\Http\Controllers\Passenger\MediaController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Ticket\TicketController;
+use App\Http\Controllers\User\StaffController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +70,14 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('/manifest', [ManifestDataController::class, 'index']);
     Route::get('/manifest/passengers/{manifest}', [ManifestDataController::class, 'show']);
+
+    Route::get('/statistics', [StatisticsController::class, 'index']);
+
+    Route::get('/staff/{limit}', [StaffController::class, 'index']);
+    Route::post('/staff/store', [StaffController::class, 'store']);
+    Route::post('/staff/edit/{user}', [StaffController::class, 'update']);
+    Route::get('/staff/show/{user}', [StaffController::class, 'show']);
+    Route::post('/staff/check-password/{user}', [StaffController::class, 'check']);
 });
 
 

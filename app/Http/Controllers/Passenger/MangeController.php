@@ -189,7 +189,8 @@ class MangeController extends Controller
         $manifestDate = ManifestDate::where('status', 0)->first();
         $routes = Time::all();
         $passengers = Passenger::where('verified', '!=', null)->get();
+        $date = $manifest->action === 'true' ? date('M-d-Y', strtotime($manifestDate->date)) : null;
 
-        return response(compact('action', 'manifestDate', 'routes', 'passengers'));
+        return response(compact('action', 'manifestDate', 'routes', 'passengers', 'date'));
     }
 }

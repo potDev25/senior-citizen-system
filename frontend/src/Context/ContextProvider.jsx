@@ -15,7 +15,7 @@ export const ContextProvider = ({children}) => {
 
     const [user, setUser] = useState({})
     const [passengers, setPassengers] = useState({})
-    const [notification, setNotification] = useState('')
+    const [notification, _setNotification] = useState('')
     const [user_token, _setUserToken] = useState(localStorage.getItem('USER_TOKEN'))
 
     const setUserToken = (user_token) => {
@@ -25,8 +25,13 @@ export const ContextProvider = ({children}) => {
         }else{
             localStorage.removeItem('USER_TOKEN')
         }
+    }
 
-        // token ? localStorage.setItem('USER_TOKEN', token) : localStorage.removeItem('USER_TOKEN')
+    const setNotification = (notification) => {
+        _setNotification(notification)
+        setTimeout(() => {
+            _setNotification('')
+        }, 2000)
     }
 
     return (

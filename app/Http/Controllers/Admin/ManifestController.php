@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\ManifestRequest;
 use App\Models\ManifestAction;
 use App\Models\ManifestData;
 use App\Models\ManifestDate;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +19,7 @@ class ManifestController extends Controller
         $time = explode('/', $data['route']);
 
         $save_manifest = new ManifestDate();
-        $save_manifest->date = $data['date'];
+        $save_manifest->date = Carbon::now()->format('Y-m-d');
         $save_manifest->route = $time[0];
         $save_manifest->time = $time[1];
         $save = $save_manifest->save();
@@ -45,9 +46,16 @@ class ManifestController extends Controller
         $validate = ManifestData::where('passengers_id', $data['passengers_id'])
                     // ->where('manifest_dates_id', $data['manifest_dates_id'])
                     ->first();
+        $getRoute = ManifestDate::where('id', $data['manifest_dates_id'])->first();
 
      
-        $save = ManifestData::create($data);
+        $save = ManifestData::create([
+            'passengers_id'     => $data['passengers_id'],
+            'manifest_dates_id' => $data['manifest_dates_id'],
+            'type'              => $data['type'],
+            'month_year'        => Carbon::now()->format('Y-M'),
+            'route'             => $getRoute->route,
+        ]);
         $id = $save->id;
         if(!$save){
             return response(422);

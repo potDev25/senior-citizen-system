@@ -13,10 +13,12 @@ export default function Ticket() {
   const {manifest_data} = useParams();
   const [passengers, setPassengers] = useState([])
   const [ticket, setTicketInfo] = useState([])
+  const [passengerFair, setPassengerFair] = useState('')
   const [fare, setFare] = useState([])
   const [manifest, setManifest] = useState([])
   const [manifestDate, setManifestDate] = useState([])
   const [id_number, setIdNumber] = useState([])
+  const [sequenceNo, setSequence] = useState('')
   const [loading, setLoading] = useState(true)
   const [btnLoading, setBtnLoading] = useState(false)
   const [fair, _setFair] = useState(null)
@@ -25,10 +27,12 @@ export default function Ticket() {
     manifest_date_id : manifest_data,
     passenger_id: pass_id,
     manifest_data_id: manifest_id,
+    fare: ''
   })
 
   const submitTicket = () => {
-    console.log(ticket_data);
+    // console.log(ticket_data);
+    setFair()
     axiosClient.post(`/ticket/store/${manifest_id}`, ticket_data)
       .then(({data}) => {
         setBtnLoading(false)
@@ -41,10 +45,10 @@ export default function Ticket() {
   }
 
   const setFair = () =>{
-    manifest.type === 'Student' && setTicket({...ticket_data, fair: '250'})
-    manifest.type === 'Regular' && setTicket({...ticket_data, fair: '300'})
-    manifest.type === 'PWD' && setTicket({...ticket_data, fair: 'PWD'})
-    manifest.type === 'Senior' && setTicket({...ticket_data, fair: '250'})
+    manifest.type === 'Student' && setTicket({...ticket_data, fare: fare.student})
+    manifest.type === 'Regular' && setTicket({...ticket_data, fare: fare.regular})
+    manifest.type === 'PWD' && setTicket({...ticket_data, fare: fare.pwd})
+    manifest.type === 'Senior' && setTicket({...ticket_data, fare: fare.senior})
   }
 
   useState(() => {
@@ -52,6 +56,7 @@ export default function Ticket() {
       .then(({data}) => {
         setPassengers(data.passenger)
         setTicketInfo(data.ticket_settings)
+        setSequence(data.newSequence)
         setFare(data.fare)
         setManifest(data.manifestData)
         setManifestDate(data.manifestDate)
@@ -108,6 +113,7 @@ export default function Ticket() {
            manifestDate={manifestDate} 
            id_number={id_number}
            ref={componentRef}
+           sequence={sequenceNo}
         />
       </>
     }

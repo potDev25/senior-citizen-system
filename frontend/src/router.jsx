@@ -18,6 +18,10 @@ import QrCode from "./view/Pages/QrCode";
 import ValidationPage from "./view/Pages/ValidationPage";
 import Ticket from "./view/Ticketing/Ticket";
 import Settings from "./view/Settings/Settings";
+import Reports from "./view/Reports/Reports";
+import Staff from "./view/Staff/Staff";
+import AddStaff from "./view/Staff/AddStaff";
+import StaffProfile from "./view/Pages/StaffProfile";
 
 const router =  createBrowserRouter ([
     {
@@ -81,6 +85,18 @@ const router =  createBrowserRouter ([
             {
                 path: '/settings/:tab',
                 element: <Settings/>
+            },
+            {
+                path: '/reports',
+                element: <Reports/>
+            },
+            {
+                path: '/staff',
+                element: <Staff/>
+            },
+            {
+                path: '/staff/profile/:id/:tab',
+                element: <StaffProfile/>
             },
         ]
     },

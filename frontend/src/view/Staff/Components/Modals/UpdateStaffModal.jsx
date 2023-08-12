@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import * as FaIcon from "react-icons/fi";
 import {
     TERipple,
     TEModal,
@@ -9,13 +10,12 @@ import {
     TEModalFooter,
     TEInput 
   } from "tw-elements-react";
-import axiosClient from '../../axiosClient';
 import  Swal  from 'sweetalert2/dist/sweetalert2';
-import ProfileTab from '../../view/Tabs/ProfileTab';
-import IndentificationTab from '../../view/Tabs/IndentificationTab';
-import ChairModal from './ChairModal';
+import AddStaff from '../../AddStaff';
+import EditStaff from '../../EditStaff';
 
-export default function ChairsManualModal({handleLoading, show, hideModal, dateId, passenger, manifestDataId}) {
+
+export default function UpdateStaffModal({handleLoading, show, hideModal, user}) {
   const [showModal, setShowModal] = useState(false);
   const [errors, setErrors] = useState({})
   const [info, setInfo] = useState([])
@@ -84,48 +84,26 @@ export default function ChairsManualModal({handleLoading, show, hideModal, dateI
   return (
       <>
         {/* <!-- Modal --> */}
-        <TEModal show={show} setShow={handleHideModal} staticBackdrop>
-          <TEModalDialog size='lg' centered>
+        <TEModal show={show} setShow={handleHideModal} scrollable staticBackdrop>
+          <TEModalDialog size='lg' centered >
             <TEModalContent>
               <TEModalHeader className='bg-blue-500 text-white'>
                 {/* <!--Modal title--> */}
-                <h5 className="text-xl font-medium leading-normal dark:text-neutral-200 uppercase">
-                  <span className='capitalize'>{passenger.name + ' ' + passenger.middle_initial}</span>
-                </h5>
+                    <h1 className='uppercase text-2xl text-white flex items-center'><FaIcon.FiEdit/> &nbsp;edit staff profile</h1>
                 {/* <!--Close button--> */}
-                <button
-                  type="button"
-                  className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                  onClick={handleHideModal}
-                  aria-label="Close"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="h-6 w-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
               </TEModalHeader>
               {/* <!--Modal body--> */}
 
-                
-
               <TEModalBody>
-                <div className='flex items-center justify-center'>
-                  <ChairModal passenger={passenger} manifest_id={manifestDataId}/>
+                <div className='flex items-center justify-center '>
+                  <EditStaff
+                    handleLoading={handleLoading}
+                    hideModal={hideModal}
+                    user={user}
+                  />
                 </div>
               </TEModalBody>
 
-              
             </TEModalContent>
           </TEModalDialog>
         </TEModal>

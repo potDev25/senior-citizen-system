@@ -1,107 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import * as FaIcon from "react-icons/fi";
-import ManifestCalendar from './Modals/ManifestCalendar';
-import axiosClient from '../axiosClient';
-import ManifestLayout from './Layout/ManifestLayout';
-import { Link } from 'react-router-dom';
-import ReactToPrint from 'react-to-print';
-import ManifestToPrint from './Tables/ManifestToPrint';
-import ManifestPassengers from './Modals/ManifestPassengers';
+import ManifestCalendar from '../../../components/Modals/ManifestCalendar';
 
-export default function () {
+export default function MonthlySalesTable() {
+    const [loadingBox, setLoadingBox] = useState(false)
     const [search, setSearch] = useState(true)
     const [strings, setString] = useState('')
     const [showModal, setModal] = useState(false)
-    const [showModalPassengers, setModalPassengers] = useState(false)
-    const [loading, setLoading] = useState(true)
-    const [loadingBox, setLoadingBox] = useState(true)
-    const [manifestDate, setManifestDate] = useState([])
-    const [trackPassenger, setTrackPassenger] = useState([])
-    const [options, setOptions] = useState([])
-    const [route, setRoute] = useState('')
-    const [dateId, setDateId] = useState([])
-    const [getDateIdForPrint, setDateIdForPrint] = useState(null)
-    const [passengers, setPassengers] = useState([])
-    const [numbers, setNumber] = useState([])
-    const [manifest, setManifest] = useState([])
-    const [toPrint, setToPrint] = useState([])
-    const [month, setMonth] = useState('')
-    const componentRef = useRef();
-
-    const search_width = () => {
-        setSearch(!search)
-    }
 
     const hideModal = () =>{
         setModal(false)
     }
 
-    const hideModalPassengers = () =>{
-        setModalPassengers(false)
-    }
-
-    const filterByRoute = (route) => {
-        setRoute(route)
-        setLoading(true)
-    }
-
-    const getDateId = (date) => {
-        setMonth(date.date + ' ' + date.time + ' | ' + date.route)
-        setDateIdForPrint(date.id)
-        setLoadingBox(true)
-        axiosClient.get(`/manifest/passengers/${date.id}`)
-        .then(({data}) => {
-            setPassengers(data.passengers)
-            setNumber(data.number)
-            setToPrint(data.toPrint)
-            setLoadingBox(false)
-        })
-        setModal(false)
-    }
-
-    useEffect(() => {
-        axiosClient.get(`/manifest${route === '' ? '' : `?route=${route}`}`)
-        .then(({data}) => {
-            setManifestDate(data.manifestDate)
-            setTrackPassenger(data.passengers)
-            setOptions(data.options)
-            setDateId(data.latestDate)
-            setMonth(data.month)
-            setLoading(false)
-        })
-    
-        axiosClient.get(`/manifest/passengers/${dateId ? dateId.id : null}`)
-        .then(({data}) => {
-            setPassengers(data.passengers)
-            setDateIdForPrint(dateId.id)
-            setNumber(data.number)
-            setToPrint(data.toPrint)
-            setLoadingBox(false)
-        })
-        .catch(() => {
-            if(dateId === null) {
-                setLoadingBox(false)
-            }
-        })
-
-    }, [route, loading])
-  
   return (
-    <>
-        <ManifestLayout
-            number={numbers}
-            loading={loadingBox}
-        />
-
-        <div className='hidden'>
-            <ManifestToPrint
-                manifest={toPrint}
-                ref={componentRef}
-            />
-        </div>
-
+    <div>
         <div className='bg-white shadow-sm h-fit md:w-full rounded'>
-            <div className='w-full h-10 bg-blue-500 text-white uppercase p-2 rounded-t-md'>{month}</div>
+            <div className='w-full h-10 bg-blue-500 text-white uppercase p-2 rounded-t-md'></div>
             <div className='p-5'>
                 <div className='flex items-center justify-between mb-4'>
                         <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -116,10 +30,7 @@ export default function () {
                             <button 
                             onClick={ev => setModal(true)}
                             className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiCalendar/> &nbsp;Date</button>
-                            <button 
-                            onClick={ev => setModalPassengers(true)}
-                            className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiUsers/> &nbsp;Passengers</button>
-                            <ManifestCalendar
+                            {/* <ManifestCalendar
                                 showModal={showModal}
                                 hideModal={hideModal}
                                 dates={manifestDate}
@@ -127,9 +38,9 @@ export default function () {
                                 filterByRoute={filterByRoute}
                                 loading={loading}
                                 getDateId={getDateId}
-                            />
+                            /> */}
 
-                            <ManifestPassengers
+                            {/* <ManifestPassengers
                                 showModal={showModalPassengers}
                                 hideModal={hideModalPassengers}
                                 dates={manifestDate}
@@ -138,12 +49,12 @@ export default function () {
                                 loading={loading}
                                 getDateId={getDateId}
                                 passengers={trackPassenger}
-                            />
+                            /> */}
 
-                            <ReactToPrint
+                            {/* <ReactToPrint
                                 trigger={() => <button className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiPrinter/> &nbsp;Print</button>}
                                 content={() =>  componentRef.current}
-                            />
+                            /> */}
                             
                         </div>
                     </div>
@@ -161,20 +72,15 @@ export default function () {
                     <table className='md:table-auto w-full bg-gray-100 text-sm'>
                         <thead className=' py-5'>
                             <tr>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>#</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>NAME</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>W/ Minor</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Age</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Sex</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>TYPE</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>SET NUMBER</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>STATUS</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Ticket</td>
+                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Route</td>
+                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Month</td>
+                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Monthly Sales</td>
+                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Action</td>
                             </tr>
                         </thead>
 
                         <tbody>
-                            {   
+                            {/* {   
                                 passengers.filter((passenger) => {
                                     return strings.toLowerCase() === '' ? passenger : passenger.passenger.last_name.toLowerCase().includes(strings) || passenger.passenger.first_name.toLowerCase().includes(strings)
                                 }).map((passenger, key) => (
@@ -225,13 +131,13 @@ export default function () {
                                         </td>
                                     </tr> 
                                 ))
-                            }
+                            } */}
                             
                         </tbody>
                     </table>
                 }
             </div>
         </div>
-    </>
+    </div>
   )
 }
