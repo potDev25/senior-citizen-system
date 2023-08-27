@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Line } from 'react-chartjs-2';
-import { UserData } from "../Data";
 import LineChart from './LineChart';
 import Barchart from './Barchart';
 import PieChart from './PieChart';
 import MonthlySalesTable from './MonthlySalesTable';
 import axiosClient from '../../../axiosClient';
+import Data from './Tables/Data';
 
 
 export default function Widgets() {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [noPassengers, setNoPassengers] = useState([])
 
     const [userData, setUserData] = useState({
-        labels: UserData.map((data) => data.year),
+        labels: noPassengers.map((data) => data.route),
         datasets: [
           {
-            label: "Users Gained",
-            data: UserData.map((data) => data.userGain),
+            label: "No. Of Passengers",
+            data: noPassengers.map((data) => data.passengers),
             backgroundColor: [
               "rgba(75,192,192,1)",
               "#ecf0f1",
@@ -26,7 +27,7 @@ export default function Widgets() {
               "#2a71d0",
             ],
             borderColor: "blue",
-            // borderWidth: 2,
+            borderWidth: 2,
           },
           
         ],
@@ -35,6 +36,7 @@ export default function Widgets() {
     useEffect(() => {
         axiosClient.get('/statistics')
             .then(({data}) => {
+                setNoPassengers(data.routeStatsResult)
                 setLoading(false)
             })
     }, [loading])
@@ -67,12 +69,7 @@ export default function Widgets() {
                 </div>
             </div>
             <div className='h-[350px] w-full bg-white rounded shadow-md text-center p-2'>
-                <h1 className='text-gray-500 uppercase text-lg font-bold'>Routes Monthly Sales</h1>
-                <div className='h-[90%] w-full flex items-center justify-center'>
-                    <PieChart
-                        chartData={userData}
-                    />
-                </div>
+                <Data/>
             </div>
            
         </div>

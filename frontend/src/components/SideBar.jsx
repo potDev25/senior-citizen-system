@@ -26,7 +26,7 @@ const Sidebar = ({children}) => {
       { title: "Dashboard", src: chart_fill, to: '/dashboard'},
       { title: "Ticketing", src: Facilities, to: '/ticketing', gap: true,},
       { title: "Staff", src: Facilities, to: '/staff'},
-      { title: "People", src: Aminities, to: '/people' },
+      { title: "Passengers", src: Facilities, to: '/people' },
       { title: "Manifest", src: Calendar, to: '/manifest'},
       { title: "Daily Sales", src: Calendar, to: '/sales'},
       { title: "Statistics", src: Chart,  gap: true, to: '/reports' },
@@ -50,10 +50,10 @@ const Sidebar = ({children}) => {
           className={`absolute cursor-pointer -right-3 top-3 w-7 border-dark-purple
            border-2 rounded-full  ${!open && "rotate-180"}`}
           onClick={() => setOpen(!open)}
-        />
-        <div className="flex items-center gap-2">
-            <div className={`h-[70px]  bg-white p-1 rounded-lg ${
-                    !open ? "w-[50px]" : "w-[80px]"
+          />
+        <div className="flex items-center gap-2 px-3">
+            <div className={`h-[70px] bg-white px-1 rounded-lg ${
+                    !open ? "w-[50px] h-[30px]" : "w-[80px]"
                     }`}>
                 <img
                     src={Logo}
@@ -76,7 +76,7 @@ const Sidebar = ({children}) => {
             <li
                 onClick={handleLink}
                 key={index}
-                className={`flex  rounded-md p-2 cursor-pointer hover:bg-blue-400 text-white text-sm items-center gap-x-4 
+                className={`flex rounded-md p-2 cursor-pointer hover:bg-blue-400 text-white text-lg font-semibold items-center gap-x-4 
                 ${Menu.gap ? "mt-6" : "mt-2"} 
                 ${link === Menu.to && "bg-blue-400"}`}
               >

@@ -29,11 +29,9 @@ export default function People() {
 
   return (
     <div className='md:w-full bg-white rounded px-5 py-2 mt-[2px]'>
-      <h1 className='text-xl mb-4 font-bold tracking-wide'>People &nbsp;
-            <span className="inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
-            20
-            </span>
-      </h1>
+      <div className='w-full h-14 text-white uppercase p-2 rounded-t-md border-b-2 mb-5 border-gray-100'>
+        <h1 className='uppercase text-2xl text-gray-500'>Passengers</h1>
+      </div>
 
       <div className='flex items-center justify-between md:w-full'>
 

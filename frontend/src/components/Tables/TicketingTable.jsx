@@ -136,6 +136,7 @@ export default function TicketingTable({title, children, dateId, time, getManife
         axiosClient.get(`/get-passenger-manifest/${dateId}`)
         .then(({data}) => {
             getManifestData(data)
+            console.log(data);
             setManifest(data)
             setLoading(false)
             
@@ -213,11 +214,11 @@ export default function TicketingTable({title, children, dateId, time, getManife
                             </td>
                             <td className='text-sm px-5 py-2 text-gray-500'>
 
-                                {data.type == 'Student' && <span className='rounded-[10px] bg-gray-300 text-gray-500 px-2 text-sm capitalize'>{data.type}</span>}
-                                {data.type == 'Regular' && <span className='rounded-[10px] bg-red-300 text-red-500 px-2 text-sm capitalize'>{data.type}</span>}
-                                {data.type == 'Senior' && <span className='rounded-[10px] bg-blue-300 text-blue-500 px-2 text-sm capitalize'>{data.type}</span>}
-                                {data.type == 'PWD' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>{data.type}</span>}
-                                {data.type == 'Minor' && <span className='rounded-[10px] bg-yellow-300 text-yellow-500 px-2 text-sm capitalize'>{data.type}</span>}
+                                {data.manifest_type == 'Student' && <span className='rounded-[10px] bg-gray-300 text-gray-500 px-2 text-sm capitalize'>{data.manifest_type}</span>}
+                                {data.manifest_type == 'Regular' && <span className='rounded-[10px] bg-red-300 text-red-500 px-2 text-sm capitalize'>{data.manifest_type}</span>}
+                                {data.manifest_type == 'Senior' && <span className='rounded-[10px] bg-blue-300 text-blue-500 px-2 text-sm capitalize'>{data.manifest_type}</span>}
+                                {data.manifest_type == 'PWD' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>{data.manifest_type}</span>}
+                                {data.manifest_type == 'Minor' && <span className='rounded-[10px] bg-yellow-300 text-yellow-500 px-2 text-sm capitalize'>{data.manifest_type}</span>}
 
                             </td>
                             <td className='text-sm px-5 py-2 text-gray-500'>

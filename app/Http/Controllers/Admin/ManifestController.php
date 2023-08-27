@@ -71,6 +71,7 @@ class ManifestController extends Controller
         $get_date_id = ManifestDate::where('status', 0)->first();
         $data = DB::table('manifest_data')
                     ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
+                    ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
                     ->where('manifest_data.manifest_dates_id', $get_date_id->id)
                     ->where('manifest_data.status','complete')
                     ->get();

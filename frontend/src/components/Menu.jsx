@@ -32,6 +32,7 @@ export default function Menu() {
     const [showManual, SetManual] = useState(false);
     const [showProfile, setProfileModal] = useState(false);
     const [showChairs, setShowChairs] = useState(false);
+    const [btnSave, setBtnSave] = useState(false);
 
     const [passenger, _setPassenger] = useState([]);
     const [manifestData, setManifestData] = useState([]);
@@ -87,11 +88,11 @@ export default function Menu() {
 
     const setAction = () => {
 
-        if(route == ''){
+        if(route === ''){
             Swal.fire({
                 icon: 'error',
                 text: 'Please Enter Date and Route!',
-                confirmButtonColor: 'blue'
+                confirmButtonColor: 'red'
             })
         }else{
 
@@ -231,7 +232,9 @@ export default function Menu() {
 
                             {/* {manifestAction == 'false' && (<input onChange={ev => setDate(ev.target.value)} type="date" className='w-full border rounded-[5px] border-gray-300 text-gray-500'/>)} */}
 
-                            {manifestAction == 'false' && (<button onClick={setAction} className='w-[30%] rounded text-gray-500 border border-2-gray-500 bg-sky-500 p-2.5 text-white flex items-center'><FaIcon.FiSave/> &nbsp;Save</button>)}
+                            {manifestAction == 'false' && (
+                                <button onClick={setAction} className='w-[30%] rounded border border-2-gray-500 bg-sky-500 p-2.5 text-white flex items-center'><FaIcon.FiSave/> &nbsp;Save</button>
+                            )}
                         </div>
                     </td>
                     {manifestAction == 'true' && <>
