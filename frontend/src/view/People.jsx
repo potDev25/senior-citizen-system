@@ -1,15 +1,23 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import RecentlyAdded from '../components/RecentlyAdded'
 import Table from '../components/Table'
 import * as FaIcon from "react-icons/fi";
 import Option from '../components/Option';
 import PeopleTable from '../components/Tables/PeopleTable';
+import AddPassengerModal from './People/Modal/AddPassengerModal';
+import axiosClient from '../axiosClient';
+import UpdloadModal from './People/Modal/UploadModal';
 
 export default function People() {
 
   const [checked, setChecked] = useState(false)
   const [search, setSearch] = useState(true)
+  const [showModal, setModal] = useState(false)
+  const [showMediaModal, setMediaModal] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [searchString, setString] = useState('')
+  const [passId, setPassId] = useState(null)
+  const [passenger, setPassenger] = useState([])
   const searchInput = useRef()
 
   const link = '/get-passengers-approved'
@@ -19,13 +27,33 @@ export default function People() {
     setChecked(!checked)
   }
 
-  // const search_width = () => {
-  //   setSearch(!search)
-  // }
+  function hideModal() {
+    setModal(false)
+  }
+
+  function hideMediaModal() {
+    setModal(false)
+  }
+
+  function handMedialModal(passId) {
+    setMediaModal(true)
+    setPassId(passId)
+  }
+
+  function handleLoading() {
+    setLoading(true)
+  }
 
   const handleSearch = (string) => {
     setString(string)
   }
+
+  useEffect(() => {
+    axiosClient.get(`/passenger/show/${passId}`)
+      .then(({data}) => {
+        setPassenger(data.passenger)
+      }) 
+  }, [passId])
 
   return (
     <div className='md:w-full bg-white rounded px-5 py-2 mt-[2px]'>
@@ -42,11 +70,11 @@ export default function People() {
             <option value="">30</option>
             <option value="">100</option>
           </select>
-
+{/* 
           <div className='border rounded-[5px] border-gray-300 flex items-center gap-2 md:px-5 py-2 cursor-pointer text-gray-500'>
             <input type="checkbox" name="" id="multiple" onChange={multiple_check} />
             <label htmlFor='multiple' className='cursor-pointer'>Select Multiple</label>
-          </div>
+          </div> */}
 
           <div>
             <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -64,7 +92,23 @@ export default function People() {
           
           {checked && <Option/>}
           
-          <button className='rounded bg-sky-500 text-white px-5 py-2 flex items-center'><FaIcon.FiPlus/> &nbsp;Register</button>
+          <button 
+            onClick={ev => setModal(true)}
+            className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center uppercase'><FaIcon.FiPlusCircle/> &nbsp;Register</button>
+
+          <AddPassengerModal
+            show={showModal}
+            hideModal={hideModal}
+            handleLoading={handleLoading}
+            showMediaModal={handMedialModal}
+          />
+
+          <UpdloadModal
+            show={showMediaModal}
+            hideModal={hideMediaModal}
+            passenger={passenger}
+          />
+
           <select name="" id="" className='border rounded-[5px] border-gray-300 text-gray-500'>
             <option value="" selected hidden>Filter</option>
             <option value="">All</option>
@@ -77,7 +121,7 @@ export default function People() {
       </div>
         
 
-      <RecentlyAdded checked={checked} link={link} title={title} string={searchString}/>
+      <RecentlyAdded checked={checked} link={link} title={title} string={searchString} load={loading}/>
         
     </div>
   )

@@ -65,10 +65,9 @@ export default function StaffHeaderProfiletab({tab, user}) {
 
   return (
     <div className='border-b border-gray-200 w-full mt-[100px] px-[100px]'>
-        <ul className='flex gap-7 text-md font-medium text-gray-500'>
-            <li className={(tab == 'details' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/staff/profile/${user.id}/details`}>Passenger Details</Link></li>
-            {/* <li className={(tab == 'identification' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/staff/profile/${user.id}/identification`}>Identifications</Link></li>
-            <li className={(tab == 'password' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/staff/profile/${user.id}/password`}>Password</Link></li> */}
+        <ul className='flex gap-7 text-md font-medium text-gray-500 uppercase'>
+            <li className={(tab == 'details' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/staff/profile/${user.id}/details`}>Staff Details</Link></li>
+            <li className={(tab == 'history' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/staff/profile/${user.id}/history`}>History</Link></li>
         </ul>
     </div>
   )

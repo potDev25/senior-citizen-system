@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import StaffProfileTab from '../Tabs/StaffProfileTab';
 import StaffHeaderProfiletab from '../../components/TabComponents/StaffHeaderProfiletab';
+import StaffHistory from '../Tabs/StaffHistory';
 
 export default function StaffProfile() {
 
@@ -70,14 +71,9 @@ export default function StaffProfile() {
             {
                 tab == 'details' && <StaffProfileTab user={user}/>
             }
-
-            {/* {
-                tab == 'identification' && <IndentificationTab passenger={user}/>
-            }
-
             {
-                tab == 'password' && <PasswordTab passenger_id={user.id}/>
-            } */}
+                tab == 'history' && <StaffHistory/>
+            }
         </>}
 
         

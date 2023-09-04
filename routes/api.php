@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ManagePassenger;
 use App\Http\Controllers\Admin\ManifestController;
 use App\Http\Controllers\Admin\ManifestDataController;
 use App\Http\Controllers\Admin\StatisticsController;
@@ -76,8 +77,16 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/staff/{limit}', [StaffController::class, 'index']);
     Route::post('/staff/store', [StaffController::class, 'store']);
     Route::post('/staff/edit/{user}', [StaffController::class, 'update']);
+    Route::delete('/staff/destroy/{user}', [StaffController::class, 'destroy']);
+    Route::put('/staff/block/{user}', [StaffController::class, 'block']);
     Route::get('/staff/show/{user}', [StaffController::class, 'show']);
     Route::post('/staff/check-password/{user}', [StaffController::class, 'check']);
+
+    // Manage Passenger Routes
+    Route::controller(ManagePassenger::class)->group(function () {
+        Route::post('/passenger/store', 'store');
+        Route::get('/passenger/show/{passenger}', 'show');
+    });
 });
 
 

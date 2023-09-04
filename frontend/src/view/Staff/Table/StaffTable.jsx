@@ -7,6 +7,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import UpdateStaffModal from '../Components/Modals/UpdateStaffModal';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 export default function StaffTable() {
     const [strings, setString] = useState('')
@@ -49,6 +50,66 @@ export default function StaffTable() {
     const handLink = (e) =>{
         setLoading(true)
         setPaginate(e)
+    }
+
+    const handlePromt = (staff) => {
+        Swal.fire({
+            title: 'Delete This Staff?',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            confirmButtonColor: 'red',
+            cancelButtonColor: '#4f46e5',
+            icon: 'warning'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                deleteStaff(staff)
+            }
+          })
+    }
+
+    const handleBlockPromt = (staff) => {
+        Swal.fire({
+            title: `${staff.block == 1 ? 'Unblock' : 'Block'} This Staff?`,
+            showCancelButton: true,
+            confirmButtonText: `${staff.block == 1 ? 'Unblock' : 'Block'}`,
+            confirmButtonColor: 'red',
+            cancelButtonColor: '#4f46e5',
+            icon: 'warning'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                blockStaff(staff)
+            }
+          })
+    }
+
+    const promptMessage = (text, icon) => {
+        Swal.fire({
+            text: text,
+            icon: icon,
+            confirmButtonColor: '#4f46e5',
+          }).then((result) => {
+            setLoading(true)
+          })
+    }
+
+    const deleteStaff = (staff) => {
+        axiosClient.delete(`/staff/destroy/${staff.id}`)
+        .then(({data}) => {
+            promptMessage('Staff Deleted Successfully', 'success')
+        })
+        .catch(() => {
+            promptMessage('Something Went Please Try Again', 'warning')
+        })
+    }
+
+    const blockStaff = (staff) => {
+        axiosClient.put(`/staff/block/${staff.id}`)
+        .then(({data}) => {
+            promptMessage('Staff Blocked Successfully', 'success')
+        })
+        .catch(() => {
+            promptMessage('Something Went Please Try Again', 'warning')
+        })
     }
 
     useEffect(() => {
@@ -164,8 +225,14 @@ export default function StaffTable() {
                                             <span className='text-gray-500'>{user.barangay}, {user.city}, {user.province}</span>
                                         </td>
                                         <td className='text-sm px-5 py-2 text-gray-500'>
-                                            {user.status == '1' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>Active</span>}
-                                            {user.status == '0' && <span className='rounded-[10px] bg-gray-300 text-gray-500 px-2 text-sm capitalize'>Offline</span>}
+                                            {
+                                                user.block == 1 ? <span className='rounded-[10px] bg-red-300 text-red-500 px-2 text-sm capitalize'>Blocked</span>
+                                                : <>
+                                                    {user.status == '1' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>Active</span>}
+                                                    {user.status == '0' && <span className='rounded-[10px] bg-gray-300 text-gray-500 px-2 text-sm capitalize'>Offline</span>}
+                                                </>
+                                            }
+                                         
                                         </td>
                                         <td className='text-sm px-5 py-2 text-gray-500'>
                                         <Menu as="div" className="relative inline-block text-left">
@@ -215,15 +282,18 @@ export default function StaffTable() {
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                     {({ active }) => (
-                                                        <Link
+                                                        <button
                                                         className={classNames(
                                                             active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                                             'flex items-center px-4 py-2 text-sm w-full'
                                                         )}
-                                                        to={'/staff/profile/' + user.id + '/details'}
+                                                        onClick={ev => handleBlockPromt(user)}
                                                         >
-                                                        <FaIcon.FiBellOff/>&nbsp; Block
-                                                        </Link>
+                                                        <FaIcon.FiBellOff/>&nbsp;
+                                                        {
+                                                            user.block == 1 ? 'Unblock' : 'Block'
+                                                        }
+                                                        </button>
                                                     )}
                                                     </Menu.Item>
                                                     <Menu.Item >
@@ -233,7 +303,7 @@ export default function StaffTable() {
                                                             active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                                             'flex items-center px-4 py-2 text-sm w-full'
                                                         )}
-                                                        // onClick={ev => handle(1)}
+                                                        onClick={ev => handlePromt(user)}
                                                         >
                                                         <FaIcon.FiTrash/>&nbsp; Delete
                                                         </button>

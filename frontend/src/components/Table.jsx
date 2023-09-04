@@ -8,27 +8,37 @@ import { useStateContext } from '../Context/ContextProvider';
 import axiosClient from '../axiosClient';
 import Spiral from './Spiral/Spiral';
 import { Link } from 'react-router-dom';
+import UpdatePassengerModal from '../view/People/Modal/UpdatePassengerModal';
 
 export default function Table({checked, passengers, string = ''}) {
-
-
+    const [showUpdateModal, setUpdateModal] = useState(false);
+    const [passenger, setPassenger] = useState([]);
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
 
-    // console.log(checked)
+    function handleHideModal(){
+        setUpdateModal(false)
+    }
+
+    function handleShowMOdal(passenger){
+        setPassenger(passenger)
+        setUpdateModal(true)
+    }
 
     const handle = (id) => {
         alert(id)
     }
-  
-
-    // console.log(passengers);
 
   return (
         
         <>
+            <UpdatePassengerModal
+                show={showUpdateModal}
+                hideModal={handleHideModal}
+                passenger={passenger}
+            />
            <tbody>
 
             {passengers ? <>
@@ -90,6 +100,32 @@ export default function Table({checked, passengers, string = ''}) {
                                 >
                                 <FaIcon.FiEye/>&nbsp; View
                                 </Link>
+                            )}
+                            </Menu.Item>
+                            <Menu.Item >
+                            {({ active }) => (
+                                <button
+                                className={classNames(
+                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                    'flex items-center px-4 py-2 text-sm w-full'
+                                )}
+                                onClick={ev => handleShowMOdal(u)}
+                                >
+                                <FaIcon.FiPenTool/>&nbsp; Edit
+                                </button>
+                            )}
+                            </Menu.Item>
+                            <Menu.Item >
+                            {({ active }) => (
+                                <button
+                                className={classNames(
+                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                    'flex items-center px-4 py-2 text-sm w-full'
+                                )}
+                                onClick={ev => handle(1)}
+                                >
+                                <FaIcon.FiBellOff/>&nbsp; Block
+                                </button>
                             )}
                             </Menu.Item>
                             <Menu.Item >

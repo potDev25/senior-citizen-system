@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ManifestData;
 use App\Models\ManifestDate;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
@@ -17,6 +18,7 @@ class StatisticsController extends Controller
         $date = '2023-08';
         $routes = ManifestDate::where('date', 'like', '%' . $date . '%')->groupBy('route')->get();
         $routeStatsResult = [];
+        $routeMonthlySalse = [];
 
         foreach ($routes as $route) {
             $manifestData = ManifestData::where('month_year', '2023-Aug')
@@ -28,7 +30,17 @@ class StatisticsController extends Controller
             ];
         }
 
-        return response(compact('routes', 'routeStatsResult'));
+        foreach ($routes as $route) {
+            $tickets = Ticket::where('month_year', '2023-Aug')
+                            ->where('route', $route->route)
+                            ->sum('fair');
+            $routeMonthlySalse[] = [
+                'route' => $route->route,
+                'sales' => $tickets
+            ];
+        }
+
+        return response(compact('routes', 'routeStatsResult', 'routeMonthlySalse'));
     }
 
     /**

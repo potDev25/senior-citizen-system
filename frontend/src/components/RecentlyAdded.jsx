@@ -8,10 +8,10 @@ import Table from './Table';
 import PeopleTable from './Tables/PeopleTable';
 import Spiral from './Spiral/Spiral';
 
-export default function RecentlyAdded({data, link, checked = false, title, string}) {
+export default function RecentlyAdded({data, link, checked = false, title, string, load}) {
 
     const [passengers, setPassengers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(load);
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')

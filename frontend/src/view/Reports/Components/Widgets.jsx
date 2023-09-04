@@ -12,34 +12,19 @@ import Data from './Tables/Data';
 export default function Widgets() {
     const [loading, setLoading] = useState(true)
     const [noPassengers, setNoPassengers] = useState([])
+    const [sales, setSales] = useState([])
 
-    const [userData, setUserData] = useState({
-        labels: noPassengers.map((data) => data.route),
-        datasets: [
-          {
-            label: "No. Of Passengers",
-            data: noPassengers.map((data) => data.passengers),
-            backgroundColor: [
-              "rgba(75,192,192,1)",
-              "#ecf0f1",
-              "#50AF95",
-              "#f3ba2f",
-              "#2a71d0",
-            ],
-            borderColor: "blue",
-            borderWidth: 2,
-          },
-          
-        ],
-      });
-
-    useEffect(() => {
+      useEffect(() => {
         axiosClient.get('/statistics')
-            .then(({data}) => {
-                setNoPassengers(data.routeStatsResult)
-                setLoading(false)
-            })
-    }, [loading])
+          .then(({data}) => {
+            setNoPassengers(data.routeStatsResult)
+            setSales(data.routeMonthlySalse)
+            setLoading(false)
+          })
+          .catch(() => {
+            setLoading(false)
+          })
+      }, [loading])
     
   return (
     <>
@@ -48,23 +33,25 @@ export default function Widgets() {
                 <h1 className='text-gray-500 uppercase text-lg font-bold'>Routes STATISTICS (No. Passengers Monthly)</h1>
                 <div className='h-full w-full'>
                     <Barchart
-                        chartData={userData}
+                        noPassengers={noPassengers}
+                        loading={loading}
                     />
                 </div>
             </div>
             <div className='h-[350px] w-full bg-white rounded shadow-md text-center p-2'>
                 <h1 className='text-gray-500 uppercase text-lg font-bold'>Monthly Sales STATISTICS</h1>
             <div className='h-full w-full'>
-                <LineChart
+                {/* <LineChart
                     data={userData}
-                />
+                /> */}
             </div>
             </div>
             <div className='h-[350px] w-full bg-white rounded shadow-md text-center p-2'>
                 <h1 className='text-gray-500 uppercase text-lg font-bold'>Routes Monthly Sales</h1>
                 <div className='h-full w-full'>
-                    <Barchart
-                        chartData={userData}
+                    <LineChart
+                        sales={sales}
+                        loading={loading}
                     />
                 </div>
             </div>

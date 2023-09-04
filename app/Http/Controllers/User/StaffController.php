@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 use function GuzzleHttp\Promise\all;
 
@@ -32,26 +33,50 @@ class StaffController extends Controller
     {
         $data = $request->validated();
 
-        if($request->hasFile('photo')){
-            $data['photo'] = $request->file('photo')->store('media', 'public');
+        $email_data = [
+            'recipient' => $data['contact_email'],
+            'fromEmail' => "8rja_express@gmail.com",
+            'fromName' => '8RJA EXPRESS INC.',
+            'subject' => ' Thank You for Registering! Your User Account and QR Code Download Link',
+            'password' => $data['password'],
+            'email' => $data['contact_email'],
+            'name' => $data['last_name'].' '.$data['first_name'],
+        ];
+
+        $sent = Mail::send('mail.staff_message', $email_data, function($message) use ($email_data){
+            $message->to($email_data['recipient'])
+                    ->from($email_data['fromEmail'], $email_data['fromName'])
+                    ->subject($email_data['subject']);
+        });
+
+        if($sent){
+            
+            if($request->hasFile('photo')){
+                $data['photo'] = $request->file('photo')->store('media', 'public');
+            }
+
+            User::create([
+                'last_name'      => $data['last_name'],
+                'first_name'     => $data['first_name'],
+                'email'          => $data['contact_email'],
+                'cotact_number'  => $data['contact_number'],
+                'gender'         => $data['gender'],
+                'photo'          => $data['photo'],
+                'province'       => $data['province'],
+                'city'           => $data['city'],
+                'barangay'       => $data['barangay'],
+                'role'           => $data['role'],
+                'password'       => bcrypt($data['password']),
+                'birthdate'      => $data['birthdate'],
+            ]);
+
+            return response(200);
+        }else{
+            return response(500);
         }
+        
 
-        User::create([
-            'last_name'      => $data['last_name'],
-            'first_name'     => $data['first_name'],
-            'email'          => $data['contact_email'],
-            'cotact_number'  => $data['contact_number'],
-            'gender'         => $data['gender'],
-            'photo'          => $data['photo'],
-            'province'       => $data['province'],
-            'city'           => $data['city'],
-            'barangay'       => $data['barangay'],
-            'role'           => $data['role'],
-            'password'       => bcrypt($data['password']),
-            'birthdate'      => $data['birthdate'],
-        ]);
-
-        return response(200);
+       
     }
 
     public function check(User $user, Request $request){
@@ -114,6 +139,19 @@ class StaffController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+        return response(200);
+    }
+
+    public function block(User $user)
+    {
+        if($user->block === 1){
+            $user->block = 0;
+        }elseif($user->block === 0){
+            $user->block = 1;
+        }
+
+        $user->update();
+        
         return response(200);
     }
 }
