@@ -259,7 +259,7 @@ export default function Upload() {
                 .catch(() =>{
                     setLoading(false);
                 })
-        }, [])
+        }, [id])
     }
 
   return (
@@ -344,7 +344,7 @@ export default function Upload() {
                     <div className='mb-6 w-[80%] text-center'>
                         <h1 className='text-sm font-bold text-[#0755A2]'>
                             {passengers.type == "Student" && 'Student ID No.'}
-                            {passengers.type == "Senior" && 'Sr. Citizen TIN No.'}
+                            {passengers.type == "Senior" && 'Sr. Citizen ID No.'}
                             {passengers.type == "Regular" && 'ID No.'}
                             {passengers.type == "PWD" && 'PWD ID No.'}
                         </h1>

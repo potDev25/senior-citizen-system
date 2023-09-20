@@ -15,7 +15,7 @@ import AddStaff from '../../AddStaff';
 import EditStaff from '../../EditStaff';
 
 
-export default function UpdateStaffModal({handleLoading, show, hideModal, user}) {
+export default function UpdateStaffModal({handleLoading, show, hideModal, user, barangays}) {
   const [showModal, setShowModal] = useState(false);
   const [errors, setErrors] = useState({})
   const [info, setInfo] = useState([])
@@ -87,9 +87,9 @@ export default function UpdateStaffModal({handleLoading, show, hideModal, user})
         <TEModal show={show} setShow={handleHideModal} scrollable staticBackdrop>
           <TEModalDialog size='lg' centered >
             <TEModalContent>
-              <TEModalHeader className='bg-blue-500 text-white'>
+            <TEModalHeader className='bg-white text-gray-900'>
                 {/* <!--Modal title--> */}
-                    <h1 className='uppercase text-2xl text-white flex items-center'><FaIcon.FiEdit/> &nbsp;edit staff profile</h1>
+                    <h1 className='uppercase text-2xl text-gray-900 flex items-center'><FaIcon.FiEdit/> &nbsp;edit profile</h1>
                 {/* <!--Close button--> */}
               </TEModalHeader>
               {/* <!--Modal body--> */}
@@ -100,6 +100,7 @@ export default function UpdateStaffModal({handleLoading, show, hideModal, user})
                     handleLoading={handleLoading}
                     hideModal={hideModal}
                     user={user}
+                    barangays={barangays}
                   />
                 </div>
               </TEModalBody>

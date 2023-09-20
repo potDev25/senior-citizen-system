@@ -22,6 +22,12 @@ import Reports from "./view/Reports/Reports";
 import Staff from "./view/Staff/Staff";
 import AddStaff from "./view/Staff/AddStaff";
 import StaffProfile from "./view/Pages/StaffProfile";
+import PeopleIndex from "./view/People/PeopleIndex";
+import Barangay from "./view/Barangay/Barangay";
+import Department from "./view/Departments/Department";
+import DepartmentUser from "./view/DepartmentUser/DepartmentUser";
+import Seniors from "./view/Barangay/Seniors";
+import ScannedSeniors from "./view/Barangay/ScannedSeniors";
 
 const router =  createBrowserRouter ([
     {
@@ -48,7 +54,7 @@ const router =  createBrowserRouter ([
             },
             {
                 path: '/manifest',
-                element: <Manifest/>
+                element: <Department/>
             },
             {
                 path: '/sales',
@@ -56,7 +62,7 @@ const router =  createBrowserRouter ([
             },
             {
                 path: '/people',
-                element: <People/>
+                element: <PeopleIndex/>
             },
             {
                 path: '/passengers',
@@ -93,6 +99,22 @@ const router =  createBrowserRouter ([
             {
                 path: '/staff',
                 element: <Staff/>
+            },
+            {
+                path: '/barangay',
+                element: <Barangay/>
+            },
+            {
+                path: '/barangay-seniors/:barangay',
+                element: <Seniors/>
+            },
+            {
+                path: '/barangay-scanned-seniors/:barangay',
+                element: <ScannedSeniors/>
+            },
+            {
+                path: '/department-users',
+                element: <DepartmentUser/>
             },
             {
                 path: '/staff/profile/:id/:tab',

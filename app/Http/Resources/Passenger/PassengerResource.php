@@ -15,6 +15,14 @@ class PassengerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        //verified date
+        if($this->verified === 0){
+            $date = Carbon::createFromFormat('m-d-Y', $this->verified);
+            $verifiedDate = $date->format('F d, Y');
+        }else{
+            $verifiedDate = $this->verified;
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->last_name.' '.$this->first_name,
@@ -29,10 +37,13 @@ class PassengerResource extends JsonResource
             'status' => $this->status,
             'religion' => $this->religion,
             'type' => $this->type,
-            'verified' => $this->verified,
+            'verified' => $verifiedDate,
             'password' => $this->password,
             'qrcode_hash' => $this->qrcode_hash,
-            'created_at' => Carbon::parse($this->created_at)->format('m-d-Y'),
+            'province' => $this->province,
+            'barangay' => $this->barangay,
+            'city' => $this->city,
+            'created_at' => Carbon::parse($this->created_at)->format('F d, Y'),
             'updated_at' => $this->updated_at,
             'address' => $this->address,
             'citizenship' => $this->citizenship,

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Staff\StaffRequest;
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -19,11 +21,49 @@ class StaffController extends Controller
      */
     public function index(int $limit)
     {
-        $users = User::where('id', '!=', Auth::user()->id)
-                ->orderBy('id', 'DESC')
+        // $users = User::where('id', '!=', Auth::user()->id)
+        //         ->orderBy('id', 'DESC')
+        //         ->paginate($limit);
+
+        $users = DB::table('users')
+                ->select('users.*', 'departments.*', 'users.id as user_id', 'departments.id as department_id', 'departments.designation as dep_designation')
+                ->where('users.id', '!=', Auth::user()->id)
+                ->where('users.role', 'barangay')
+                ->join('departments', 'users.designation', '=', 'departments.id')
+                ->orderBy('users.id', 'DESC')
                 ->paginate($limit);
+
+        $barangays = Department::where('type', 'Barangay')
+                     ->get();
         
-        return response(compact('users'));
+        return response(compact('users', 'barangays'));
+    }
+
+    public function department(int $limit)
+    {
+        // $users = User::where('id', '!=', Auth::user()->id)
+        //         ->orderBy('id', 'DESC')
+        //         ->paginate($limit);
+
+        $users = DB::table('users')
+                ->select('users.*', 'departments.*', 'users.id as user_id', 'departments.id as department_id', 'departments.designation as dep_designation')
+                ->where('users.id', '!=', Auth::user()->id)
+                ->where('users.role', 'department')
+                ->join('departments', 'users.designation', '=', 'departments.id')
+                ->orderBy('users.id', 'DESC')
+                ->paginate($limit);
+
+        $barangays = Department::where('type', 'Department')
+                     ->get();
+        
+        return response(compact('users', 'barangays'));
+    }
+
+    //check if user for barangay already exist
+    public function checkDesignationExist(int $designation) : bool {
+        $check = User::where('designation', $designation)->first();
+
+        return $check ? true : false;
     }
 
     /**
@@ -33,50 +73,53 @@ class StaffController extends Controller
     {
         $data = $request->validated();
 
-        $email_data = [
-            'recipient' => $data['contact_email'],
-            'fromEmail' => "8rja_express@gmail.com",
-            'fromName' => '8RJA EXPRESS INC.',
-            'subject' => ' Thank You for Registering! Your User Account and QR Code Download Link',
-            'password' => $data['password'],
-            'email' => $data['contact_email'],
-            'name' => $data['last_name'].' '.$data['first_name'],
-        ];
-
-        $sent = Mail::send('mail.staff_message', $email_data, function($message) use ($email_data){
-            $message->to($email_data['recipient'])
-                    ->from($email_data['fromEmail'], $email_data['fromName'])
-                    ->subject($email_data['subject']);
-        });
-
-        if($sent){
-            
-            if($request->hasFile('photo')){
-                $data['photo'] = $request->file('photo')->store('media', 'public');
-            }
-
-            User::create([
-                'last_name'      => $data['last_name'],
-                'first_name'     => $data['first_name'],
-                'email'          => $data['contact_email'],
-                'cotact_number'  => $data['contact_number'],
-                'gender'         => $data['gender'],
-                'photo'          => $data['photo'],
-                'province'       => $data['province'],
-                'city'           => $data['city'],
-                'barangay'       => $data['barangay'],
-                'role'           => $data['role'],
-                'password'       => bcrypt($data['password']),
-                'birthdate'      => $data['birthdate'],
-            ]);
-
-            return response(200);
+        if($this->checkDesignationExist($data['designation'])){
+            return response(422);
         }else{
-            return response(500);
+            $email_data = [
+                'recipient' => $data['contact_email'],
+                'fromEmail' => "8rja_express@gmail.com",
+                'fromName' => '8RJA EXPRESS INC.',
+                'subject' => ' Thank You for Registering! Your User Account and QR Code Download Link',
+                'password' => $data['password'],
+                'email' => $data['contact_email'],
+                'name' => $data['last_name'].' '.$data['first_name'],
+            ];
+    
+            $sent = Mail::send('mail.staff_message', $email_data, function($message) use ($email_data){
+                $message->to($email_data['recipient'])
+                        ->from($email_data['fromEmail'], $email_data['fromName'])
+                        ->subject($email_data['subject']);
+            });
+    
+            if($sent){
+                
+                if($request->hasFile('photo')){
+                    $data['photo'] = $request->file('photo')->store('media', 'public');
+                }
+    
+                User::create([
+                    'last_name'      => $data['last_name'],
+                    'first_name'     => $data['first_name'],
+                    'email'          => $data['contact_email'],
+                    'cotact_number'  => $data['contact_number'],
+                    'gender'         => $data['gender'],
+                    'photo'          => $data['photo'],
+                    'province'       => $data['province'],
+                    'city'           => $data['city'],
+                    'barangay'       => $data['barangay'],
+                    'role'           => $data['role'],
+                    'designation'    => $data['designation'],
+                    'password'       => bcrypt($data['password']),
+                    'birthdate'      => $data['birthdate'],
+                ]);
+    
+                return response(200);
+            }else{
+                return response(500);
+            }
         }
-        
 
-       
     }
 
     public function check(User $user, Request $request){
@@ -88,7 +131,13 @@ class StaffController extends Controller
      */
     public function show(User $user)
     {
-        return response(compact('user'));
+        $users = DB::table('users')
+                    ->select('users.*', 'departments.*', 'users.id as user_id', 'departments.id as department_id', 'departments.designation as dep_designation')
+                    ->where('users.id', $user->id)
+                    ->join('departments', 'users.designation', '=', 'departments.id')
+                    ->first();
+
+        return response(compact('users'));
     }
 
     /**
@@ -128,6 +177,7 @@ class StaffController extends Controller
        $user->role = isset($request->role) ? $request->role : $user->role;
        $user->birthdate = isset($request->birthdate) ? $request->birthdate : $user->birthdate;
        $user->photo = isset($request->photo) ? $file : $user->photo;
+       $user->designation = isset($request->designation) ? $request->designation : $user->designation;
        $user->update();
 
        return response(200);

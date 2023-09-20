@@ -1,5 +1,5 @@
 import React from 'react'
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
 export default function LineChart({sales, loading}) {
@@ -11,7 +11,7 @@ export default function LineChart({sales, loading}) {
       labels,
       datasets: [
         {
-          label: 'Data Values',
+          label: 'Sales',
           data: values,
           backgroundColor: '#a2cff6',
           fill: true,
@@ -31,15 +31,16 @@ export default function LineChart({sales, loading}) {
           },
         ],
       },
+      maintainAspectRatio: false
     };
 
     return (
-      <Line data={chartData} options={chartOptions} />
+      <Bar data={chartData} options={chartOptions} />
     );
   };
 
   return (
-    <div>
+    <div className='h-full pb-10'>
       {loading ? <p>Loading chart...</p> : renderChart() }
     </div>
   )

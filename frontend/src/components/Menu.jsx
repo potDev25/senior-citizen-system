@@ -14,6 +14,8 @@ import ChairsManualModal from './Modals/ChairsManualModal';
 import ManifestToPrint from './Tables/ManifestToPrint';
 import ReactToPrint from 'react-to-print';
 import SubmitManifestModal from './Modals/SubmitManifestModal';
+import ManifestLayout from './Layout/ManifestLayout';
+import RebookModal from './Modals/RebookModal';
 
 export default function Menu() {
 
@@ -30,12 +32,16 @@ export default function Menu() {
     const [manifest, setManifest] = useState([])
     const [passengers, setPassengers] = useState([]);
     const [showManual, SetManual] = useState(false);
+    const [showRebook, SetRebook] = useState(false);
+    const [showRefund, SetRefund] = useState(false);
     const [showProfile, setProfileModal] = useState(false);
     const [showChairs, setShowChairs] = useState(false);
     const [btnSave, setBtnSave] = useState(false);
+    const [numbers, setNumber] = useState([])
 
     const [passenger, _setPassenger] = useState([]);
     const [manifestData, setManifestData] = useState([]);
+    const [rebookPassengers, setRebookPassengers] = useState([]);
     const [manifest_id2, setManifestId2] = useState(null)
     const componentRef = useRef();
 
@@ -132,6 +138,10 @@ export default function Menu() {
         SetManual(hide)
     }
 
+    const hideRebookModal = (hide) => {
+        SetRebook(hide)
+    }
+
     const getManifest = (manifest) => {
         setManifestData(manifest)
     }
@@ -149,6 +159,8 @@ export default function Menu() {
                     setTime(data.manifestDate.time)
                     setDateId(data.manifestDate.id)
                     setRoute(data.manifestDate.route)
+                    setNumber(data.number)
+                    setRebookPassengers(data.rebookPassengers)
                     _setDate(data.date)
                 }
                 
@@ -158,7 +170,7 @@ export default function Menu() {
                 _setAction(false)
             })
 
-        axiosClient.get('/get-passengers-approved')
+        axiosClient.get('/get-passengers-approved/5000?page=1')
             .then(({data}) => {
                 setPassengers(data.data)
             })
@@ -171,105 +183,59 @@ export default function Menu() {
 
     
   return (
-    <div className='flex gap-2'>
+    <> 
+        <div className='flex gap-2'>
 
-        <ManualTicketing 
-            show={showManual}
-            hideModal={hideModal}
-            passengers={passengers}
-            setPassengerProfile={setPassengerProfile}
-            dateId={dateId}
-        />
-
-        <ProfileModal
-            passenger={passenger}
-            setChair={handleShowChairs}
-            show={showProfile}
-            hideModal={hideProfileModal}
-            dateId={dateId}
-        />
-
-        <ChairsManualModal
-            show={showChairs}
-            hideModal={hideChairModal}
-            passenger={passenger}
-            manifestDataId={manifest_id2}
-        />
-
-        <div className='hidden'>
-            <ManifestToPrint
-                manifest={manifestData}
-                ref={componentRef}
+            <ManualTicketing 
+                show={showManual}
+                hideModal={hideModal}
+                passengers={passengers}
+                setPassengerProfile={setPassengerProfile}
+                dateId={dateId}
             />
-        </div>
 
-        <div className='bg-white shadow-sm h-fit  md:w-[30%] px-5 py-2 rounded md:block lg:block sm:hidden'>
-            <h1 className='text-md mb-4 font-bold tracking-wide'>Ticketing Menu</h1>
+            <RebookModal 
+                show={showRebook}
+                hideModal={hideRebookModal}
+                passengers={rebookPassengers}
+                setPassengerProfile={setPassengerProfile}
+                dateId={dateId}
+            />
 
-            <table className='md:table-auto w-full text-sm mt-2'>
-                <tbody>
-                {loading && <TableSpiral/>}
-                <tr>
-                    <td className='text-gray-500 flex items-center cursor-pointer p-3'>
-                    {manifestAction == 'false' && <select onChange={ev => setRoute(ev.target.value)} name="" id="" className='w-full border rounded-[5px] border-gray-300 text-gray-500'>
-                            <option value="" selected hidden><FaIcon.FiArrowUp/> Select Route</option>
-                            {
-                                routes.map((route) => (
-                                    <option key={route.id} value={`${route.from} - ${route.to} / ${route.departure}`}>{route.from} - {route.to} {route.departure}</option>
-                                ))
-                            }
-                        </select>}
+            <ProfileModal
+                passenger={passenger}
+                setChair={handleShowChairs}
+                show={showProfile}
+                hideModal={hideProfileModal}
+                dateId={dateId}
+            />
 
-                        {manifestAction == 'true' && <div className='uppercase w-full border rounded-[5px] border-gray-300 text-gray-500 py-2 px-5'>
-                                {route}
-                            </div>}
-                    </td>
-                    <td className='text-gray-500 flex items-center cursor-pointer p-3'>
-                        <div className='flex items-center justify-between gap-2 w-full'>
-                            {/* {manifestAction == 'true' && <div className='w-full border rounded-[5px] border-gray-300 text-gray-500 py-2 px-5'>
-                                {date}
-                            </div>} */}
+            <ChairsManualModal
+                show={showChairs}
+                hideModal={hideChairModal}
+                passenger={passenger}
+                manifestDataId={manifest_id2}
+            />
 
-                            {/* {manifestAction == 'false' && (<input onChange={ev => setDate(ev.target.value)} type="date" className='w-full border rounded-[5px] border-gray-300 text-gray-500'/>)} */}
-
-                            {manifestAction == 'false' && (
-                                <button onClick={setAction} className='w-[30%] rounded border border-2-gray-500 bg-sky-500 p-2.5 text-white flex items-center'><FaIcon.FiSave/> &nbsp;Save</button>
-                            )}
-                        </div>
-                    </td>
-                    {manifestAction == 'true' && <>
-                    <td className='text-gray-500 flex items-center cursor-pointer hover:bg-sky-200 p-3'>
-
-                        <ScanModal date={dateId}/>
-
-                    </td>
-                    <td className='text-gray-500 flex items-center cursor-pointer hover:bg-sky-200 p-3'>
-                        <button 
-                            onClick={ev => SetManual(true)}
-                            className='w-full rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiPaperclip/>
-                             &nbsp;Manual
-                        </button>
-                    </td>
-                    <td className='text-gray-500 flex items-center cursor-pointer hover:bg-sky-200 p-3'>
-                    <ReactToPrint
-                        trigger={() => <button className='w-full rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiPrinter/> &nbsp;Print Manifest</button>}
-                        content={() =>  componentRef.current}
-                    />
-                    </td>
-                    </>}
-                    
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <TicketingTable title={date} dateId={dateId} manifest={manifest} time={time} getManifestData={getManifest}>
-            {manifestAction == 'true' &&
-            <div className='mt-5 flex justify-between'>
-                <div></div>
-                <SubmitManifestModal/>
+            <div className='hidden'>
+                <ManifestToPrint
+                    manifest={manifestData}
+                    ref={componentRef}
+                />
             </div>
-            }
-        </TicketingTable>
-    </div>
+
+            <div className='bg-white shadow-sm h-fit  md:w-[30%] px-5 py-2 rounded md:block lg:block sm:hidden'>
+                <ScanModal date={dateId}/>
+            </div>
+            <TicketingTable title={date} dateId={dateId} manifest={manifest} time={time} getManifestData={getManifest}>
+                {manifestAction == 'true' &&
+                <div className='mt-5 flex justify-between'>
+                    <div></div>
+                    <SubmitManifestModal/>
+                </div>
+                }
+            </TicketingTable>
+        </div>
+    </>
   )
 }

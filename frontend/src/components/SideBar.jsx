@@ -11,28 +11,54 @@ import Setting from '../assets/Setting.png'
 import Calendar from '../assets/Calendar.png'
 import Control from '../assets/Control.png'
 import Facilities from '../assets/facilities.png'
+import Camera from '../assets/icons8-camera-20.png'
+import Admin from '../assets/icons8-admin-20.png'
+import Admin1 from '../assets/icons8-admin-21.png'
 import Users from '../assets/User.png'
 import Navbar from "./Navbar";
-import Logo from '../assets/images/logo-3.png'
+import Logo from '../assets/images/seniors/UEWFefw.png'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-const Sidebar = ({children}) => {
+const Sidebar = ({children, user}) => {
   const [open, setOpen] = useState(true);
   const [link, setLink] = useState('');
   const toastId = useRef(null);
+  let Menus = [];
 
-  const Menus = [
+  if(user.role === 'admin'){
+    Menus = [
       { title: "Dashboard", src: chart_fill, to: '/dashboard'},
-      { title: "Ticketing", src: Facilities, to: '/ticketing', gap: true,},
-      { title: "Staff", src: Facilities, to: '/staff'},
-      { title: "Passengers", src: Facilities, to: '/people' },
-      { title: "Manifest", src: Calendar, to: '/manifest'},
-      { title: "Daily Sales", src: Calendar, to: '/sales'},
+      { title: "Scanning", src: Camera, to: '/ticketing', gap: true,},
+      { title: "Senior Citizens", src: Users, to: '/people' },
+      { title: "Barangay Admins", src: Admin1, to: '/staff'},
+      { title: "Department Admins", src: Admin, to: '/department-users'},
+      { title: "Barangay Management", src: Facilities, to: '/barangay'},
+      { title: "Departments", src: Calendar, to: '/manifest'},
+      // { title: "Daily Sales", src: Calendar, to: '/sales'},
       { title: "Statistics", src: Chart,  gap: true, to: '/reports' },
       { title: "Settings", src: Setting, to: '/settings/fare' },
-      { title: "Logs", src: Setting, to: '/logs' },
-  ];
+    ];
+  }else if(user.role === 'barangay'){
+    Menus = [
+      { title: "Dashboard", src: chart_fill, to: '/dashboard'},
+      { title: "Scanning", src: Camera, to: '/ticketing', gap: true},
+      { title: "Senior Citizens", src: Users, to: '/people' },
+      { title: "Scanned Seniors", src: Camera, to: `/barangay-scanned-seniors/${user.barangay}` },
+      // { title: "Daily Sales", src: Calendar, to: '/sales'},
+      { title: "Statistics", src: Chart,  gap: true, to: '/reports' },
+      { title: "Settings", src: Setting, to: '/settings/fare' },
+    ];
+  }else if(user.role === 'department'){
+    Menus = [
+      { title: "Dashboard", src: chart_fill, to: '/dashboard'},
+      { title: "Scanning", src: Camera, to: '/ticketing', gap: true,},
+      { title: "Staff", src: Users, to: '/ticketing',},
+      // { title: "Daily Sales", src: Calendar, to: '/sales'},
+      { title: "Statistics", src: Chart,  gap: true, to: '/reports' },
+      { title: "Settings", src: Setting, to: '/settings/fare' },
+    ];
+  }
 
   const handleLink = () => {
     setLink(window.location.pathname)
@@ -51,7 +77,7 @@ const Sidebar = ({children}) => {
            border-2 rounded-full  ${!open && "rotate-180"}`}
           onClick={() => setOpen(!open)}
           />
-        <div className="flex items-center gap-2 px-3">
+        <div className="flex items-center gap-2 px-3 py-2">
             <div className={`h-[70px] bg-white px-1 rounded-lg ${
                     !open ? "w-[50px] h-[30px]" : "w-[80px]"
                     }`}>
@@ -63,11 +89,11 @@ const Sidebar = ({children}) => {
                 />
             </div>
           <h1
-            className={`text-[#ffff] origin-left font-bold tracking-wide text-lg duration-200 ${
+            className={`text-[#ffff] origin-left font-bold tracking-wider text-3xl duration-200 ${
               !open && "scale-0"
             }`}
           >
-            RJA Express
+            SCIS
           </h1>
         </div>
        
@@ -76,9 +102,9 @@ const Sidebar = ({children}) => {
             <li
                 onClick={handleLink}
                 key={index}
-                className={`flex rounded-md p-2 cursor-pointer hover:bg-blue-400 text-white text-lg font-semibold items-center gap-x-4 
+                className={`flex rounded-md p-2 cursor-pointer hover:bg-[#FCB040] text-white text-lg font-semibold items-center gap-x-3 
                 ${Menu.gap ? "mt-6" : "mt-2"} 
-                ${link === Menu.to && "bg-blue-400"}`}
+                ${link === Menu.to && "bg-[#FCB040]"}`}
               >
               
                 <img src={Menu.src} />

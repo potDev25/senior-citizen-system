@@ -26,7 +26,7 @@ export default function GuestLayout() {
 
 
   return (
-    <div className=' md:w-full md:h-[100vh] bg-[url("./public/background.svg")] bg-no-repeat bg-white' >
+    <div className=' md:w-full md:h-[100vh] bg-[url("./public/undraw_hologram_re_7ppw.svg")] bg-no-repeat bg-center bg-contain bg-white' >
       <ToastContainer/>
       <Outlet/>
     </div>

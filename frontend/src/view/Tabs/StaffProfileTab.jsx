@@ -49,8 +49,15 @@ export default function StaffProfileTab({user}) {
             <div className='py-3 w-full mb-2 border-b border-gray-200'>
                 <div className='flex items-center gap-5'>
                     <h1 className='text-black text-md font-2xl'>Role:</h1>
-                    {user.role == 'Ticketing Agent' && <span className='rounded-[10px] bg-blue-300 text-blue-500 px-2 text-sm capitalize'>{user.role}</span>}
-                    {user.role == 'Clearing Man' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>{user.role}</span>}
+                    {user.role == 'department' && <span className='rounded-[10px] bg-blue-300 text-blue-500 px-2 text-sm capitalize'>{user.role} User</span>}
+                    {user.role == 'barangay' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>{user.role} User</span>}
+                </div>
+            </div>
+            <div className='py-3 w-full mb-2 border-b border-gray-200'>
+                <div className='flex items-center gap-5'>
+                    <h1 className='text-black text-md font-2xl'>Designation:</h1>
+                    {user.role == 'department' &&  <p className='text-gray-500 text-md font-2xl capitalize'>{user.dep_designation}</p>}
+                    {user.role == 'barangay' &&  <p className='text-gray-500 text-md font-2xl capitalize'>Brgy. {user.dep_designation}</p>}
                 </div>
             </div>
         </div>

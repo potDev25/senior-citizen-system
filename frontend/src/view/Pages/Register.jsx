@@ -23,11 +23,13 @@ export default function Register() {
   const [date, setDate] = useState()
   const [gender_input, setGender] = useState()
   const [status, setStatus] = useState()
-  const [type, setType] = useState()
 
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
+  const [provinces, setProvinces] = useState([]);
+  const [cities, setCities] = useState([])
+  const [barangays, setBarangay] = useState([])
 
   const toastError = (text) => {
         toast.error(text, {
@@ -40,6 +42,22 @@ export default function Register() {
             progress: undefined,
             theme: "colored",
         });
+    }
+
+    const getCities = (province_id) => {
+        setProvince(province_id)
+        axiosClient.get(`/get-cities/${province_id}`)
+            .then(({data}) => {
+                setCities(data.cities)
+            })
+    }
+
+    const getBarangay = (city_id) => {
+        setCity(city_id)
+        axiosClient.get(`/get-barangay/${city_id}`)
+            .then(({data}) => {
+                setBarangay(data.barangays)
+            })
     }
 
   const onSubmit = (e) => {
@@ -58,8 +76,10 @@ export default function Register() {
         age: age_input.current.value,
         birthdate: date,
         status: status,
-        type: type,
-        address: add
+        address: add,
+        city: city,
+        barangay: brgy,
+        province: province
     }
 
     axiosClient.post('/register', data)
@@ -81,6 +101,13 @@ export default function Register() {
     console.log(errors)
   }
 
+  useEffect(() => {
+    axiosClient.get('/get-provinces')
+        .then(({data}) => {
+            setProvinces(data.provinces)
+        })
+  }, [loading])
+
   return (
     <FormContainer>
          <ToastContainer/>
@@ -89,7 +116,7 @@ export default function Register() {
             <LogoForm/>
 
             <form action="" className='px-[50px]' onSubmit={onSubmit}>
-                <h1 className='text-lg font-bold text-[#0755A2]'>Register</h1>
+                <h1 className='text-2xl font-bold text-[#0755A2] uppercase'>Register</h1>
                 <p className='text-sm font-sm text-gray-500'>Please enter your account details</p>
 
                 <div className='mt-5 mb-6'>
@@ -108,29 +135,42 @@ export default function Register() {
                 </div>
 
                 <div className="mb-6">
-                    <label htmlFor="first_name" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Email</label>
-                    <input ref={email_input} type="text" id="first_name" className={(errors.email ? 'border-red-500' : 'border-gray-300') + " bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} placeholder="Email"/>
+                    <label htmlFor="email" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Email</label>
+                    <input ref={email_input} type="email" id="first_name" className={(errors.email ? 'border-red-500' : 'border-gray-300') + " bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"} placeholder="Email"/>
                 </div>
 
                 <div className='mb-6'>
                     <label for="first_name" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Address</label>
                     <div className='grid gap-2 mb-6 md:grid-cols-3'>
                         <div>
-                            <select onChange={(ev) => setProvince(ev.target.value)}  id="" name="" className={(errors.address ? 'border-red-500' : 'border-gray-300') + " bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}>
-                                <option value="" selected>Provice</option>
-                                <option value="biliran">Biliran</option>
+                            <select onChange={(ev) => getCities(ev.target.value)}  id="" name="" className={(errors.address ? 'border-red-500' : 'border-gray-300') + " bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}>
+                                <option>Select Province</option>
+                                  
+                                  {
+                                      provinces.map((province) => (
+                                          <option value={province.province_id}>{province.name}</option>
+                                      ))
+                                  }
                             </select>
                         </div>
                         <div>
-                            <select onChange={(ev) => setCity(ev.target.value)} id="" name="" className={(errors.address ? 'border-red-500' : 'border-gray-300') + " bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}>
-                                <option value="" selected>City/Municipality</option>
-                                <option value="maripipi">Maripipi</option>
+                            <select onChange={(ev) => getBarangay(ev.target.value)} id="" name="" className={(errors.address ? 'border-red-500' : 'border-gray-300') + " bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}>
+                                <option>Select City</option>
+                                {
+                                    cities.map((city) => (
+                                        <option value={city.city_id}>{city.name}</option>
+                                    ))
+                                }
                             </select>
                         </div>
                         <div className=''>
                             <select onChange={(ev) => setBrgy(ev.target.value)} id="" name="" className={(errors.address ? 'border-red-500' : 'border-gray-300') + " bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}>
-                                <option value="" selected>Barangay</option>
-                                <option value="binalayan west">Binalayan West</option>
+                                <option value="" selected>Select Barangay</option>
+                                {
+                                    barangays.map((barangay) => (
+                                        <option value={barangay.name}>{barangay.name}</option>
+                                    ))
+                                }
                             </select>
                         </div>  
                     </div>
@@ -177,32 +217,10 @@ export default function Register() {
                         <option value="" selected>Status</option>
                         <option value="Single" selected>Single</option>
                         <option value="Married" selected>Married</option>
-                        <option value="Widow" selected>Widow</option>
+                        <option value="Widowed" selected>Widow</option>
                     </select>
                 </div>
 
-                <div className="flex gap-3">
-                    <div className="flex gap-2">
-                        <input onChange={(ev) => setType(ev.target.value)} id="regular" type="radio" value="Regular" name="default-radio" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                        <label htmlFor="regular" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Regular</label>
-                    </div>
-                    <div className="flex gap-2">
-                        <input onChange={(ev) => setType(ev.target.value)} id="student" type="radio" value="Student" name="default-radio" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                        <label htmlFor="student" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Student</label>
-                    </div>
-                    <div className="flex gap-2">
-                        <input onChange={(ev) => setType(ev.target.value)} id="senior" type="radio" value="Senior" name="default-radio" className=""/>
-                        <label htmlFor="senior" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Senior</label>
-                    </div>
-                    <div className="flex gap-2">
-                        <input onChange={(ev) => setType(ev.target.value)} id="pwd" type="radio" value="PWD" name="default-radio" className=""/>
-                        <label htmlFor="pwd" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">PWD</label>
-                    </div>
-                    <div className="flex gap-2">
-                        <input onChange={(ev) => setType(ev.target.value)} id="minor" type="radio" value="Minor" name="default-radio" className=""/>
-                        <label htmlFor="minor" className="block mb-2 text-sm font-medium  text-[#0755A2] dark:text-white">Minor</label>
-                    </div>
-                </div>
                 <p className='text-sm text-red-500 animate-pulse'>{errors.type}</p>
 
                 <div className="mb-6 mt-6 w-full">

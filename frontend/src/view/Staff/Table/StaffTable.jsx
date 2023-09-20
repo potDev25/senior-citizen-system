@@ -20,6 +20,7 @@ export default function StaffTable() {
     const [limit, _setLimit] = useState(5)
     const [paginate, setPaginate] = useState(1);
     const [links, setLinks] = useState([]);
+    const [barangays, setBarangays] = useState([]);
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
@@ -93,7 +94,7 @@ export default function StaffTable() {
     }
 
     const deleteStaff = (staff) => {
-        axiosClient.delete(`/staff/destroy/${staff.id}`)
+        axiosClient.delete(`/staff/destroy/${staff.user_id}`)
         .then(({data}) => {
             promptMessage('Staff Deleted Successfully', 'success')
         })
@@ -103,7 +104,7 @@ export default function StaffTable() {
     }
 
     const blockStaff = (staff) => {
-        axiosClient.put(`/staff/block/${staff.id}`)
+        axiosClient.put(`/staff/block/${staff.user_id}`)
         .then(({data}) => {
             promptMessage('Staff Blocked Successfully', 'success')
         })
@@ -117,14 +118,15 @@ export default function StaffTable() {
             .then(({data}) => {
                 setUsers(data.users.data)
                 setLinks(data.users.links)
+                setBarangays(data.barangays)
                 setLoading(false)
             })
 
     }, [loading])
   return (
     <div className='bg-white shadow-sm h-fit md:w-full rounded'>
-            <div className='w-full px-4 py-3 h-14 text-white uppercase p-2 rounded-t-md border-b-2 border-gray-100'>
-                <h1 className='uppercase text-2xl text-gray-500'>manage staff</h1>
+            <div className='w-full h-10 text-white uppercase p-2 rounded-t-md border-b-2 border-gray-100'>
+                <h1 className='uppercase text-md text-gray-500'>manage barangay users</h1>
             </div>
             <div className='p-5'>
                 <div className='flex items-center justify-between mb-4'>
@@ -158,12 +160,13 @@ export default function StaffTable() {
                         <div className='flex items-center justify-center gap-2'>
                             <button 
                             onClick={ev => setShowModal(true)}
-                            className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center uppercase'><FaIcon.FiPlusCircle/> &nbsp;Add Staff</button>
+                            className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center uppercase'><FaIcon.FiPlusCircle/> &nbsp;Add Admin</button>
                            
                             <AddStaffModal
                              hideModal={hideModal}
                              show={showModal}
                              handleLoading={handleLoading}
+                             barangays={barangays}
                             />
 
                             <UpdateStaffModal
@@ -171,6 +174,7 @@ export default function StaffTable() {
                              show={showUpdateModal}
                              handleLoading={handleLoading}
                              user={user}
+                             barangays={barangays}
                             />
                             
                         </div>
@@ -191,7 +195,7 @@ export default function StaffTable() {
                             <tr>
                                 <td className='text-sm text-gray-500 font-medium px-5 py-2'>NAME</td>
                                 <td className='text-sm text-gray-500 font-medium px-5 py-2'>Email</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>ROLE</td>
+                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Designation</td>
                                 <td className='text-sm text-gray-500 font-medium px-5 py-2'>ADDRESS</td>
                                 <td className='text-sm text-gray-500 font-medium px-5 py-2'>STATUS</td>
                                 <td className='text-sm text-gray-500 font-medium px-5 py-2'>OPTION</td>
@@ -219,7 +223,7 @@ export default function StaffTable() {
                                         <td className='text-sm px-5 py-2 text-gray-500'>
                                             {user.role == 'Ticketing Agent' && <span className='rounded-[10px] bg-blue-300 text-blue-500 px-2 text-sm capitalize'>{user.role}</span>}
                                             {user.role == 'Clearing Man' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>{user.role}</span>}
-                                         
+                                            <span className='text-gray-500'>Brgy. {user.dep_designation}</span>
                                         </td>
                                         <td className='text-sm px-5 py-2 text-gray-500'>
                                             <span className='text-gray-500'>{user.barangay}, {user.city}, {user.province}</span>
@@ -237,9 +241,9 @@ export default function StaffTable() {
                                         <td className='text-sm px-5 py-2 text-gray-500'>
                                         <Menu as="div" className="relative inline-block text-left">
                                             <div>
-                                                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300">
+                                                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset rounded-md">
                                                 OPTIONS
-                                                <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                <ChevronDownIcon className="-mr-1 h-5 w-5 text-white" aria-hidden="true" />
                                                 </Menu.Button>
                                             </div>
 
@@ -274,7 +278,7 @@ export default function StaffTable() {
                                                             active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                                             'flex items-center px-4 py-2 text-sm w-full'
                                                         )}
-                                                        to={'/staff/profile/' + user.id + '/details'}
+                                                        to={'/staff/profile/' + user.user_id + '/details'}
                                                         >
                                                         <FaIcon.FiEye/>&nbsp; View
                                                         </Link>

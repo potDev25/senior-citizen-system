@@ -37,7 +37,7 @@ const errorlert = (text) => {
         icon: 'error',
         title: text,
         showConfirmButton: false,
-        timer: 1500
+        timer: 1800
       })
 }
    
@@ -51,7 +51,8 @@ const errorlert = (text) => {
             successAlert('Rebook Action Completed!')
             setBtnLoading(false)
             handleLoading(true)
-            handleHideModal()
+            // handleHideModal()
+            window.location.reload();
         })
         .catch((error) => {
             if(error.response.data.errors){

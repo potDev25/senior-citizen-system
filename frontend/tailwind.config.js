@@ -23,6 +23,13 @@ export default {
 
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
+    },
+    backgroundSize: {
+      'auto': 'auto',
+      'cover': 'cover',
+      'contain': 'contain',
+      '30%': '30%',
+      '16': '3rem',
     }
   },
   plugins: [

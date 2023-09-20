@@ -14,7 +14,7 @@ import  Swal  from 'sweetalert2/dist/sweetalert2';
 import AddPassenger from '../Components/Forms/AddPassenger';
 
 
-export default function AddPassengerModal({handleLoading, show, hideModal, showMediaModal}) {
+export default function AddPassengerModal({handleLoading, show, hideModal, showMediaModal, provinces}) {
   const [showModal, setShowModal] = useState(false);
   const [errors, setErrors] = useState({})
   const [info, setInfo] = useState([])
@@ -86,9 +86,9 @@ export default function AddPassengerModal({handleLoading, show, hideModal, showM
         <TEModal show={show} setShow={handleHideModal} scrollable staticBackdrop>
           <TEModalDialog size='lg' centered >
             <TEModalContent>
-              <TEModalHeader className='bg-blue-500 text-white'>
+              <TEModalHeader className='bg-white'>
                 {/* <!--Modal title--> */}
-                    <h1 className='uppercase text-2xl text-white flex items-center'><FaIcon.FiPlusCircle/> &nbsp;register passenger</h1>
+                    <h1 className='uppercase text-2xl text-gray-900 flex items-center'><FaIcon.FiPlusCircle/> &nbsp;register senior</h1>
                 {/* <!--Close button--> */}
                 <button
                   type="button"
@@ -120,6 +120,7 @@ export default function AddPassengerModal({handleLoading, show, hideModal, showM
                     handleLoading={handleLoading}
                     hideModal={hideModal}
                     showMediaModal={showMediaModal}
+                    provinces={provinces}
                   />
                 </div>
               </TEModalBody>

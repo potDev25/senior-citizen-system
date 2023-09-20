@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
-import Logo from '../../assets/images/logo-2.jpg'
+import Logo from '../../assets/images/seniors/SCMS.png'
 import PassengerLogin from '../Modals/PassengerLogin'
 
 export default function RegistrationNavbar() {
@@ -53,7 +53,7 @@ export default function RegistrationNavbar() {
 
                         <Link to={'/registration'}>
                         <img
-                        className="hidden h-16 w-auto lg:block"
+                        className="hidden h-[150px] w-[250px] lg:block"
                         src={Logo}
                         alt="Your Company"
                         />

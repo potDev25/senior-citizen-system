@@ -7,6 +7,7 @@ use App\Http\Requests\Passenger\PassengerRequest;
 use App\Models\Media;
 use App\Models\Passenger;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ManagePassenger extends Controller
 {
@@ -25,18 +26,24 @@ class ManagePassenger extends Controller
     {
         $data = $request->validated();
 
+        $province = DB::table('provinces')->where('province_id', $data['province'])->first();
+        $city     = DB::table('cities')->where('city_id', $data['city'])->first();
+
         $passenger = Passenger::create([
-            'last_name' => $data['last_name'],
-            'first_name' => $data['first_name'],
-            'email' => $data['contact_email'],
+            'last_name'      => $data['last_name'],
+            'first_name'     => $data['first_name'],
+            'email'          => $data['contact_email'],
             'contact_number' => $data['contact_number'],
-            'gender' => $data['gender'],
-            'age' => $data['age'],
-            'birthdate' => $data['birthdate'],
-            'type' => $data['type'],
-            'address' => $data['barangay'].', '. $data['city'].', '.$data['province'],
-            'password' => bcrypt($data['password']),
-            'qrcode_hash' => rand(100, 1000000),
+            'gender'         => $data['gender'],
+            'age'            => $data['age'],
+            'birthdate'      => $data['birthdate'],
+            'type'           => $data['type'],
+            'address'        => $data['barangay'].', '. $city->name.', '.$province->name,
+            'province'       => $province->name,
+            'city'           => $city->name,
+            'barangay'       => $data['barangay'],
+            'password'       => bcrypt($data['password']),
+            'qrcode_hash'    => rand(100, 1000000),
         ]);
 
         $id = $passenger->id;
@@ -70,8 +77,10 @@ class ManagePassenger extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Passenger $passenger)
     {
-        //
+        $passenger->delete();
+
+        return response(200);
     }
 }

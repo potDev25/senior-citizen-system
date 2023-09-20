@@ -39,7 +39,7 @@ export default function MainLayout() {
   return (
     <div>
 
-        <SideBar passengers={passengers}>
+        <SideBar user={user}>
           <Outlet/>
         </SideBar>
         <ToastContainer/>

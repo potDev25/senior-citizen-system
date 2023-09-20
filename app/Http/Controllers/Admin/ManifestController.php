@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\ManifestRequest;
 use App\Models\ManifestAction;
 use App\Models\ManifestData;
 use App\Models\ManifestDate;
+use App\Models\Passenger;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,20 +42,11 @@ class ManifestController extends Controller
         return response(compact('id', 'status'));
     }
 
-    public function store_manifest_data(ManifestDataRequest $request){
-        $data = $request->validated();
-        $validate = ManifestData::where('passengers_id', $data['passengers_id'])
-                    // ->where('manifest_dates_id', $data['manifest_dates_id'])
-                    ->first();
-        $getRoute = ManifestDate::where('id', $data['manifest_dates_id'])->first();
-
-     
+    public function store_manifest_data(Passenger $passenger){
         $save = ManifestData::create([
-            'passengers_id'     => $data['passengers_id'],
-            'manifest_dates_id' => $data['manifest_dates_id'],
-            'type'              => $data['type'],
+            'passengers_id'     => $passenger->id,
             'month_year'        => Carbon::now()->format('Y-M'),
-            'route'             => $getRoute->route,
+            'date'              => Carbon::now()->format('Y-m-d'),
         ]);
         $id = $save->id;
         if(!$save){
@@ -64,17 +56,27 @@ class ManifestController extends Controller
         $status = 200;
 
         return response(compact('status', 'id'));
-        
     }
 
-    public function passengers(string $date_id){
-        $get_date_id = ManifestDate::where('status', 0)->first();
-        $data = DB::table('manifest_data')
+    public function passengers(){
+        if(auth()->user()->role === 'admin'){
+            $data = DB::table('manifest_data')
                     ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
                     ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
-                    ->where('manifest_data.manifest_dates_id', $get_date_id->id)
+                    ->where('manifest_data.date', Carbon::now()->format('Y-m-d'))
                     ->where('manifest_data.status','complete')
+                    ->groupBy('manifest_data.passengers_id')
                     ->get();
+        }elseif(auth()->user()->role === 'barangay'){
+            $data = DB::table('manifest_data')
+                    ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
+                    ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
+                    ->where('manifest_data.date', Carbon::now()->format('Y-m-d'))
+                    ->where('manifest_data.status','complete')
+                    ->where('passengers.barangay', auth()->user()->barangay)
+                    ->groupBy('manifest_data.passengers_id')
+                    ->get();
+        }
 
         return json_encode($data);
     }

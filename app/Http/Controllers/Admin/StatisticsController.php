@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ManifestData;
 use App\Models\ManifestDate;
+use App\Models\Passenger;
 use App\Models\Ticket;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
@@ -13,15 +15,33 @@ class StatisticsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $month)
     {
-        $date = '2023-08';
-        $routes = ManifestDate::where('date', 'like', '%' . $date . '%')->groupBy('route')->get();
-        $routeStatsResult = [];
+        $setUpDate         = Carbon::createFromFormat('Y-M', $month);
+        $year = '2023';
+        $date              = $setUpDate->format('Y-m');
+        $routes            = ManifestDate::where('date', 'like', '%' . $date . '%')->groupBy('route')->get();
+        $passengers        = ManifestData::groupBy('type')->get();
+        $getMonth          = ManifestData::groupBy('month_year')
+                                         ->get();
+        $getTickets           = Ticket::where('month_year',  'like', '%' . $year . '%')
+                                        ->groupBy('month_year')
+                                        ->get();
+        $routeStatsResult  = [];
         $routeMonthlySalse = [];
+        $passStats         = [];
+        $options           = [];
+        $annualSales       = []; 
+
+        foreach ($getMonth as $m) {
+            $options[] = [
+                'label'         => $m->month_year,
+                'value'         => $m->month_year,
+            ];
+        }
 
         foreach ($routes as $route) {
-            $manifestData = ManifestData::where('month_year', '2023-Aug')
+            $manifestData = ManifestData::where('month_year', $month)
                                         ->where('route', $route->route)
                                         ->get();
             $routeStatsResult[] = [
@@ -31,7 +51,7 @@ class StatisticsController extends Controller
         }
 
         foreach ($routes as $route) {
-            $tickets = Ticket::where('month_year', '2023-Aug')
+            $tickets = Ticket::where('month_year', $month)
                             ->where('route', $route->route)
                             ->sum('fair');
             $routeMonthlySalse[] = [
@@ -40,7 +60,26 @@ class StatisticsController extends Controller
             ];
         }
 
-        return response(compact('routes', 'routeStatsResult', 'routeMonthlySalse'));
+        foreach ($passengers as $passenger) {
+            $pass = ManifestData::where('month_year', $month)
+                    ->where('type', $passenger->type)
+                    ->get();
+            $passStats[] = [
+                'type' => $passenger->type,
+                'numberPassenger' => count($pass)
+            ];
+        }
+
+        foreach ($getTickets as $ticket) {
+            $fare = Ticket::where('month_year', $ticket->month_year)
+                            ->sum('fair');
+            $annualSales[] = [
+                'month' => $ticket->month_year,
+                'sales' => $fare
+            ];
+        }
+
+        return response(compact('routes', 'routeStatsResult', 'routeMonthlySalse', 'passStats', 'options', 'date', 'month', 'annualSales'));
     }
 
     /**

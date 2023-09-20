@@ -102,19 +102,7 @@ export default function Table({checked, passengers, string = ''}) {
                                 </Link>
                             )}
                             </Menu.Item>
-                            <Menu.Item >
-                            {({ active }) => (
-                                <button
-                                className={classNames(
-                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                    'flex items-center px-4 py-2 text-sm w-full'
-                                )}
-                                onClick={ev => handleShowMOdal(u)}
-                                >
-                                <FaIcon.FiPenTool/>&nbsp; Edit
-                                </button>
-                            )}
-                            </Menu.Item>
+                           
                             <Menu.Item >
                             {({ active }) => (
                                 <button

@@ -13,10 +13,10 @@ export default function Barchart({noPassengers, loading}) {
       labels,
       datasets: [
         {
-          label: 'Data Values',
+          label: 'Passengers',
           data: values,
-          // backgroundColor: '#45a0ed',
-          borderColor: '#45a0ed',
+          backgroundColor: ' #91A3B0',
+          borderColor: ' #91A3B0',
           borderWidth: 1,
         },
       ],
@@ -32,6 +32,7 @@ export default function Barchart({noPassengers, loading}) {
           },
         ],
       },
+      maintainAspectRatio: false
     };
 
     return (
@@ -40,7 +41,7 @@ export default function Barchart({noPassengers, loading}) {
   };
 
   return (
-    <div>
+    <div className='h-full pb-10'>
       {loading ? <p>Loading chart...</p> : renderChart() }
     </div>
   )

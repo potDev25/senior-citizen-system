@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import axiosClient from '../../axiosClient';
 import Image from '../../assets/images/image-3.jpg'
 import profileImage from '../../assets/images/image-4.jpeg'
-import Logo from '../../assets/images/logo-2.jpg'
+import Logo from '../../assets/images/seniors/UEWFefw.png'
 import * as FaIcon from "react-icons/fa";
 import ProfileTab from '../Tabs/ProfileTab';
 import HeaderProfiletab from '../../components/TabComponents/HeaderProfiletab';
@@ -49,8 +49,8 @@ export default function Profile() {
         </div>}
 
         {!loading && <>
-            <div className='h-[200px] bg-[#4f46e5] w-full flex items-center justify-center p-5'>
-                <img src={Logo} alt="" className='w-[70%] h-[80%] rounded' />
+            <div className='h-[200px] bg-[#232b2d] w-full flex items-center justify-center p-5'>
+                <img src={Logo} alt="" className='w-[50%] h-full rounded' />
             </div>
 
             <div className='absolute h-[180px] w-[500px] top-[15%] lg:top-[18%] sm:top-[15%] md:top-[15%] left-4 flex'>

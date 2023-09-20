@@ -31,10 +31,11 @@ class StaffRequest extends FormRequest
             "city" => 'required',
             "province" => 'required',
             "barangay" => 'required',
-            "role" => 'required',
             "password" => 'required|confirmed|min:8',
             "password_confirmation" => 'required',
             "photo" => 'required|image|mimes:png,jpg',
+            "designation" => 'required',
+            "role" => 'required'
         ];
     }
 
@@ -44,6 +45,7 @@ class StaffRequest extends FormRequest
             "first_name.required"            => 'Please provide first name',
             "contact_email.required"         => 'Please provide contact email',
             "contact_number.required"        => 'Please provide contact number',
+            "designation.required"           => 'Please Select Designation',
             "gender.required"                => 'Please provide gender',
             "birthdate.required"             => 'Please provide birthdate',
             "city.required"                  => 'Please provide city address',

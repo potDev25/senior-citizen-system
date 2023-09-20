@@ -92,80 +92,23 @@ export default function ScanModal({date}) {
 
     const handleNext = () => {
 
-      var data = {}
-
-      Swal.fire({
-        text: 'Continue Booking as?',
-        input: 'select',
-        inputOptions: {
-          'student' : 'Student',
-          'regular' : 'Rugular',
-          'senior' : 'Senior',
-          'pwd' : 'PWD',
-        },
-        inputPlaceholder: passenger.type,
-        showCancelButton: true,
-        cancelButtonColor: 'red',
-        confirmButtonColor: 'blue',
-        confirmButtonText: 'Continue',
-        inputValidator: (value) => {
-          return new Promise((resolve) => {
-            if (value !== '') {
-              //value has change
-              data = {
-                'passengers_id': passenger.id,
-                'manifest_dates_id': date,
-                'type': value
-              }
-              
-            } else {
-              //no change of value
-              data = {
-                'passengers_id': passenger.id,
-                'manifest_dates_id': date,
-                'type': passenger.type
-              }
-            }
-            axiosClient.post('/store-manifest-data', data)
-              .then(({data}) => {
-                console.log(data)
-                if(data.status == 200){
-                  resolve()
-                  setManifestId(data.id)
-                  setShowProfile(false)
-                  setChair(true)
-                }
-                if(data.status == 422){
-                  hideLoadingToast()
-                  alertMessage('Something went wrong, please try again!', 'error')
-                }
-
-                if(data == 403){
-                  alertMessage('Passenger already booked!', 'warning')
-                }
-              })
-              .catch(err => {
-                console.log(err)
-                hideLoadingToast()
-                alertMessage('Something went wrong, please try again!', 'warning')
-              })
-
-          })
-        }
-      })
+      axiosClient.post(`/store-manifest-data/${passenger.id}`)
+        .then(({data}) => {
+          window.location.reload();
+          setShowProfile(false)
+        })
+        .catch(err => {
+          console.log(err)
+          hideLoadingToast()
+          alertMessage('Something went wrong, please try again!', 'warning')
+        })
     }
-  
-    console.log(date)
 
-    // if(loading){
-    //     loadingToast('Processing....')
-    // }
-    
 
   return (
     <>
         
-        <button onClick={(ev) => setShow(true)} className='w-full rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiCamera/> &nbsp;Scan QR</button>
+        <button onClick={(ev) => setShow(true)} className='w-full rounded bg-blue-600 text-white border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center'><FaIcon.FiCamera/> &nbsp;Scan QR</button>
 
         {show ? ( 
         <>

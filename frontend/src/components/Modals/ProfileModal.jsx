@@ -73,42 +73,7 @@ export default function ProfileModal({handleLoading, show, hideModal, dateId, pa
   }
 
   const handleNext = () => {
-
-    var data = {}
-
-    Swal.fire({
-      text: 'Continue Booking as?',
-      input: 'select',
-      inputOptions: {
-        'Student' : 'Student',
-        'Regular' : 'Rugular',
-        'Senior' : 'Senior',
-        'PWD' : 'PWD',
-      },
-      inputPlaceholder: passenger.type,
-      showCancelButton: true,
-      cancelButtonColor: 'red',
-      confirmButtonColor: 'blue',
-      confirmButtonText: 'Continue',
-      inputValidator: (value) => {
-        return new Promise((resolve) => {
-          if (value !== '') {
-            //value has change
-            data = {
-              'passengers_id': passenger.id,
-              'manifest_dates_id': dateId,
-              'type': value
-            }
-            
-          } else {
-            //no change of value
-            data = {
-              'passengers_id': passenger.id,
-              'manifest_dates_id': dateId,
-              'type': passenger.type
-            }
-          } 
-          axiosClient.post('/store-manifest-data', data)
+    axiosClient.post(`/store-manifest-data/${passenger.id}`)
             .then(({data}) => { 
               resolve()
               setChair(data.id)
@@ -118,10 +83,6 @@ export default function ProfileModal({handleLoading, show, hideModal, dateId, pa
               console.log(err)
               alertMessage('Something went wrong, please try again!', 'warning')
             })
-
-        })
-      }
-    })
   }
 
   const handleHideModal = () => {
@@ -214,7 +175,7 @@ export default function ProfileModal({handleLoading, show, hideModal, dateId, pa
                     className="ml-1 inline-block rounded bg-blue-500 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   >
 
-                    Next
+                    OK
                   
                   </button>
                 </TERipple>

@@ -4,11 +4,13 @@ import Profile from '../../../../assets/images/profile.png'
 import axiosClient from '../../../../axiosClient';
 import { useStateContext } from '../../../../Context/ContextProvider';
 
-export default function AddPassenger({hideModal, handleLoading, showMediaModal}) {
+export default function AddPassenger({hideModal, handleLoading, showMediaModal, provinces}) {
     const [btnLoading, setLoading] = useState(false)
     const [photo, _setPhoto] = useState('')
     const [image, setImage] = useState('')
     const [errors, setErrors] = useState([])
+    const [cities, setCities] = useState([])
+    const [barangays, setBarangay] = useState([])
     const {setNotification} = useStateContext()
     const [userInfo, setUserInfo] = useState({
         last_name: '',
@@ -21,7 +23,7 @@ export default function AddPassenger({hideModal, handleLoading, showMediaModal})
         city: '',
         province: '',
         barangay: '',
-        type: '',
+        type: 'Senior',
         password: '',
         password_confirmation: '',
     })
@@ -59,6 +61,22 @@ export default function AddPassenger({hideModal, handleLoading, showMediaModal})
                     alert('server error please try again later')
                 }
                 setLoading(false)
+            })
+    }
+
+    const getCities = (province_id) => {
+        setUserInfo({...userInfo, province: province_id})
+        axiosClient.get(`/get-cities/${province_id}`)
+            .then(({data}) => {
+                setCities(data.cities)
+            })
+    }
+
+    const getBarangay = (city_id) => {
+        setUserInfo({...userInfo, city: city_id})
+        axiosClient.get(`/get-barangay/${city_id}`)
+            .then(({data}) => {
+                setBarangay(data.barangays)
             })
     }
   return (
@@ -131,13 +149,18 @@ export default function AddPassenger({hideModal, handleLoading, showMediaModal})
                                     Province
                                 </label>
                                 <div className="relative">
-                                    <select onChange={ev => setUserInfo({...userInfo, province: ev.target.value})} 
+                                    <select onChange={ev => getCities(ev.target.value)} 
                                         className={`${errors.city ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
                                         id="grid-state"
                                     >
-                                    <option>New Mexico</option>
-                                    <option>Missouri</option>
-                                    <option>Texas</option>
+                                    <option>Select Province</option>
+                                  
+                                    {
+                                        provinces.map((province) => (
+                                            <option value={province.province_id}>{province.name}</option>
+                                        ))
+                                    }
+
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -150,13 +173,16 @@ export default function AddPassenger({hideModal, handleLoading, showMediaModal})
                                     City/Municipality
                                 </label>
                                 <div className="relative">
-                                    <select onChange={ev => setUserInfo({...userInfo, city: ev.target.value})} 
+                                    <select onChange={ev => getBarangay(ev.target.value)} 
                                         className={`${errors.city ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
                                         id="grid-state"
                                     >
-                                    <option>New Mexico</option>
-                                    <option>Missouri</option>
-                                    <option>Texas</option>
+                                        <option>Select City</option>
+                                        {
+                                            cities.map((city) => (
+                                                <option value={city.city_id}>{city.name}</option>
+                                            ))
+                                        }
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -173,9 +199,12 @@ export default function AddPassenger({hideModal, handleLoading, showMediaModal})
                                         className={`${errors.barangay ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
                                         id="grid-state"
                                     >
-                                    <option>New Mexico</option>
-                                    <option>Missouri</option>
-                                    <option>Texas</option>
+                                        <option>Select Barangay</option>
+                                        {
+                                            barangays.map((barangay) => (
+                                                <option value={barangay.name}>{barangay.name}</option>
+                                            ))
+                                        }
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -203,30 +232,6 @@ export default function AddPassenger({hideModal, handleLoading, showMediaModal})
                                 </div>
                             </div>
                             {errors.gender ? <p class="text-red-500 text-xs italic mt-4">{errors.gender}</p> : null}
-                            </div>
-                        </div>
-                        <div className="flex flex-wrap -mx-3 mb-6 mt-6">
-                            <div className="w-full px-3">
-                                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-                                    Type
-                                </label>
-                                <div className="relative">
-                                    <select onChange={ev => setUserInfo({...userInfo, type: ev.target.value})} 
-                                        className={`${errors.type ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
-                                        id="grid-state"
-                                    >
-                                        <option value='' selected>Select Type</option>
-                                        <option value='Minor'>Minor</option>
-                                        <option value='Student'>Student</option>
-                                        <option value='PWD'>PWD</option>
-                                        <option value='Regular'>Regularn</option>
-                                        <option value='Senior'>Senior</option>
-                                    </select>
-                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                    </div>
-                                </div>
-                                {errors.role ? <p class="text-red-500 text-xs italic mt-4">{errors.role}</p> : null}
                             </div>
                         </div>
                         <div className="flex flex-wrap -mx-3 mb-6 mt-6">

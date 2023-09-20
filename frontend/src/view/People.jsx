@@ -18,6 +18,7 @@ export default function People() {
   const [searchString, setString] = useState('')
   const [passId, setPassId] = useState(null)
   const [passenger, setPassenger] = useState([])
+  const [limit, _setLimit] = useState(5)
   const searchInput = useRef()
 
   const link = '/get-passengers-approved'
@@ -29,6 +30,10 @@ export default function People() {
 
   function hideModal() {
     setModal(false)
+  }
+  function setLimit(ev) {
+    _setLimit(ev.target.value)
+    setLoading(true)
   }
 
   function hideMediaModal() {
@@ -53,7 +58,7 @@ export default function People() {
       .then(({data}) => {
         setPassenger(data.passenger)
       }) 
-  }, [passId])
+  }, [loading])
 
   return (
     <div className='md:w-full bg-white rounded px-5 py-2 mt-[2px]'>
@@ -64,12 +69,21 @@ export default function People() {
       <div className='flex items-center justify-between md:w-full'>
 
         <div className='mb-5 flex gap-3 items-center'>
-          <select name="" id="" className='border rounded-[5px] border-gray-300 text-gray-500'>
-            <option value="">10</option>
-            <option value="">20</option>
-            <option value="">30</option>
-            <option value="">100</option>
-          </select>
+            <div className="relative">
+                <select
+                    onChange={ev => setLimit(ev)}
+                    className={` border-gray-200 block appearance-none w-full bg-gray-200 border  text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
+                    id="grid-state"
+                >
+                    <option selected value='5'>5</option>
+                    <option value='10'>10</option>
+                    <option value='20'>20</option>
+                    <option value='5000'>All</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
 {/* 
           <div className='border rounded-[5px] border-gray-300 flex items-center gap-2 md:px-5 py-2 cursor-pointer text-gray-500'>
             <input type="checkbox" name="" id="multiple" onChange={multiple_check} />

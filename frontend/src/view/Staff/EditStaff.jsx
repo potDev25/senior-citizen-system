@@ -4,7 +4,7 @@ import Profile from '../../assets/images/profile.png'
 import axiosClient from '../../axiosClient';
 import { useStateContext } from '../../Context/ContextProvider';
 
-export default function EditStaff({hideModal, handleLoading, user}) {
+export default function EditStaff({hideModal, handleLoading, user, barangays}) {
     const [btnLoading, setLoading] = useState(false)
     const [photo, _setPhoto] = useState('')
     const [image, setImage] = useState('')
@@ -23,8 +23,8 @@ export default function EditStaff({hideModal, handleLoading, user}) {
         city: '',
         province: '',
         barangay: '',
-        role: '',
         photo: '',
+        designation: '',
     })
 
     const config = {
@@ -63,7 +63,7 @@ export default function EditStaff({hideModal, handleLoading, user}) {
         ev.preventDefault();
         console.log(userInfo);
         setLoading(true)
-        axiosClient.post(`/staff/edit/${user.id}`, userInfo, config)
+        axiosClient.post(`/staff/edit/${user.user_id}`, userInfo, config)
             .then(({data}) => {
                 setLoading(false)
                 setNotification('Staff Profile Edited Successfully')
@@ -248,16 +248,19 @@ export default function EditStaff({hideModal, handleLoading, user}) {
                         <div className="flex flex-wrap -mx-3 mb-6 mt-6">
                             <div className="w-full px-3">
                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-                                    Role
+                                    Designation
                                 </label>
                                 <div className="relative">
-                                    <select onChange={ev => setUserInfo({...userInfo, role: ev.target.value})} 
-                                        className={`${errors.role ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
+                                    <select onChange={ev => setUserInfo({...userInfo, designation: ev.target.value})} 
+                                        className={`${errors.designation ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
                                         id="grid-state"
                                     >
-                                        <option value={user.role} selected hidden>{user ? user.role : 'Role'}</option>
-                                        <option value='Ticketing Agent'>Ticketing Agent</option>
-                                        <option value='Clearing Man'>Clearing Man</option>
+                                        <option value={user.dep_designation}>{user.dep_designation}</option>
+                                        {
+                                            barangays.map((barangay, id) => (
+                                                <option value={barangay.id}>{barangay.designation}</option>
+                                            ))
+                                        }
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>

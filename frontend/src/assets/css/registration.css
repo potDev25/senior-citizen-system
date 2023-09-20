@@ -1,9 +1,6 @@
-.body{
-    background-image: url('../images/bg-3.jpg');
-    background-position: center center;
+/* .body{
+    background-image: url('./public/undraw_hologram_re_7ppw.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    z-index: -100;
-    opacity: 2;
-}
+} */
