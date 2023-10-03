@@ -15,7 +15,7 @@ import AddStaff from '../../AddStaff';
 import { Link } from 'react-router-dom';
 
 
-export default function MenuModal({handleLoading, show, hideModal, dateId, passenger, manifestDataId, provinces}) {
+export default function MenuModal({handleLoading, show, hideModal, dateId, passenger, manifestDataId, numbers}) {
   const [showModal, setShowModal] = useState(false);
   const [errors, setErrors] = useState({})
   const [info, setInfo] = useState([])
@@ -119,20 +119,20 @@ export default function MenuModal({handleLoading, show, hideModal, dateId, passe
                 <div className='grid grid-cols-2 gap-5'>
                   <div className='rounded-md border border-gray-300 shadow-lg h-28 w-full hover:shadow-2xl p-2 text-center'>
                     <Link
-                      to={`/barangay-seniors/${passenger.id}`}
+                      to={`/department/staff/${passenger.id}`}
                     >
 
                       <h1 className='text-xl font-semibold uppercase flex justify-center items-center gap-2'><FaIcon.FiUserPlus/> Staff</h1>
-                      <p className='text-4xl text-green-500 mt-3'>200</p>
+                      <p className='text-4xl text-green-500 mt-3'>{numbers ? numbers.staff : 0}</p>
 
                     </Link>
                   </div>
                   <div className='rounded-md border border-gray-300 shadow-lg h-28 w-full hover:shadow-2xl p-2 text-center'>
                     <Link 
-                      to={`/barangay-scanned-seniors/${passenger.id}`}
+                      to={`/department-scanned-seniors/${passenger.id}`}
                     >
                       <h1 className='text-xl font-semibold uppercase flex justify-center items-center gap-2'><FaIcon.FiCamera/> Scanned Senior Citizens</h1>
-                      <p className='text-4xl text-red-500 mt-3'>100</p>
+                      <p className='text-4xl text-red-500 mt-3'>{numbers ? numbers.scanned : 0}</p>
                     </Link>
                   </div>
                 </div>

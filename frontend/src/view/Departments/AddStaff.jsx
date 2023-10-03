@@ -55,7 +55,7 @@ export default function AddStaff({hideModal, handleLoading, provinces}) {
     function submitUser(ev) {
         ev.preventDefault();
         setLoading(true)
-        axiosClient.post('/department/barangay/store', userInfo, config)
+        axiosClient.post('/department/departments/store', userInfo, config)
             .then(({data}) => {
                 setLoading(false)
                 setNotification('Barangay Added Successfully')
@@ -183,13 +183,13 @@ export default function AddStaff({hideModal, handleLoading, provinces}) {
                         <div className="flex flex-wrap -mx-3 mb-6">
                             <div className="w-full px-3">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
-                                Brgy Captain
+                                Head Department
                             </label>
                             <input 
                                 onChange={ev => setUserInfo({...userInfo, head: ev.target.value})}
                                 id="grid-last-name" 
                                 type="text" 
-                                placeholder="Brgy. Captain"
+                                placeholder="Head Department"
                                 class={`${errors.head ? 'border border-red-500' : 'border-none'} appearance-none block w-full bg-gray-200 text-gray-700  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white`} 
                                 />
                                 {errors.head ? <p class="text-red-500 text-xs italic">{errors.head}</p> : null}

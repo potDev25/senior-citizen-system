@@ -88,7 +88,7 @@ export default function AddStaffModal({handleLoading, show, hideModal, dateId, p
             <TEModalContent>
               <TEModalHeader className='bg-white text-white'>
                 {/* <!--Modal title--> */}
-                    <h1 className='uppercase text-2xl text-gray-900 flex items-center'><FaIcon.FiPlusCircle/> &nbsp;register barangay</h1>
+                    <h1 className='uppercase text-2xl text-gray-900 flex items-center'><FaIcon.FiPlusCircle/> &nbsp;register Department</h1>
                 {/* <!--Close button--> */}
                 <button
                   type="button"

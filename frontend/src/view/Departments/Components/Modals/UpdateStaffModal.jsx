@@ -89,7 +89,7 @@ export default function UpdateStaffModal({handleLoading, show, hideModal, user, 
             <TEModalContent>
               <TEModalHeader className='bg-white text-gray-600'>
                 {/* <!--Modal title--> */}
-                    <h1 className='uppercase text-2xl text-gray-900 flex items-center'><FaIcon.FiEdit/> &nbsp;edit staff profile</h1>
+                    <h1 className='uppercase text-2xl text-gray-900 flex items-center'><FaIcon.FiEdit/> &nbsp;edit department info</h1>
                 {/* <!--Close button--> */}
               </TEModalHeader>
               {/* <!--Modal body--> */}

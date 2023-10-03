@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as FaIcon from "react-icons/fi";
 import Profile from '../../assets/images/profile.png'
 import axiosClient from '../../axiosClient';
@@ -10,6 +10,9 @@ export default function AddStaff({hideModal, handleLoading, barangays}) {
     const [image, setImage] = useState('')
     const [errors, setErrors] = useState([])
     const {setNotification} = useStateContext()
+    const [provinces, setProvinces] = useState([])
+    const [cities, setCities] = useState([])
+    const [barangay, setBarangay] = useState([])
     const [userInfo, setUserInfo] = useState({
         last_name: '',
         first_name: '',
@@ -69,6 +72,29 @@ export default function AddStaff({hideModal, handleLoading, barangays}) {
                 setLoading(false)
             })
     }
+
+    const getCities = (province_id) => {
+        setUserInfo({...userInfo, province: province_id})
+        axiosClient.get(`/get-cities/${province_id}`)
+            .then(({data}) => {
+                setCities(data.cities)
+            })
+    }
+
+    const getBarangay = (city_id) => {
+        setUserInfo({...userInfo, city: city_id})
+        axiosClient.get(`/get-barangay/${city_id}`)
+            .then(({data}) => {
+                setBarangay(data.barangays)
+            })
+    }
+
+    useEffect(() => {
+        axiosClient.get('/get-provinces')
+            .then(({data}) => {
+                setProvinces(data.provinces)
+            })
+    }, [])
   return (
     <div className='flex gap-5 items-center justify-center'>
         <div className='bg-white shadow-sm h-fit md:w-[700px] rounded'>
@@ -153,13 +179,18 @@ export default function AddStaff({hideModal, handleLoading, barangays}) {
                                     Province
                                 </label>
                                 <div className="relative">
-                                    <select onChange={ev => setUserInfo({...userInfo, province: ev.target.value})} 
+                                    <select onChange={ev => getCities(ev.target.value)} 
                                         className={`${errors.city ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
                                         id="grid-state"
                                     >
-                                    <option>New Mexico</option>
-                                    <option>Missouri</option>
-                                    <option>Texas</option>
+                                    <option>Select Province</option>
+                                  
+                                    {
+                                        provinces.map((province) => (
+                                            <option value={province.province_id}>{province.name}</option>
+                                        ))
+                                    }
+
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -172,13 +203,16 @@ export default function AddStaff({hideModal, handleLoading, barangays}) {
                                     City/Municipality
                                 </label>
                                 <div className="relative">
-                                    <select onChange={ev => setUserInfo({...userInfo, city: ev.target.value})} 
+                                    <select onChange={ev => getBarangay(ev.target.value)} 
                                         className={`${errors.city ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
                                         id="grid-state"
                                     >
-                                    <option>New Mexico</option>
-                                    <option>Missouri</option>
-                                    <option>Texas</option>
+                                        <option>Select City</option>
+                                        {
+                                            cities.map((city) => (
+                                                <option value={city.city_id}>{city.name}</option>
+                                            ))
+                                        }
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -191,13 +225,16 @@ export default function AddStaff({hideModal, handleLoading, barangays}) {
                                     Barangay
                                 </label>
                                 <div className="relative">
-                                    <select onChange={ev => setUserInfo({...userInfo, barangay: ev.target.value})} 
+                                <select onChange={ev => setUserInfo({...userInfo, barangay: ev.target.value})} 
                                         className={`${errors.barangay ? 'border-red-500' : 'border-gray-200'} block appearance-none w-full bg-gray-200 border  text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500`} 
                                         id="grid-state"
                                     >
-                                    <option>New Mexico</option>
-                                    <option>Missouri</option>
-                                    <option>Texas</option>
+                                        <option>Select Barangay</option>
+                                        {
+                                            barangay.map((barangay) => (
+                                                <option value={barangay.name}>{barangay.name}</option>
+                                            ))
+                                        }
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>

@@ -68,7 +68,7 @@ export default function HeaderProfiletab({tab, passenger}) {
         <ul className='flex gap-7 text-md font-medium text-gray-500'>
             <li className={(tab == 'details' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/passenger/profile/${passenger.id}/details`}>Passenger Details</Link></li>
             <li className={(tab == 'identification' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/passenger/profile/${passenger.id}/identification`}>Identifications</Link></li>
-            <li className={(tab == 'password' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/passenger/profile/${passenger.id}/password`}>Password</Link></li>
+            {/* <li className={(tab == 'password' && 'border-b-4 border-black') + ' tracker-wider py-3'}><Link to={`/passenger/profile/${passenger.id}/password`}>Password</Link></li> */}
             {passenger.verified == 0 &&
             <li className='py-3'>
                 <button onClick={(ev) => approve()} className='flex items-center gap-1 bg-[#4f46e5] text-white px-2 rounded py-1 hover:bg-yellow-500'><FaIcon.FaCheckCircle/>Approve</button>

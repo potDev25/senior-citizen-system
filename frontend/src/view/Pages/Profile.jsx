@@ -38,7 +38,7 @@ export default function Profile() {
     
 
   return (
-    <div className={(!loading ?  'bg-white shadow-md' : 'flex items-center justify-center p-10') + ' sm:w-[500px] lg:w-full rounded relative h-fit'}>
+    <div className={(!loading ?  'bg-white shadow-md' : 'flex items-center justify-center p-10') + ' sm:w-[100%] lg:w-full rounded relative lg:h-fit md:h-fit sm:h-[150vh]'}>
 
         {loading && <div role="status">
             <svg aria-hidden="true" className="w-[100px] h-[100px] mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,12 +53,12 @@ export default function Profile() {
                 <img src={Logo} alt="" className='w-[50%] h-full rounded' />
             </div>
 
-            <div className='absolute h-[180px] w-[500px] top-[15%] lg:top-[18%] sm:top-[15%] md:top-[15%] left-4 flex'>
+            <div className='absolute h-[180px] w-[500px] top-[15%] lg:top-[18%] sm:top-[12%] md:top-[15%] left-4 flex'>
 
-                <img src={passenger.selfie} alt="" className='bg-white h-[150px] w-[150px] rounded-full border border-4 border-white' />
+                <img src={passenger.selfie} alt="" className='bg-white md:h-[150px] sm:h-[120px] lg:h-[150px] md:w-[150px] lg:w-[150px] sm:w-[120px] rounded-full border border-4 border-white' />
 
                 <div className='mt-[75px] px-2 py-1'>
-                    <h1 className='text-black text-2xl font-lg font-bold capitalize'>{passenger.name} {passenger.middle_initial}</h1>
+                    <h1 className='text-black md:text-2xl lg:text-2xl sm:text-sm font-lg font-bold capitalize'>{passenger.name} {passenger.middle_initial}</h1>
                     <p className='text-gray-500 text-sm'>{passenger.email}</p>
                 </div>
             </div>

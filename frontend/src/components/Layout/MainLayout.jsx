@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate ,Outlet } from 'react-router-dom'
 import SideBar from '../SideBar'
 import { useStateContext } from '../../Context/ContextProvider'
@@ -7,42 +7,39 @@ import { ToastContainer, toast } from 'react-toastify';
 
 export default function MainLayout() {
   const {user_token, setUser, user, passengers, setPassengers, notification} = useStateContext();
+  const [loading, setLoading] = useState(true);
 
-  if(!user_token){
-    return <Navigate to={'/'}/>
-  }else if(notification){
-      toast.success(notification, {
-        position: "top-right",
-        toastId: notification,
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: 'colored',
-      });
-  }
+   
 
   useEffect(() => {
     axiosClient.get('/user')
       .then(({data}) => {
         setUser(data)
+        setLoading(false)
       })
-
-    // axiosClient.get('/get-passengers')
-    //   .then(({passengers}) => {
-    //     setPassengers(passengers)
-    //   })
-  }, [])
+  }, [loading])
 
   return (
     <div>
 
-        <SideBar user={user}>
-          <Outlet/>
-        </SideBar>
-        <ToastContainer/>
+        {loading ? 
+          <div className='flex items-center justify-center'>
+            <dotlottie-player 
+             style={{width: "300px", height: "300px"}}
+             src="https://lottie.host/94c197c5-081c-41f0-a6e0-cc8938fbfbc6/HtchuuwPvF.json"
+             background="transparent" speed="1" 
+             loop autoplay></dotlottie-player>
+          </div> :
+
+          <>
+            <SideBar user={user}>
+              <Outlet/>
+            </SideBar>
+            <ToastContainer/>
+          </>
+        }
+
+        
       
     </div>
   )

@@ -124,12 +124,12 @@ export default function StaffTable() {
 
     }, [loading])
   return (
-    <div className='bg-white shadow-sm h-fit md:w-full rounded'>
+    <div className='bg-white shadow-sm h-fit md:w-full rounded overflow-auto'>
             <div className='w-full h-10 text-white uppercase p-2 rounded-t-md border-b-2 border-gray-100'>
                 <h1 className='uppercase text-md text-gray-500'>manage department users</h1>
             </div>
             <div className='p-5'>
-                <div className='flex items-center justify-between mb-4'>
+                <div className='lg:flex md:flex items-center justify-between mb-4'>
                         <div className='flex items-center'>
                             <div className="relative">
                                 <select
@@ -157,7 +157,7 @@ export default function StaffTable() {
 
                         </div>
 
-                        <div className='flex items-center justify-center gap-2'>
+                        <div className='lg:flex md:flex sm:mt-5 items-center justify-center gap-2'>
                             <button 
                             onClick={ev => setShowModal(true)}
                             className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center uppercase'><FaIcon.FiPlusCircle/> &nbsp;Add User</button>
@@ -190,15 +190,15 @@ export default function StaffTable() {
                         <span class="sr-only">Loading...</span>
                     </div>
                     :
-                    <table className='md:table-auto w-full bg-gray-100 text-sm'>
-                        <thead className=' py-5'>
+                    <table className='md:table-auto w-full bg-gray-100 text-sm overflow-auto'>
+                        <thead className='bg-gray-800 py-5'>
                             <tr>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>NAME</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Email</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Department</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>ADDRESS</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>STATUS</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>OPTION</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>NAME</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>Email</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>Department</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>ADDRESS</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>STATUS</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>OPTION</td>
                             </tr>
                         </thead>
 
@@ -209,7 +209,7 @@ export default function StaffTable() {
                                 }).map((user, key) => (
                                     <tr className='p-5 border border-b-2 hover:bg-gray-300 pointer mb-5' key={key}>
                                         <td className='text-md px-5 py-2 font-medium flex gap-5 items-center'>
-                                            <div>
+                                            <div className='sm:hidden lg:block md:block'>
                                                 <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${user.photo}`} alt="" className='sm:h-10 w-10 rounded-full'/>
                                             </div>
                                             <div>

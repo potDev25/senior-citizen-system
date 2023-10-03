@@ -9,6 +9,7 @@ use App\Models\Department;
 use App\Models\Passenger;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
@@ -35,6 +36,13 @@ class DepartmentController extends Controller
         );
     }
 
+    public function getDepartmentStaff(int $limit, Department $department){
+        $users = User::where('department_id', $department->id)->paginate($limit);
+
+        return response(compact('department', 'users'));
+    }
+
+    //scanned seniors in barangay
     public function getScannedSeniors(Passenger $passenger, int $limit, Request $request){
         if(auth()->user()->role === 'admin'){
             $data = DB::table('manifest_data')
@@ -50,6 +58,31 @@ class DepartmentController extends Controller
                     ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
                     ->where('manifest_data.status','complete')
                     ->where('passengers.barangay', auth()->user()->barangay)
+                    // ->groupBy('manifest_data.passengers_id')
+                    ->paginate($limit);
+        }
+
+        return response(compact('data'));
+    }
+
+    //scanned seniors in departments
+    public function getScannedSeniorsDepartment(Passenger $passenger, int $limit, Request $request){
+        if(auth()->user()->role === 'admin'){
+            $data = DB::table('manifest_data')
+                    ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
+                    ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
+                    ->where('manifest_data.status','complete')
+                    ->where('manifest_data.department_id', $request->barangay)
+                    // ->where('passengers.barangay', $request->barangay)
+                    // ->groupBy('manifest_data.passengers_id')
+                    ->paginate($limit);
+        }elseif(auth()->user()->role === 'department'){
+            $data = DB::table('manifest_data')
+                    ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
+                    ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
+                    ->where('manifest_data.status','complete')
+                    ->where('manifest_data.user_id', auth()->user()->id)
+                    // ->where('passengers.barangay', auth()->user()->barangay)
                     // ->groupBy('manifest_data.passengers_id')
                     ->paginate($limit);
         }
@@ -182,6 +215,27 @@ class DepartmentController extends Controller
         ];
         
         return response(compact('numberData', 'user'));
+    }
+
+    public function getStaffNumbers(Department $department){
+        $staff    = User::where('department_id', $department->id)->get();
+
+        $data = DB::table('manifest_data')
+                    ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
+                    ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
+                    ->where('manifest_data.status','complete')
+                    ->where('manifest_data.department_id', $department->id)
+                    // ->groupBy('manifest_data.passengers_id')
+                    ->get();
+        
+        // $user       = User::where('designation', $barangay->id)->first(); 
+
+        $numberData = [
+            'staff' => count( $staff ),
+            'scanned' => count($data),
+        ];
+        
+        return response(compact('numberData'));
     }
 
     /**

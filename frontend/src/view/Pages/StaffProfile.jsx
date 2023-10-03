@@ -19,11 +19,16 @@ export default function StaffProfile() {
 
     const {id} = useParams();
     const {tab} = useParams();
+    const [histories, setHistories] = useState([])
 
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState([])
     const [presentTab, setTab] = useState(false)
     const [show, setShow] = useState(false)
+
+    const handleLoading = () => {
+        setLoading(true)
+    }
 
     if(id){
         useEffect(() => {
@@ -31,6 +36,7 @@ export default function StaffProfile() {
                 .then(({data}) => {
                     setLoading(false);
                     setUser(data.users);
+                    setHistories(data.loggedHistory)
                 })
                 .catch(() =>{
                     setLoading(false);
@@ -41,7 +47,7 @@ export default function StaffProfile() {
     
 
   return (
-    <div className={(!loading ?  'bg-white shadow-md' : 'flex items-center justify-center p-10') + ' sm:w-[500px] lg:w-full rounded relative h-fit'}>
+    <div className={(!loading ?  'bg-white shadow-md' : 'flex items-center justify-center p-10') + ' sm:w-[500px] lg:w-full rounded relative lg:h-fit md:h-fit sm:h-[150vh]'}>
 
         {loading && <div role="status">
             <svg aria-hidden="true" className="w-[100px] h-[100px] mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,23 +62,23 @@ export default function StaffProfile() {
                 <img src={Logo} alt="" className='w-[50%] h-full rounded' />
             </div>
 
-            <div className='absolute h-[180px] w-[500px] top-[15%] lg:top-[18%] sm:top-[15%] md:top-[15%] left-4 flex'>
+            <div className='absolute h-[180px] w-[500px] top-[15%] lg:top-[18%] sm:top-[12%] md:top-[15%] left-4 flex'>
 
-                <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${user.photo}`} alt="" className='bg-white h-[150px] w-[150px] rounded-full border border-4 border-white' />
+                <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${user.photo}`} alt="" className='bg-white md:h-[150px] sm:h-[120px] lg:h-[150px] md:w-[150px] lg:w-[150px] sm:w-[120px] rounded-full border border-4 border-white' />
 
                 <div className='mt-[75px] px-2 py-1'>
-                    <h1 className='text-black text-2xl font-lg font-bold capitalize'>{user.last_name} {user.first_name}</h1>
+                    <h1 className='text-black md:text-2xl lg:text-2xl sm:text-sm font-lg font-bold capitalize'>{user.last_name} {user.first_name}</h1>
                     <p className='text-gray-500 text-sm'>{user.email}</p>
                 </div>
             </div>
 
-            <StaffHeaderProfiletab tab={tab} user={user}/>
+            <StaffHeaderProfiletab tab={tab} user={user} handleLoading={handleLoading}/>
 
             {
                 tab == 'details' && <StaffProfileTab user={user}/>
             }
             {
-                tab == 'history' && <StaffHistory/>
+                tab == 'history' && <StaffHistory histories={histories}/>
             }
         </>}
 

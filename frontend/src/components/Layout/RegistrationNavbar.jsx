@@ -60,15 +60,15 @@ export default function RegistrationNavbar() {
                         </Link>
                     </div>
                     </div>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                    <span className='lg:block md:block sm:hidden'>Already registered?&nbsp; &nbsp;  </span>
-                    <div className="flex bg-blue-500 text-white text-sm hover:text-white',
-                        'block rounded px-3 py-1 tracking-wider font-medium cursor-pointer" onClick={() => setShow(true)}>
-                    
-                        SIGN IN HERE
-                    </div>
+                    {/* <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                      <span className='lg:block md:block sm:hidden'>Already registered?&nbsp; &nbsp;  </span>
+                      <div className="flex bg-blue-500 text-white text-sm hover:text-white',
+                          'block rounded px-3 py-1 tracking-wider font-medium cursor-pointer" onClick={() => setShow(true)}>
+                      
+                          SIGN IN HERE
+                      </div>
 
-                    </div>
+                    </div> */}
                 </div>
                 </div>
 

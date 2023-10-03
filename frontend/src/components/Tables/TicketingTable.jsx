@@ -149,7 +149,7 @@ export default function TicketingTable({title, children, dateId, time, getManife
     }, [loading])
 
   return (
-    <div className='bg-white shadow-sm h-fit md:w-full sm:w-full sm:scroll-auto px-5 py-2 rounded'>
+    <div className='bg-white shadow-sm h-fit md:w-full sm:w-full sm:scroll-auto px-5 py-2 rounded overflow-auto'>
 
         <WithMinor 
             show={showModal}

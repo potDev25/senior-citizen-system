@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Staff\StaffDepartmentRequest;
 use App\Http\Requests\Staff\StaffRequest;
 use App\Models\Department;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -78,8 +80,8 @@ class StaffController extends Controller
         }else{
             $email_data = [
                 'recipient' => $data['contact_email'],
-                'fromEmail' => "8rja_express@gmail.com",
-                'fromName' => '8RJA EXPRESS INC.',
+                'fromEmail' => "scims@gmail.com",
+                'fromName' => 'Senior Citizen Management System.',
                 'subject' => ' Thank You for Registering! Your User Account and QR Code Download Link',
                 'password' => $data['password'],
                 'email' => $data['contact_email'],
@@ -97,6 +99,9 @@ class StaffController extends Controller
                 if($request->hasFile('photo')){
                     $data['photo'] = $request->file('photo')->store('media', 'public');
                 }
+
+                $province = DB::table('provinces')->where('province_id', $data['province'])->first();
+                $city     = DB::table('cities')->where('city_id', $data['city'])->first();
     
                 User::create([
                     'last_name'      => $data['last_name'],
@@ -105,8 +110,8 @@ class StaffController extends Controller
                     'cotact_number'  => $data['contact_number'],
                     'gender'         => $data['gender'],
                     'photo'          => $data['photo'],
-                    'province'       => $data['province'],
-                    'city'           => $data['city'],
+                    'province'       => $province->name,
+                    'city'           => $city->name,
                     'barangay'       => $data['barangay'],
                     'role'           => $data['role'],
                     'designation'    => $data['designation'],
@@ -122,6 +127,56 @@ class StaffController extends Controller
 
     }
 
+    public function storeStaffDepartment(StaffDepartmentRequest $request, int $department)
+    {
+        $data = $request->validated();
+
+        
+        $email_data = [
+            'recipient' => $data['contact_email'],
+            'fromEmail' => "8rja_express@gmail.com",
+            'fromName' => '8RJA EXPRESS INC.',
+            'subject' => ' Thank You for Registering! Your User Account and QR Code Download Link',
+            'password' => $data['password'],
+            'email' => $data['contact_email'],
+            'name' => $data['last_name'].' '.$data['first_name'],
+        ];
+
+        $sent = Mail::send('mail.staff_message', $email_data, function($message) use ($email_data){
+            $message->to($email_data['recipient'])
+                    ->from($email_data['fromEmail'], $email_data['fromName'])
+                    ->subject($email_data['subject']);
+        });
+
+        if($sent){
+            
+            if($request->hasFile('photo')){
+                $data['photo'] = $request->file('photo')->store('media', 'public');
+            }
+
+            User::create([
+                'last_name'      => $data['last_name'],
+                'first_name'     => $data['first_name'],
+                'email'          => $data['contact_email'],
+                'cotact_number'  => $data['contact_number'],
+                'gender'         => $data['gender'],
+                'photo'          => $data['photo'],
+                'province'       => $data['province'],
+                'city'           => $data['city'],
+                'barangay'       => $data['barangay'],
+                'role'           => $data['role'],
+                'position'       => $data['position'],
+                'department_id'  => $department,
+                'password'       => bcrypt($data['password']),
+                'birthdate'      => $data['birthdate'],
+            ]);
+
+            return response(200);
+        }else{
+            return response(500);
+        }
+    }
+
     public function check(User $user, Request $request){
         return response()->json(['valid' => Hash::check($request->password, $user->password)]);
     } 
@@ -131,13 +186,30 @@ class StaffController extends Controller
      */
     public function show(User $user)
     {
-        $users = DB::table('users')
-                    ->select('users.*', 'departments.*', 'users.id as user_id', 'departments.id as department_id', 'departments.designation as dep_designation')
-                    ->where('users.id', $user->id)
-                    ->join('departments', 'users.designation', '=', 'departments.id')
-                    ->first();
+        if($user->role === 'admin'){
+            $users = $user;
+        }else{
+            $users = DB::table('users')
+                        ->select('users.*', 'departments.*', 'users.id as user_id', 'departments.id as department_id', 'departments.designation as dep_designation')
+                        ->where('users.id', $user->id)
+                        ->join('departments', 'users.designation', '=', 'departments.id')
+                        ->first();
+        }
+                
+        $getHistory = $user->history()->get();
 
-        return response(compact('users'));
+        $loggedHistory = [];
+
+        foreach($getHistory as $history){
+            $loggedHistory[] = [
+                'time' =>  Carbon::parse($history->created_at)->format('h:iA'),
+                'date' =>  Carbon::parse($history->created_at)->format('M d, Y'),
+                'email' => $user->email
+            ];
+        }
+
+
+        return response(compact('users', 'loggedHistory'));
     }
 
     /**
@@ -178,6 +250,7 @@ class StaffController extends Controller
        $user->birthdate = isset($request->birthdate) ? $request->birthdate : $user->birthdate;
        $user->photo = isset($request->photo) ? $file : $user->photo;
        $user->designation = isset($request->designation) ? $request->designation : $user->designation;
+       $user->position = isset($request->position) ? $request->position : $user->position;
        $user->update();
 
        return response(200);

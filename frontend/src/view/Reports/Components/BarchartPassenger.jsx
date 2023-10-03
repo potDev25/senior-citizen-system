@@ -6,14 +6,14 @@ import axiosClient from '../../../axiosClient';
 
 export default function BarchartPassenger({passengers, loading}) {
   const renderChart = () => {
-    const labels = passengers.map(item => item.type);
-    const values = passengers.map(item => item.numberPassenger);
+    const labels = passengers.map(item => item.department);
+    const values = passengers.map(item => item.numberOfSeniors);
 
     const chartData = {
       labels,
       datasets: [
         {
-          label: 'Passenger',
+          label: 'Seniors',
           data: values,
           backgroundColor: '#6699CC',
           borderColor: '#6699CC',

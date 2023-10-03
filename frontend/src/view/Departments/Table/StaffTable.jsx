@@ -21,9 +21,11 @@ export default function StaffTable() {
     const [showMenuModal, setMenuModal] = useState(false)
     const [showUpdateModal, setShowUpdateModal] = useState(false)
     const [limit, _setLimit] = useState(10)
-    const [paginate, setPaginate] = useState(1);
-    const [links, setLinks] = useState([]);
-    const [provinces, setProvinces] = useState([]);
+    const [paginate, setPaginate] = useState(1)
+    const [links, setLinks] = useState([])
+    const [provinces, setProvinces] = useState([])
+    const [menuLoading, setMenuLoading] = useState(true)
+    const [numberSenior, setNumberSenior] = useState([]);
 
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
@@ -42,6 +44,7 @@ export default function StaffTable() {
     }
 
     function handleShowMenuModal(user) {
+        getNumberSeniors(user.id)
         setUser(user)
         setMenuModal(true)
     }
@@ -67,7 +70,7 @@ export default function StaffTable() {
 
     const handlePromt = (staff) => {
         Swal.fire({
-            title: 'Delete This Barangay?',
+            title: 'Delete This Department?',
             showCancelButton: true,
             confirmButtonText: 'Delete',
             confirmButtonColor: 'red',
@@ -95,6 +98,20 @@ export default function StaffTable() {
           })
     }
 
+    const getNumberSeniors = (barangayId) => {
+        setMenuLoading(true)
+        axiosClient.get(`department/departments/get-staff/${barangayId}`)
+            .then(({data}) => {
+                setNumberSenior(data.numberData)
+                setAdmin(data.user)
+                setMenuLoading(false)
+            })
+            // .catch(() => {
+            //     alert('Server Error!')
+            //     setMenuLoading(false)
+            // })
+    }
+
     const promptMessage = (text, icon) => {
         Swal.fire({
             text: text,
@@ -108,7 +125,7 @@ export default function StaffTable() {
     const deleteStaff = (staff) => {
         axiosClient.delete(`/department/destroy/${staff.id}`)
         .then(({data}) => {
-            promptMessage('Barangay Deleted Successfully', 'success')
+            promptMessage('Department Deleted Successfully', 'success')
         })
         .catch(() => {
             promptMessage('Something Went Please Try Again', 'warning')
@@ -145,7 +162,7 @@ export default function StaffTable() {
                 <h1 className='uppercase text-md text-gray-500'>manage departments</h1>
             </div>
             <div className='p-5'>
-                <div className='flex items-center justify-between mb-4'>
+                <div className='md:flex lg:flex items-center justify-between mb-4'>
                         <div className='flex items-center'>
                             <div className="relative">
                                 <select
@@ -173,7 +190,7 @@ export default function StaffTable() {
 
                         </div>
 
-                        <div className='flex items-center justify-center gap-2'>
+                        <div className='md:flex lg:flex sm:mt-5 items-center justify-center gap-2'>
                             <button 
                             onClick={ev => setShowModal(true)}
                             className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center uppercase'><FaIcon.FiPlusCircle/> &nbsp;Register departments</button>
@@ -191,6 +208,7 @@ export default function StaffTable() {
                              handleLoading={handleLoading}
                              provinces={provinces}
                              passenger={user}
+                             numbers={numberSenior}
                             />
 
                             <UpdateStaffModal
@@ -214,7 +232,7 @@ export default function StaffTable() {
                         <span class="sr-only">Loading...</span>
                     </div> :
                     
-                    <div className='grid grid-cols-5 mt-10 gap-5'>
+                    <div className='grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-5 mt-10 gap-5'>
 
                         {   
                             users.filter((user) => {
@@ -226,7 +244,7 @@ export default function StaffTable() {
                                     </a>
                                     <div className="p-5">
                                         <a href="#">
-                                            <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-600 capitalize dark:text-white">Brgy. {user.designation}</h5>
+                                            <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-600 capitalize dark:text-white">{user.designation}</h5>
                                             <p class="mb-3 font-normal text-gray-500 text-sm dark:text-gray-400">{user.barangay}, {user.city}, {user.province}</p>
                                         </a>
 

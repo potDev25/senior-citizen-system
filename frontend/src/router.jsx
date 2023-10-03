@@ -28,6 +28,11 @@ import Department from "./view/Departments/Department";
 import DepartmentUser from "./view/DepartmentUser/DepartmentUser";
 import Seniors from "./view/Barangay/Seniors";
 import ScannedSeniors from "./view/Barangay/ScannedSeniors";
+import UsersTable from "./view/Departments/Table/usersTable";
+import Users from "./view/Departments/Table/Users";
+import Announcements from "./view/Announcement/Announcements";
+import Layout from "./view/Announcement/Layout";
+import DepartmentScannedSeniors from "./view/Departments/DepartmentScannedSeniors";
 
 const router =  createBrowserRouter ([
     {
@@ -109,12 +114,24 @@ const router =  createBrowserRouter ([
                 element: <Seniors/>
             },
             {
+                path: '/department/staff/:department',
+                element: <Users/>
+            },
+            {
                 path: '/barangay-scanned-seniors/:barangay',
                 element: <ScannedSeniors/>
             },
             {
+                path: '/department-scanned-seniors/:barangay',
+                element: <DepartmentScannedSeniors/>
+            },
+            {
                 path: '/department-users',
                 element: <DepartmentUser/>
+            },
+            {
+                path: '/announcements',
+                element: <Layout/>
             },
             {
                 path: '/staff/profile/:id/:tab',

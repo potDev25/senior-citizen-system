@@ -62,7 +62,7 @@
         
     
         <footer class="mt-8">
-            <p class="mt-3 text-gray-500 dark:text-gray-400">© 8 RJA EXPRESS INCORPORATION.</p>
+            <p class="mt-3 text-gray-500 dark:text-gray-400">© Senior Citizen Information Mangement System.</p>
         </footer>
     </section>
 

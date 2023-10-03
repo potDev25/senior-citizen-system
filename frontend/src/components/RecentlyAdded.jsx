@@ -11,6 +11,7 @@ import Spiral from './Spiral/Spiral';
 export default function RecentlyAdded({data, link, checked = false, title, string, load}) {
 
     const [passengers, setPassengers] = useState([]);
+    const [numberOfRequest, setNumberOfRequest] = useState(0);
     const [loading, setLoading] = useState(load);
 
     function classNames(...classes) {
@@ -29,7 +30,8 @@ export default function RecentlyAdded({data, link, checked = false, title, strin
         axiosClient.get(link)
         .then(({data}) => {
             setLoading(false)
-            setPassengers(data.data)
+            setPassengers(data.seniors)
+            setNumberOfRequest(data.numberberOfRequest)
             console.log(data.data)
         })
         .catch(() => {
@@ -40,10 +42,10 @@ export default function RecentlyAdded({data, link, checked = false, title, strin
 
 
   return (
-    <div className='md:w-full bg-white rounded px-2 py-2'>
-        <h1 className='text-xl mb-4 font-bold tracking-wide'>{title} &nbsp;
+    <div className='md:w-full bg-white rounded px-2 py-2 sm:overflow-auto md:overflow-visible lg:overflow-visible'>
+        <h1 className='text-lg mb-4 font-thin tracking-wide'>{title} &nbsp;
             {title != '' && <span className="inline-flex items-center rounded-md bg-red-500 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
-            20
+            {numberOfRequest}
             </span>}
         </h1>
 

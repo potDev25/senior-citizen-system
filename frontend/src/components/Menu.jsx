@@ -184,23 +184,7 @@ export default function Menu() {
     
   return (
     <> 
-        <div className='flex gap-2'>
-
-            <ManualTicketing 
-                show={showManual}
-                hideModal={hideModal}
-                passengers={passengers}
-                setPassengerProfile={setPassengerProfile}
-                dateId={dateId}
-            />
-
-            <RebookModal 
-                show={showRebook}
-                hideModal={hideRebookModal}
-                passengers={rebookPassengers}
-                setPassengerProfile={setPassengerProfile}
-                dateId={dateId}
-            />
+        <div className='lg:flex md:flex gap-2'>
 
             <ProfileModal
                 passenger={passenger}
@@ -224,7 +208,7 @@ export default function Menu() {
                 />
             </div>
 
-            <div className='bg-white shadow-sm h-fit  md:w-[30%] px-5 py-2 rounded md:block lg:block sm:hidden'>
+            <div className='bg-white shadow-sm h-fit sm:mb-5 md:w-[30%] px-5 py-2 rounded md:block lg:block'>
                 <ScanModal date={dateId}/>
             </div>
             <TicketingTable title={date} dateId={dateId} manifest={manifest} time={time} getManifestData={getManifest}>

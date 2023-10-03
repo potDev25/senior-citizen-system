@@ -3,14 +3,14 @@ import React from 'react'
 export default function PeopleTable({children, loading, link}) {
   return (
     <>
-    <table className={(loading ? 'bg-gray-50' : 'bg-gray-100') + ' md:table-auto w-full text-sm'}>
-    <thead className=' py-5'>
+    <table className={(loading ? 'bg-gray-50' : 'bg-gray-100') + ' md:table-auto w-full text-sm overflow-auto'}>
+    <thead className='py-5 bg-gray-800'>
         <tr>
-            <td className='text-sm text-gray-500 font-medium px-5 py-2'>NAME</td>
-            <td className='text-sm text-gray-500 font-medium px-5 py-2'>ADDRESS</td>
-            <td className='text-sm text-gray-500 font-medium px-5 py-2'>TYPE</td>
-            <td className='text-sm text-gray-500 font-medium px-5 py-2'>DATE</td>
-            <td className='text-sm text-gray-500 font-medium px-5 py-2'>OPTIONS</td>
+            <td className='text-sm text-white font-medium px-5 py-2'>NAME</td>
+            <td className='text-sm text-white font-medium px-5 py-2'>ADDRESS</td>
+            <td className='text-sm text-white font-medium px-5 py-2'>TYPE</td>
+            <td className='text-sm text-white font-medium px-5 py-2'>DATE</td>
+            <td className='text-sm text-white font-medium px-5 py-2'>OPTIONS</td>
         </tr>
     </thead>
 

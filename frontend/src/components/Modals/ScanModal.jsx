@@ -79,7 +79,7 @@ export default function ScanModal({date}) {
             .catch((error) => {
               console.log(error.response.status)
               hideLoadingToast()
-              error.response.status === 422 ? alertMessage('Passenger Already Booked!', 'warning') : alertMessage('Passenger not found!', 'error')
+              error.response.status === 422 ? alertMessage('Seniors Already Booked!', 'warning') : alertMessage('Senior not found!', 'error')
             })
       
     };
@@ -135,7 +135,7 @@ export default function ScanModal({date}) {
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
 
-                    <div className='w-[500px] h-[500px]'>
+                    <div className='lg:w-[500px] md:w-[500px] sm:w-[400px] md:h-[500px] lg:h-[500px]'>
                     <QrScanner
                         onDecode={(result) => handleScan(result)}
                         onError={(error) => console.log(error?.message)}
@@ -166,9 +166,9 @@ export default function ScanModal({date}) {
                 <div
                     className="delay-150 transition-all ease-in-out justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
                 >
-                    <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                    <div className="relative w-auto my-6 mx-auto sm:w-[80%] lg:max-w-3xl md:max-w-3xl">
                     {/*content*/}
-                    <div className="border-0 rounded-lg shadow-3xl relative flex flex-col w-[900px] bg-white outline-none focus:outline-none">
+                    <div className="border-0 rounded-lg shadow-3xl relative flex flex-col lg:w-[900px] md:w-[900px] sm:w-[470px] bg-white outline-none focus:outline-none">
                         {/*header*/}
                         <div className="flex items-start justify-between p-2 border-b border-solid bg-blue-500 border-slate-200 rounded-t">
                         <h3 className="text-lg text-white font-semibold">
@@ -216,7 +216,7 @@ export default function ScanModal({date}) {
                         <h1>{qrCodeData}</h1>
                         </div>
                         {/*footer*/}
-                        <div className="flex items-center justify-end p-2 border-t border-solid border-slate-200 rounded-b">
+                        <div className="flex items-center lg:justify-end md:justify-end sm:justify-center p-2 border-t border-solid border-slate-200 rounded-b">
                         <button
                             className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             type="button"

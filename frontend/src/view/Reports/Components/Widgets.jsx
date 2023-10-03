@@ -29,9 +29,9 @@ export default function Widgets() {
       useEffect(() => {
         axiosClient.get(`/statistics/${month}`)
           .then(({data}) => {
-            setNoPassengers(data.routeStatsResult)
+            setNoPassengers(data.barangaySeniors)
             setSales(data.routeMonthlySalse)
-            setpassengerStats(data.passStats);
+            setpassengerStats(data.scannedSeniors);
             setOptions(data.options);
             setAnnualSales(data.annualSales);
             setLoading(false)
@@ -46,18 +46,10 @@ export default function Widgets() {
         {/* <div className='w-full h-[50px] bg-blue-500 text-white rounded mb-5 flex items-center justify-center'>
 
         </div> */}
-        <div className='mb-5'>
-            <Select 
-            className='w-[200px]'
-            options={options}
-            placeholder='Months' 
-            onChange={ev => setMonth(ev.value)}
-            />
-        </div>
 
-        <div className='grid grid-cols-2 gap-5'>
+        <div className='grid lg:grid-cols-2 sm:grid-cols-1 gap-5'>
             <div className='h-[350px] w-full bg-white rounded shadow-md text-center p-2'>
-                <h1 className='text-gray-500 uppercase text-lg font-bold'>Routes STATISTICS (No. Passengers Monthly, {month})</h1>
+                <h1 className='text-gray-500 uppercase text-lg font-bold'>REGISTERED SENIORS(By Barangay)</h1>
                 <div className='h-full w-full'>
                     <Barchart
                         noPassengers={noPassengers}
@@ -66,15 +58,15 @@ export default function Widgets() {
                 </div>
             </div>
             <div className='h-[350px] w-full bg-white rounded shadow-md text-center p-2'>
-                <h1 className='text-gray-500 uppercase text-lg font-bold flex items-center justify-center'>Passengers<span className='text-sm'>(Passenger By Type, {month})</span></h1>
-            <div className='h-full w-full'>
-                <BarchartPassenger
-                     passengers={passengerStats}
-                     loading={loading}
-                />
+                <h1 className='text-gray-500 uppercase text-lg font-bold flex items-center justify-center'>Scanner Seniors (By Department)</h1>
+                <div className='h-full w-full'>
+                    <BarchartPassenger
+                        passengers={passengerStats}
+                        loading={loading}
+                    />
+                </div>
             </div>
-            </div>
-            <div className='h-[350px] w-full bg-white rounded shadow-md text-center p-2'>
+            {/* <div className='h-[350px] w-full bg-white rounded shadow-md text-center p-2'>
                 <h1 className='text-gray-500 uppercase text-lg font-bold'>Routes Monthly Sales ({month})</h1>
                 <div className='h-full w-full'>
                     <LineChart
@@ -87,17 +79,17 @@ export default function Widgets() {
                 <Data
                     data={sales}
                 />
-            </div>
+            </div> */}
            
         </div>
 
-        <div className='bg-white w-full h-[350px] mt-5 p-2 text-center'>
+        {/* <div className='bg-white w-full h-[350px] mt-5 p-2 text-center'>
             <h1 className='text-gray-500 uppercase text-lg font-bold'>Annual Sales</h1>
             <AnnualSaleBarChart
                 annualSales={annualSales}
                 loading={loading}
             />
-        </div>
+        </div> */}
     </>
   )
 }

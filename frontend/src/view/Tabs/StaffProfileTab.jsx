@@ -51,6 +51,7 @@ export default function StaffProfileTab({user}) {
                     <h1 className='text-black text-md font-2xl'>Role:</h1>
                     {user.role == 'department' && <span className='rounded-[10px] bg-blue-300 text-blue-500 px-2 text-sm capitalize'>{user.role} User</span>}
                     {user.role == 'barangay' && <span className='rounded-[10px] bg-green-300 text-green-500 px-2 text-sm capitalize'>{user.role} User</span>}
+                    {user.role == 'admin' &&  <p className='bg-red-200 text-red-500 p-2 text-sm rounded-lg capitalize'>General Admin</p>}
                 </div>
             </div>
             <div className='py-3 w-full mb-2 border-b border-gray-200'>
@@ -58,6 +59,7 @@ export default function StaffProfileTab({user}) {
                     <h1 className='text-black text-md font-2xl'>Designation:</h1>
                     {user.role == 'department' &&  <p className='text-gray-500 text-md font-2xl capitalize'>{user.dep_designation}</p>}
                     {user.role == 'barangay' &&  <p className='text-gray-500 text-md font-2xl capitalize'>Brgy. {user.dep_designation}</p>}
+                    {user.role == 'admin' &&  <p className='bg-red-200 text-red-500 p-2 text-sm rounded-lg capitalize'>{user.role}</p>}
                 </div>
             </div>
         </div>

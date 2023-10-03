@@ -55,7 +55,7 @@ export default function PeopleTable() {
 
     const handlePromt = (staff) => {
         Swal.fire({
-            title: 'Delete This Passenger?',
+            title: 'Delete Senior?',
             showCancelButton: true,
             confirmButtonText: 'Delete',
             confirmButtonColor: 'red',
@@ -96,7 +96,7 @@ export default function PeopleTable() {
     const deleteStaff = (staff) => {
         axiosClient.delete(`/passenger/destroy/${staff.id}`)
         .then(({data}) => {
-            promptMessage('Passenger Deleted Successfully', 'success')
+            promptMessage('Senior Deleted Successfully', 'success')
         })
         .catch(() => {
             promptMessage('Something Went Please Try Again', 'warning')
@@ -128,12 +128,12 @@ export default function PeopleTable() {
 
     }, [loading])
   return (
-    <div className='bg-white shadow-sm h-fit md:w-full rounded'>
+    <div className='bg-white shadow-sm h-fit md:w-full rounded overflow-auto'>
             <div className='w-full h-10 text-white uppercase p-2 rounded-t-md border-b-2 border-gray-100'>
                 <h1 className='uppercase text-md text-gray-500'>manage seniors</h1>
             </div>
             <div className='p-5'>
-                <div className='flex items-center justify-between mb-4'>
+                <div className='sm:block md:flex lg:flex items-center justify-between mb-4'>
                         <div className='flex items-center'>
                             <div className="relative">
                                 <select
@@ -161,7 +161,7 @@ export default function PeopleTable() {
 
                         </div>
 
-                        <div className='flex items-center justify-center gap-2'>
+                        <div className='lg:flex items-center justify-center gap-2 sm:mt-5'>
                             <button 
                             onClick={ev => setShowModal(true)}
                             className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center uppercase'><FaIcon.FiPlusCircle/> &nbsp;Register Senior</button>
@@ -186,14 +186,14 @@ export default function PeopleTable() {
                         <span class="sr-only">Loading...</span>
                     </div>
                     :
-                    <table className='md:table-auto w-full bg-gray-100 text-sm'>
-                        <thead className=' py-5'>
+                    <table className='md:table-auto w-full bg-gray-100 text-sm overflow-auto'>
+                        <thead className='bg-gray-800 py-5'>
                             <tr>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>NAME</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>ADDRESS</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Designation</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>DATE ADDED</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>OPTIONS</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>NAME</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>ADDRESS</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>Designation</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>DATE ADDED</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>OPTIONS</td>
                             </tr>
                         </thead>
 
@@ -207,7 +207,7 @@ export default function PeopleTable() {
                             .map(u => (
                                 <tr className={' p-5 border border-b-2 hover:bg-gray-300 pointer mb-5'}>
                                 <td className='text-md px-5 py-2 font-medium flex gap-5 items-center'>
-                                    <div>
+                                    <div className='md:hidden lg:block sm:hidden'>
                                         <img src={u.selfie} alt="" className='sm:h-10 w-10 rounded-full'/>
                                     </div>
                                     <div>
@@ -252,19 +252,7 @@ export default function PeopleTable() {
                                                 </Link>
                                             )}
                                             </Menu.Item>
-                                            <Menu.Item >
-                                            {({ active }) => (
-                                                <button
-                                                className={classNames(
-                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                    'flex items-center px-4 py-2 text-sm w-full'
-                                                )}
-                                                onClick={ev => handle(1)}
-                                                >
-                                                <FaIcon.FiBellOff/>&nbsp; Block
-                                                </button>
-                                            )}
-                                            </Menu.Item>
+                                            
                                             <Menu.Item >
                                             {({ active }) => (
                                                 <button

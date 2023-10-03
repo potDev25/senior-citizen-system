@@ -5,8 +5,11 @@ use App\Http\Controllers\Admin\ManagePassenger;
 use App\Http\Controllers\Admin\ManifestController;
 use App\Http\Controllers\Admin\ManifestDataController;
 use App\Http\Controllers\Admin\StatisticsController;
+use App\Http\Controllers\Announcment\AnnouncementController;
 use App\Http\Controllers\Chair\ChairController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Department\DepartmentController;
+use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Passenger\MangeController;
 use App\Http\Controllers\Passenger\MediaController;
 use App\Http\Controllers\Settings\SettingsController;
@@ -30,6 +33,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('/user', function (Request $request) {
         return $request->user();
+    });
+
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/dashboard', 'index');
     });
 
     Route::get('/get-passengers', [MangeController::class, 'get_passengers']);
@@ -77,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/staff/{limit}', [StaffController::class, 'index']);
     Route::get('/staff/department/{limit}', [StaffController::class, 'department']);
     Route::post('/staff/store', [StaffController::class, 'store']);
+    Route::post('/staff/department/store/{department}', [StaffController::class, 'storeStaffDepartment']);
     Route::post('/staff/edit/{user}', [StaffController::class, 'update']);
     Route::delete('/staff/destroy/{user}', [StaffController::class, 'destroy']);
     Route::put('/staff/block/{user}', [StaffController::class, 'block']);
@@ -96,8 +104,11 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::get('/department/barangays/{limit}', 'index');
         Route::get('/department/departments/{limit}', 'departments');
         Route::get('department/barangay/get-seniors/{barangay}', 'getNumbers');
+        Route::get('department/departments/get-staff/{department}', 'getStaffNumbers');
+        Route::get('/department/staff/{limit}/{department}', 'getDepartmentStaff');
         Route::get('/get-seniors/{limit}/{barangay}', 'getSeniors');
         Route::get('/get-scanned-seniors/{limit}/{barangay}', 'getScannedSeniors');
+        Route::get('/get-scanned-depertment-seniors/{limit}/{barangay}', 'getScannedSeniorsDepartment');
 
         //post routes
         Route::post('/department/barangay/update/{user}', 'update');
@@ -107,6 +118,26 @@ Route::middleware('auth:sanctum')->group(function(){
         //delete routes
         Route::delete('/department/destroy/{barangay}', 'destroy');
     });
+
+    Route::controller(AnnouncementController::class)->group(function () {
+        //get api
+        Route::get('/announcement/index/{limit}', 'index');
+        Route::get('/announcement/published/{limit}', 'getPublishedAnnouncement');
+        //post api
+        Route::post('/announcement/store', 'store');
+        //put api
+        Route::put('/announcement/edit/{announcement}', 'update');
+        Route::put('/announcement/publish/{announcement}', 'publish');
+        //delete api
+        Route::delete('/announcement/destroy/{announcement}', 'destroy');
+    });
+
+    Route::controller(NotificationController::class)->group(function () {
+        Route::get('/notification/index', 'index');
+        Route::put('/notification/read-event', 'readEvent');
+    });
+
+
 });
 
 

@@ -45,6 +45,8 @@ class ManifestController extends Controller
     public function store_manifest_data(Passenger $passenger){
         $save = ManifestData::create([
             'passengers_id'     => $passenger->id,
+            'user_id'           => auth()->user()->id,
+            'department_id'     => auth()->user()->designation,
             'month_year'        => Carbon::now()->format('Y-M'),
             'date'              => Carbon::now()->format('Y-m-d'),
         ]);
@@ -74,6 +76,15 @@ class ManifestController extends Controller
                     ->where('manifest_data.date', Carbon::now()->format('Y-m-d'))
                     ->where('manifest_data.status','complete')
                     ->where('passengers.barangay', auth()->user()->barangay)
+                    ->groupBy('manifest_data.passengers_id')
+                    ->get();
+        }elseif(auth()->user()->role === 'department'){
+            $data = DB::table('manifest_data')
+                    ->join('passengers', 'passengers.id', '=', 'manifest_data.passengers_id')
+                    ->select('manifest_data.*', 'manifest_data.type as manifest_type', 'passengers.*')
+                    ->where('manifest_data.date', Carbon::now()->format('Y-m-d'))
+                    ->where('manifest_data.status','complete')
+                    ->where('manifest_data.user_id', auth()->user()->id)
                     ->groupBy('manifest_data.passengers_id')
                     ->get();
         }

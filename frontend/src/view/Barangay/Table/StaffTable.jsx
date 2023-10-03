@@ -167,7 +167,7 @@ export default function StaffTable() {
                 <h1 className='uppercase text-md text-gray-500'>manage barangay</h1>
             </div>
             <div className='p-5'>
-                <div className='flex items-center justify-between mb-4'>
+                <div className='lg:flex md:flex items-center justify-between mb-4'>
                         <div className='flex items-center'>
                             <div className="relative">
                                 <select
@@ -195,7 +195,7 @@ export default function StaffTable() {
 
                         </div>
 
-                        <div className='flex items-center justify-center gap-2'>
+                        <div className='lg:flex md:flex sm:mt-5 items-center justify-center gap-2'>
                             <button 
                             onClick={ev => setShowModal(true)}
                             className='rounded text-gray-500 border border-2-gray-500 hover:bg-sky-500 hover:text-white px-5 py-2 flex items-center uppercase'><FaIcon.FiPlusCircle/> &nbsp;Register Barangay</button>
@@ -239,7 +239,7 @@ export default function StaffTable() {
                         <span class="sr-only">Loading...</span>
                     </div> :
                     
-                    <div className='grid grid-cols-5 mt-10 gap-5'>
+                    <div className='grid md:grid-cols-2 lg:md:grid-cols-5 sm:grid-cols-1 mt-10 gap-5'>
 
                         {   
                             users.filter((user) => {

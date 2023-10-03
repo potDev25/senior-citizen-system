@@ -10,6 +10,7 @@ use App\Models\ManifestAction;
 use App\Models\ManifestData;
 use App\Models\ManifestDate;
 use App\Models\Media;
+use App\Models\Notification;
 use App\Models\Passenger;
 use App\Models\Time;
 use Illuminate\Http\Request;
@@ -49,6 +50,12 @@ class MangeController extends Controller
         $id = $passenger->id;
 
         if($passenger){
+            Notification::create([
+                'notification' => $data['last_name'].' '.$data['first_name'].' '.'is requesting for approval',
+                'passenger_id' => $id,
+                'type' => 'seniors'
+            ]);
+
             $response = 200;
         }else{
             $response = 500;
@@ -58,6 +65,7 @@ class MangeController extends Controller
     }
 
     public function show(Passenger $passenger){
+        Notification::where('passenger_id', $passenger->id)->update(['status' => 1]);
         return new PassengerResource($passenger);
     }
     
@@ -68,20 +76,30 @@ class MangeController extends Controller
         if(count($get_media) >= 0){
             $user = auth()->user()->role;
             if($user === 'admin'){
-                return PassengerResource::collection(
+                $seniors = PassengerResource::collection(
                     $passenger::where('verified', 0)
                                 ->where('done', 1)
                                 ->orderBy('id', 'DESC')
                                 ->get()
+
                 );
+
+                $numberberOfRequest = count($seniors);
+
+                return response(compact('seniors', 'numberberOfRequest'));
             }elseif ($user === 'barangay') {
-                return PassengerResource::collection(
+                
+                $seniors = PassengerResource::collection(
                     $passenger::where('verified', 0)
                                 ->where('barangay', auth()->user()->barangay)
                                 ->where('done', 1)
                                 ->orderBy('id', 'DESC')
                                 ->get()
                 );
+
+                $numberberOfRequest = count($seniors);
+
+                return response(compact('seniors', 'numberberOfRequest'));
             }
            
         }else{
@@ -179,8 +197,8 @@ class MangeController extends Controller
 
                 $email_data = [
                     'recipient' => $passenger->email,
-                    'fromEmail' => "8rja_express@gmail.com",
-                    'fromName' => '8RJA EXPRESS INC.',
+                    'fromEmail' => "scims@gmail.com",
+                    'fromName' => 'Senior Citizen Management System.',
                     'subject' => ' Thank You for Registering! Your User Account and QR Code Download Link',
                     'password' => $password,
                     'email' => $passenger->email,

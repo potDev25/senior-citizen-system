@@ -133,8 +133,8 @@ export default function ScannedSeniorTable() {
 
     }, [loading])
   return (
-    <div className='bg-white shadow-sm h-fit md:w-full rounded'>
-            <div className='w-full h-10 text-white uppercase p-2 rounded-t-md border-b-2 border-gray-100'>
+    <div className='bg-white shadow-sm h-fit md:w-full rounded overflow-auto'>
+            <div className='w-full lg:h-10 md:h-10 sm:h-14 text-white uppercase p-2 rounded-t-md border-b-2 border-gray-100'>
                 <h1 className='uppercase text-md text-gray-500'>Brgy. {barangay} Scanned Senior Citizens</h1>
             </div>
             <div className='p-5'>
@@ -190,14 +190,14 @@ export default function ScannedSeniorTable() {
                         <span class="sr-only">Loading...</span>
                     </div>
                     :
-                    <table className='md:table-auto w-full bg-gray-100 text-sm'>
-                        <thead className=' py-5'>
+                    <table className='md:table-auto w-full bg-gray-100 text-sm overflow-auto'>
+                        <thead className='bg-gray-800 py-5'>
                             <tr>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>NAME</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>ADDRESS</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>Designation</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>DATE SCANNED</td>
-                                <td className='text-sm text-gray-500 font-medium px-5 py-2'>OPTIONS</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>NAME</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>ADDRESS</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>Designation</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>DATE SCANNED</td>
+                                <td className='text-sm text-white font-medium px-5 py-2'>OPTIONS</td>
                             </tr>
                         </thead>
 

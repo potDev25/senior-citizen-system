@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Models\ManifestData;
 use App\Models\ManifestDate;
 use App\Models\Passenger;
@@ -17,69 +18,30 @@ class StatisticsController extends Controller
      */
     public function index(string $month)
     {
-        $setUpDate         = Carbon::createFromFormat('Y-M', $month);
-        $year = '2023';
-        $date              = $setUpDate->format('Y-m');
-        $routes            = ManifestDate::where('date', 'like', '%' . $date . '%')->groupBy('route')->get();
-        $passengers        = ManifestData::groupBy('type')->get();
-        $getMonth          = ManifestData::groupBy('month_year')
-                                         ->get();
-        $getTickets           = Ticket::where('month_year',  'like', '%' . $year . '%')
-                                        ->groupBy('month_year')
+        $getDepartments = Department::where('type', 'Department')->get();
+        $getBarangays   = Department::where('type', 'Barangay')->get();
+        $scannedSeniors  = [];
+        $barangaySeniors = [];
+
+        foreach ($getDepartments as $m) {
+            $getScannerSeniors = ManifestData::where('department_id', $m->id)->get();
+            $scannedSeniors[] = [
+                'department'         => $m->designation,
+                'numberOfSeniors'    => count($getScannerSeniors),
+            ];
+        }
+
+        //scanned seniors
+        foreach ($getBarangays as $barangays) {
+            $seniors = Passenger::where('barangay', $barangays->barangay)
                                         ->get();
-        $routeStatsResult  = [];
-        $routeMonthlySalse = [];
-        $passStats         = [];
-        $options           = [];
-        $annualSales       = []; 
-
-        foreach ($getMonth as $m) {
-            $options[] = [
-                'label'         => $m->month_year,
-                'value'         => $m->month_year,
+            $barangaySeniors[] = [
+                'barangay' => $barangays->designation,
+                'numberOfSeniors' => count($seniors)
             ];
         }
 
-        foreach ($routes as $route) {
-            $manifestData = ManifestData::where('month_year', $month)
-                                        ->where('route', $route->route)
-                                        ->get();
-            $routeStatsResult[] = [
-                'route' => $route->route,
-                'passengers' => count($manifestData)
-            ];
-        }
-
-        foreach ($routes as $route) {
-            $tickets = Ticket::where('month_year', $month)
-                            ->where('route', $route->route)
-                            ->sum('fair');
-            $routeMonthlySalse[] = [
-                'route' => $route->route,
-                'sales' => $tickets
-            ];
-        }
-
-        foreach ($passengers as $passenger) {
-            $pass = ManifestData::where('month_year', $month)
-                    ->where('type', $passenger->type)
-                    ->get();
-            $passStats[] = [
-                'type' => $passenger->type,
-                'numberPassenger' => count($pass)
-            ];
-        }
-
-        foreach ($getTickets as $ticket) {
-            $fare = Ticket::where('month_year', $ticket->month_year)
-                            ->sum('fair');
-            $annualSales[] = [
-                'month' => $ticket->month_year,
-                'sales' => $fare
-            ];
-        }
-
-        return response(compact('routes', 'routeStatsResult', 'routeMonthlySalse', 'passStats', 'options', 'date', 'month', 'annualSales'));
+        return response(compact('scannedSeniors', 'barangaySeniors', 'getDepartments', 'getBarangays'));
     }
 
     /**
